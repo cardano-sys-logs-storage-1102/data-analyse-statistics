@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataLab — Análise Estatística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: #1e2330;
+    --border2: #252c3a;
+    --accent: #f5a623;
+    --accent2: #e8891a;
+    --accent-dim: rgba(245,166,35,0.12);
+    --accent-glow: rgba(245,166,35,0.25);
+    --text: #e8eaf0;
+    --text2: #8892a4;
+    --text3: #4a5568;
+    --green: #34d399;
+    --blue: #60a5fa;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --teal: #2dd4bf;
+    --radius: 12px;
+    --radius-lg: 18px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* Background grid */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,166,35,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,166,35,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 28px 40px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,12,16,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: #000;
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+
+  .logo-text {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .logo-text span { color: var(--accent); }
+
+  .header-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    position: relative;
+    z-index: 10;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+  }
+
+  /* ── DROP ZONE ── */
+  .drop-zone {
+    border: 1.5px dashed var(--border2);
+    border-radius: var(--radius-lg);
+    padding: 60px 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .drop-zone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, var(--accent-dim) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .drop-zone:hover::before,
+  .drop-zone.drag-over::before { opacity: 1; }
+
+  .drop-zone:hover,
+  .drop-zone.drag-over {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 0 40px var(--accent-dim);
+    transform: scale(1.005);
+  }
+
+  .drop-zone.loaded {
+    border-style: solid;
+    border-color: var(--green);
+    box-shadow: 0 0 0 1px var(--green), 0 0 30px rgba(52,211,153,0.1);
+  }
+
+  .drop-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+    transition: transform 0.3s;
+  }
+
+  .drop-zone:hover .drop-icon { transform: translateY(-4px) scale(1.1); }
+
+  .drop-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .drop-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+  }
+
+  .drop-formats {
+    margin-top: 16px;
+    display: inline-flex;
+    gap: 8px;
+  }
+
+  .format-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    letter-spacing: 1px;
+  }
+
+  #fileInput { display: none; }
+
+  /* ── FILE INFO BAR ── */
+  .file-info {
+    display: none;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(52,211,153,0.06);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: var(--radius);
+    margin-top: 16px;
+    animation: slideIn 0.4s ease;
+  }
+
+  .file-info.show { display: flex; }
+
+  .file-info-icon { font-size: 24px; }
+
+  .file-info-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--green);
+  }
+
+  .file-info-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  .file-info-clear {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    cursor: pointer;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    transition: all 0.2s;
+  }
+
+  .file-info-clear:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── COLUMN SELECTOR ── */
+  .col-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 8px;
+  }
+
+  .select-wrap {
+    position: relative;
+  }
+
+  .select-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .select-label .type-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .type-dot.numeric { background: var(--accent); }
+  .type-dot.category { background: var(--blue); }
+
+  select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    padding: 12px 16px;
+    cursor: pointer;
+    appearance: none;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+
+  .select-arrow {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    pointer-events: none;
+    color: var(--text3);
+    font-size: 12px;
+  }
+
+  /* ── STAT GROUPS ── */
+  .stat-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .stat-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .stat-group-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface2);
+  }
+
+  .stat-group-icon {
+    font-size: 18px;
+  }
+
+  .stat-group-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .stat-group-desc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    margin-left: auto;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .stat-card {
+    background: var(--surface);
+    padding: 20px 18px;
+    transition: background 0.2s;
+    cursor: default;
+  }
+
+  .stat-card:hover { background: var(--surface2); }
+
+  .stat-card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+
+  .stat-card-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .stat-card-value.accent { color: var(--accent); }
+  .stat-card-value.green { color: var(--green); }
+  .stat-card-value.blue { color: var(--blue); }
+  .stat-card-value.red { color: var(--red); }
+  .stat-card-value.purple { color: var(--purple); }
+  .stat-card-value.teal { color: var(--teal); }
+
+  .stat-card-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  /* Percentile bar */
+  .percentile-bar {
+    grid-column: 1 / -1;
+    padding: 20px 24px;
+    background: var(--surface);
+  }
+
+  .pct-track {
+    height: 6px;
+    background: var(--border2);
+    border-radius: 999px;
+    position: relative;
+    margin: 12px 0 20px;
+  }
+
+  .pct-fill {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--teal));
+    border-radius: 999px;
+    transition: width 0.6s ease;
+  }
+
+  .pct-markers {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  .pct-marker { text-align: center; }
+  .pct-marker-val { font-weight: 700; color: var(--text); font-size: 13px; }
+  .pct-marker-label { color: var(--text2); font-size: 10px; margin-top: 2px; }
+
+  /* ── GROUPED RESULTS ── */
+  .group-results {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .group-card {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .group-card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .group-card-header:hover { background: rgba(255,255,255,0.02); }
+
+  .group-badge {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .group-mini-stats {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  .group-mini-stats span { color: var(--text); font-weight: 600; }
+
+  .group-card-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .group-stat {
+    background: var(--surface);
+    padding: 14px 16px;
+  }
+
+  .group-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .group-stat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ── CHARTS ── */
+  .chart-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .chart-tab {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .chart-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .chart-tab.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .chart-panel {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .chart-panel.active { display: block; }
+
+  .chart-panel canvas { max-height: 380px; }
+
+  /* ── ACTION BUTTONS ── */
+  .action-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    border: none;
+    outline: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 4px 20px rgba(245,166,35,0.3);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent2);
+    box-shadow: 0 6px 28px rgba(245,166,35,0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border2);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .btn-green {
+    background: rgba(52,211,153,0.1);
+    color: var(--green);
+    border: 1px solid rgba(52,211,153,0.3);
+  }
+
+  .btn-green:hover {
+    background: rgba(52,211,153,0.2);
+    transform: translateY(-1px);
+  }
+
+  .btn-blue {
+    background: rgba(96,165,250,0.1);
+    color: var(--blue);
+    border: 1px solid rgba(96,165,250,0.3);
+  }
+
+  .btn-blue:hover {
+    background: rgba(96,165,250,0.2);
+    transform: translateY(-1px);
+  }
+
+  .btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    margin: 40px 0;
+  }
+
+  /* ── HIDDEN SECTION ── */
+  .results-section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .results-section.show { display: block; }
+
+  /* ── LOADING ── */
+  .loading-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--teal), var(--accent));
+    background-size: 200% 100%;
+    border-radius: 999px;
+    animation: shimmer 1.5s infinite;
+    display: none;
+    margin-top: 12px;
+  }
+
+  .loading-bar.show { display: block; }
+
+  /* ── TOOLTIP ── */
+  .tooltip {
+    position: relative;
+  }
+
+  .tooltip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 100;
+  }
+
+  .tooltip:hover::after { opacity: 1; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 40px;
+    color: var(--text3);
+  }
+
+  .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+    50% { box-shadow: 0 0 0 6px transparent; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    header { padding: 20px; }
+    main { padding: 24px 16px 60px; }
+    .col-grid { grid-template-columns: 1fr; }
+    .stat-cards { grid-template-columns: repeat(2, 1fr); }
+    .action-bar { flex-direction: column; }
+    .btn { justify-content: center; }
+    .chart-tabs { gap: 6px; }
+    .chart-tab { padding: 10px 14px; font-size: 10px; }
+    .group-mini-stats { display: none; }
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ── MISC ── */
+  .space-y > * + * { margin-top: 24px; }
+  .mt-6 { margin-top: 24px; }
+  .mt-4 { margin-top: 16px; }
+  .mt-8 { margin-top: 32px; }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .badge-outlier {
+    background: rgba(248,113,113,0.15);
+    color: var(--red);
+    border: 1px solid rgba(248,113,113,0.3);
+  }
+
+  .badge-skew {
+    background: rgba(96,165,250,0.15);
+    color: var(--blue);
+    border: 1px solid rgba(96,165,250,0.3);
+  }
+
+  /* skewness / kurtosis interpretation pill */
+  .interp-pill {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">DL</div>
+    <div>
+      <div class="logo-text">Data<span>Lab</span></div>
+    </div>
+  </div>
+  <div class="header-tag">Análise Estatística v1.0</div>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- STEP 1: UPLOAD -->
+  <div class="space-y">
+    <p class="section-title">01 — importar dados</p>
+
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <span class="drop-icon" id="dropIcon">📂</span>
+      <div class="drop-title" id="dropTitle">Arraste seu arquivo aqui</div>
+      <div class="drop-sub" id="dropSub">ou clique para selecionar</div>
+      <div class="drop-formats">
+        <span class="format-badge">CSV</span>
+        <span class="format-badge">XLSX</span>
+        <span class="format-badge">XLS</span>
+      </div>
+    </div>
+    <div class="loading-bar" id="loadingBar"></div>
+    <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" />
+
+    <div class="file-info" id="fileInfo">
+      <span class="file-info-icon">✅</span>
+      <div>
+        <div class="file-info-name" id="fileName">—</div>
+        <div class="file-info-meta" id="fileMeta">—</div>
+      </div>
+      <button class="file-info-clear" onclick="clearFile()">✕ Limpar</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: COLUMN SELECTION -->
+  <div id="configSection" style="display:none; animation: fadeIn 0.4s ease;" class="mt-8">
+    <p class="section-title">02 — configurar análise</p>
+
+    <div class="col-grid">
+      <div class="select-wrap">
+        <div class="select-label"><span class="type-dot numeric"></span> Coluna Numérica</div>
+        <select id="numericCol">
+          <option value="">— selecione —</option>
+        </select>
+        <span class="select-arrow">▾</span>
+      </div>
+      <div class="select-wrap">
+        <div class="select-label"><span class="type-dot category"></span> Agrupar por Categoria <span style="opacity:.5">(opcional)</span></div>
+        <select id="categoryCol">
+          <option value="">— sem agrupamento —</option>
+        </select>
+        <span class="select-arrow">▾</span>
+      </div>
+    </div>
+
+    <div class="action-bar mt-6">
+      <button class="btn btn-primary" onclick="runAnalysis()" id="analyzeBtn">
+        ⚡ Calcular Estatísticas
+      </button>
+      <button class="btn btn-ghost" onclick="document.getElementById('fileInput').click()">
+        📂 Trocar Arquivo
+      </button>
+    </div>
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="divider" id="divider1" style="display:none"></div>
+
+  <!-- RESULTS -->
+  <div class="results-section" id="resultsSection">
+
+    <!-- EXPORT / IMPORT BAR -->
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:28px;">
+      <p class="section-title" style="margin:0; flex:1">03 — resultados</p>
+      <div class="action-bar" style="margin:0">
+        <button class="btn btn-green tooltip" data-tip="Exportar resultados em JSON" onclick="exportJSON()">
+          ⬇ Exportar JSON
+        </button>
+        <button class="btn btn-green tooltip" data-tip="Exportar relatório em CSV" onclick="exportCSV()">
+          ⬇ Exportar CSV
+        </button>
+        <button class="btn btn-blue tooltip" data-tip="Importar resultados JSON anteriores" onclick="document.getElementById('importInput').click()">
+          ⬆ Importar Resultados
+        </button>
+        <input type="file" id="importInput" accept=".json" style="display:none" onchange="importResults(event)">
+      </div>
+    </div>
+
+    <!-- STAT GROUPS CONTAINER -->
+    <div id="statGroupsContainer" class="stat-groups"></div>
+
+    <!-- GROUPED RESULTS -->
+    <div id="groupedSection" style="display:none; margin-top:32px;">
+      <p class="section-title">análise por categoria</p>
+      <div id="groupedContainer" class="group-results"></div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="mt-8">
+      <p class="section-title">visualizações</p>
+
+      <div class="chart-tabs" id="chartTabs">
+        <button class="chart-tab active" onclick="switchChart('histogram', this)">Histograma + KDE</button>
+        <button class="chart-tab" onclick="switchChart('boxplot', this)">Box Plot</button>
+        <button class="chart-tab" onclick="switchChart('scatter', this)">Scatter / Outliers</button>
+        <button class="chart-tab" onclick="switchChart('bargroup', this)" id="tabBarGroup" style="display:none">Médias por Grupo</button>
+        <button class="chart-tab" onclick="switchChart('ecdf', this)">ECDF</button>
+      </div>
+
+      <div class="chart-panel active" id="panel-histogram">
+        <canvas id="chartHistogram"></canvas>
+      </div>
+      <div class="chart-panel" id="panel-boxplot">
+        <canvas id="chartBoxplot"></canvas>
+      </div>
+      <div class="chart-panel" id="panel-scatter">
+        <canvas id="chartScatter"></canvas>
+      </div>
+      <div class="chart-panel" id="panel-bargroup">
+        <canvas id="chartBarGroup"></canvas>
+      </div>
+      <div class="chart-panel" id="panel-ecdf">
+        <canvas id="chartEcdf"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let rawData = [];
+let headers = [];
+let currentStats = null;
+let currentGrouped = null;
+let charts = {};
+
+// ══════════════════════════════════════════════
+//  FILE HANDLING
+// ══════════════════════════════════════════════
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('drag-over');
+});
+
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+});
+
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) processFile(e.target.files[0]);
+});
+
+function processFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!['csv','xlsx','xls'].includes(ext)) {
+    alert('Formato não suportado. Use CSV, XLSX ou XLS.');
+    return;
+  }
+
+  document.getElementById('loadingBar').classList.add('show');
+  document.getElementById('dropIcon').textContent = '⏳';
+  document.getElementById('dropTitle').textContent = 'Processando…';
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    setTimeout(() => {
+      try {
+        const wb = XLSX.read(e.target.result, { type: 'binary' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        rawData = XLSX.utils.sheet_to_json(ws, { defval: '' });
+        headers = rawData.length ? Object.keys(rawData[0]) : [];
+
+        document.getElementById('loadingBar').classList.remove('show');
+        dropZone.classList.add('loaded');
+        document.getElementById('dropIcon').textContent = '✅';
+        document.getElementById('dropTitle').textContent = file.name;
+        document.getElementById('dropSub').textContent = `${rawData.length.toLocaleString('pt-BR')} linhas · ${headers.length} colunas`;
+
+        const fileInfo = document.getElementById('fileInfo');
+        fileInfo.classList.add('show');
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileMeta').textContent =
+          `${rawData.length.toLocaleString('pt-BR')} registros · ${headers.length} colunas · ${(file.size/1024).toFixed(1)} KB`;
+
+        populateSelectors();
+        document.getElementById('configSection').style.display = 'block';
+        hideResults();
+      } catch(err) {
+        document.getElementById('loadingBar').classList.remove('show');
+        alert('Erro ao ler arquivo: ' + err.message);
+      }
+    }, 300);
+  };
+  reader.readAsBinaryString(file);
+}
+
+function clearFile() {
+  rawData = []; headers = [];
+  document.getElementById('fileInfo').classList.remove('show');
+  document.getElementById('configSection').style.display = 'none';
+  dropZone.classList.remove('loaded');
+  document.getElementById('dropIcon').textContent = '📂';
+  document.getElementById('dropTitle').textContent = 'Arraste seu arquivo aqui';
+  document.getElementById('dropSub').textContent = 'ou clique para selecionar';
+  fileInput.value = '';
+  hideResults();
+}
+
+function hideResults() {
+  document.getElementById('resultsSection').classList.remove('show');
+  document.getElementById('divider1').style.display = 'none';
+}
+
+// ══════════════════════════════════════════════
+//  COLUMN DETECTION
+// ══════════════════════════════════════════════
+function detectNumeric(col) {
+  let count = 0, valid = 0;
+  for (const row of rawData) {
+    if (row[col] !== '' && row[col] !== null && row[col] !== undefined) {
+      count++;
+      if (!isNaN(parseFloat(String(row[col]).replace(',', '.')))) valid++;
+    }
+  }
+  return count > 0 && valid / count > 0.7;
+}
+
+function populateSelectors() {
+  const numSel = document.getElementById('numericCol');
+  const catSel = document.getElementById('categoryCol');
+  numSel.innerHTML = '<option value="">— selecione —</option>';
+  catSel.innerHTML = '<option value="">— sem agrupamento —</option>';
+
+  headers.forEach(h => {
+    if (detectNumeric(h)) {
+      numSel.innerHTML += `<option value="${h}">📊 ${h}</option>`;
+    } else {
+      catSel.innerHTML += `<option value="${h}">🏷 ${h}</option>`;
+    }
+  });
+}
+
+// ══════════════════════════════════════════════
+//  STATISTICS ENGINE
+// ══════════════════════════════════════════════
+function parseValues(col) {
+  return rawData
+    .map(r => parseFloat(String(r[col]).replace(',','.')))
+    .filter(v => !isNaN(v));
+}
+
+function calcStats(values) {
+  if (!values.length) return null;
+  const n = values.length;
+  const sorted = [...values].sort((a,b)=>a-b);
+
+  // Central tendency
+  const mean = values.reduce((s,v)=>s+v,0)/n;
+  const median = n%2===0
+    ? (sorted[n/2-1]+sorted[n/2])/2
+    : sorted[Math.floor(n/2)];
+
+  // Trimmed mean 5%
+  const trim = Math.floor(n*0.05);
+  const trimmed = sorted.slice(trim, n-trim);
+  const trimmedMean = trimmed.reduce((s,v)=>s+v,0)/trimmed.length;
+
+  // Mode
+  const freq = {};
+  values.forEach(v=>{ freq[v]=(freq[v]||0)+1; });
+  const maxFreq = Math.max(...Object.values(freq));
+  const modes = maxFreq > 1
+    ? Object.keys(freq).filter(k=>freq[k]===maxFreq).map(Number)
+    : null;
+
+  // Dispersion
+  const variance = values.reduce((s,v)=>s+(v-mean)**2,0)/(n-1);
+  const std = Math.sqrt(variance);
+  const cv = mean !== 0 ? (std/Math.abs(mean))*100 : null;
+  const range = sorted[n-1]-sorted[0];
+
+  // Percentiles
+  const pct = p => {
+    const idx = (p/100)*(n-1);
+    const lo = Math.floor(idx), hi = Math.ceil(idx);
+    return sorted[lo]+(sorted[hi]-sorted[lo])*(idx-lo);
+  };
+  const q1=pct(25), q2=pct(50), q3=pct(75);
+  const iqr = q3-q1;
+
+  // Outliers (Tukey)
+  const lo = q1-1.5*iqr, hi = q3+1.5*iqr;
+  const outliers = values.filter(v=>v<lo||v>hi);
+
+  // Shape
+  const skewness = values.reduce((s,v)=>s+((v-mean)/std)**3,0)/n;
+  const kurtosis = values.reduce((s,v)=>s+((v-mean)/std)**4,0)/n - 3;
+
+  // Missing
+  const missing = rawData.length - values.length;
+  const unique = new Set(values).size;
+
+  return {
+    n, missing, unique,
+    mean, median, trimmedMean, modes,
+    std, variance, cv, range,
+    min: sorted[0], max: sorted[n-1],
+    q1, q2, q3, iqr,
+    outlierCount: outliers.length, outliers,
+    skewness, kurtosis,
+    pct5: pct(5), pct95: pct(95),
+    sorted, values
+  };
+}
+
+function fmt(v, decimals=2) {
+  if (v === null || v === undefined || isNaN(v)) return '—';
+  return Number(v).toLocaleString('pt-BR', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+}
+
+function fmtShort(v) {
+  if (v === null || v === undefined || isNaN(v)) return '—';
+  const n = Number(v);
+  if (Math.abs(n) >= 1e6) return (n/1e6).toFixed(2)+'M';
+  if (Math.abs(n) >= 1e3) return (n/1e3).toFixed(2)+'K';
+  return n.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function skewLabel(s) {
+  if (s > 1) return { label:'Assimetria Alta →', color:'var(--red)' };
+  if (s > 0.5) return { label:'Assimetria Mod. →', color:'var(--accent)' };
+  if (s < -1) return { label:'Assimetria Alta ←', color:'var(--red)' };
+  if (s < -0.5) return { label:'Assimetria Mod. ←', color:'var(--accent)' };
+  return { label:'Simétrica', color:'var(--green)' };
+}
+
+function kurtLabel(k) {
+  if (k > 1) return { label:'Leptocúrtica', color:'var(--purple)' };
+  if (k < -1) return { label:'Platicúrtica', color:'var(--blue)' };
+  return { label:'Mesocúrtica', color:'var(--green)' };
+}
+
+// ══════════════════════════════════════════════
+//  RENDER STATS
+// ══════════════════════════════════════════════
+function renderStats(s, container) {
+  const sl = skewLabel(s.skewness);
+  const kl = kurtLabel(s.kurtosis);
+
+  const html = `
+    <!-- GROUP 1: RESUMO -->
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">🧮</span>
+        <span class="stat-group-title">Resumo Rápido</span>
+        <span class="stat-group-desc">visão geral do dataset</span>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-card-label">Registros (N)</div>
+          <div class="stat-card-value accent">${s.n.toLocaleString('pt-BR')}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Valores Nulos</div>
+          <div class="stat-card-value ${s.missing>0?'red':'green'}">${s.missing}</div>
+          <div class="stat-card-sub">${((s.missing/rawData.length)*100).toFixed(1)}% do total</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Valores Únicos</div>
+          <div class="stat-card-value blue">${s.unique.toLocaleString('pt-BR')}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Mínimo</div>
+          <div class="stat-card-value">${fmtShort(s.min)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Máximo</div>
+          <div class="stat-card-value">${fmtShort(s.max)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Amplitude</div>
+          <div class="stat-card-value teal">${fmtShort(s.range)}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP 2: TENDÊNCIA CENTRAL -->
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">🎯</span>
+        <span class="stat-group-title">Tendência Central</span>
+        <span class="stat-group-desc">onde os dados se concentram</span>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-card-label">Média</div>
+          <div class="stat-card-value accent">${fmt(s.mean)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Mediana</div>
+          <div class="stat-card-value">${fmt(s.median)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Média Aparada 5%</div>
+          <div class="stat-card-value teal">${fmt(s.trimmedMean)}</div>
+          <div class="stat-card-sub">robusta a outliers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Moda</div>
+          <div class="stat-card-value ${s.modes?'':'red'}">${
+            s.modes ? (s.modes.length<=3 ? s.modes.map(m=>fmt(m)).join(', ') : s.modes.length+' modos') : 'Sem moda'
+          }</div>
+          ${s.modes && s.modes.length > 3 ? `<div class="stat-card-sub">distribuição uniforme</div>` : ''}
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP 3: DISPERSÃO -->
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">📏</span>
+        <span class="stat-group-title">Dispersão</span>
+        <span class="stat-group-desc">o quanto os dados variam</span>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-card-label">Desvio Padrão</div>
+          <div class="stat-card-value">${fmt(s.std)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Variância</div>
+          <div class="stat-card-value blue">${fmt(s.variance)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">CV%</div>
+          <div class="stat-card-value ${s.cv>50?'red':s.cv>25?'accent':'green'}">${s.cv!==null?fmt(s.cv)+'%':'—'}</div>
+          <div class="stat-card-sub">coef. variação</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">IQR</div>
+          <div class="stat-card-value purple">${fmt(s.iqr)}</div>
+          <div class="stat-card-sub">Q3 − Q1</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Outliers</div>
+          <div class="stat-card-value ${s.outlierCount>0?'red':'green'}">${s.outlierCount}</div>
+          <div class="stat-card-sub">${((s.outlierCount/s.n)*100).toFixed(1)}% dos dados</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP 4: PERCENTIS -->
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">📐</span>
+        <span class="stat-group-title">Percentis & Posição</span>
+        <span class="stat-group-desc">distribuição posicional</span>
+      </div>
+      <div class="stat-cards">
+        <div class="percentile-bar">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text2); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;">Régua de Percentis</div>
+          <div class="pct-track">
+            <div class="pct-fill" style="left:${((s.q1-s.min)/(s.max-s.min)*100).toFixed(1)}%; width:${((s.q3-s.q1)/(s.max-s.min)*100).toFixed(1)}%"></div>
+          </div>
+          <div class="pct-markers">
+            <div class="pct-marker">
+              <div class="pct-marker-val">${fmtShort(s.min)}</div>
+              <div class="pct-marker-label">Min</div>
+            </div>
+            <div class="pct-marker">
+              <div class="pct-marker-val">${fmtShort(s.pct5)}</div>
+              <div class="pct-marker-label">P5</div>
+            </div>
+            <div class="pct-marker">
+              <div class="pct-marker-val">${fmtShort(s.q1)}</div>
+              <div class="pct-marker-label">Q1 (25%)</div>
+            </div>
+            <div class="pct-marker">
+              <div class="pct-marker-val" style="color:var(--accent)">${fmtShort(s.q2)}</div>
+              <div class="pct-marker-label">Q2 (50%)</div>
+            </div>
+            <div class="pct-marker">
+              <div class="pct-marker-val">${fmtShort(s.q3)}</div>
+              <div class="pct-marker-label">Q3 (75%)</div>
+            </div>
+            <div class="pct-marker">
+              <div class="pct-marker-val">${fmtShort(s.pct95)}</div>
+              <div class="pct-marker-label">P95</div>
+            </div>
+            <div class="pct-marker">
+              <div class="pct-marker-val">${fmtShort(s.max)}</div>
+              <div class="pct-marker-label">Max</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP 5: DISTRIBUIÇÃO -->
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">📊</span>
+        <span class="stat-group-title">Forma da Distribuição</span>
+        <span class="stat-group-desc">comportamento estatístico</span>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-card-label">Assimetria (Skewness)</div>
+          <div class="stat-card-value">${fmt(s.skewness, 3)}</div>
+          <div class="interp-pill" style="background:${sl.color}22; color:${sl.color}; border:1px solid ${sl.color}44;">${sl.label}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Curtose (Kurtosis)</div>
+          <div class="stat-card-value">${fmt(s.kurtosis, 3)}</div>
+          <div class="interp-pill" style="background:${kl.color}22; color:${kl.color}; border:1px solid ${kl.color}44;">${kl.label}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════
+//  GROUPED ANALYSIS
+// ══════════════════════════════════════════════
+function renderGrouped(numCol, catCol) {
+  const groups = {};
+  rawData.forEach(row => {
+    const cat = String(row[catCol] ?? 'N/A');
+    const val = parseFloat(String(row[numCol]).replace(',','.'));
+    if (!isNaN(val)) {
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(val);
+    }
+  });
+
+  const results = Object.entries(groups).map(([cat, vals]) => {
+    const s = calcStats(vals);
+    return { cat, s };
+  }).sort((a,b) => b.s.mean - a.s.mean);
+
+  currentGrouped = results;
+
+  const container = document.getElementById('groupedContainer');
+  container.innerHTML = '';
+
+  results.forEach(({ cat, s }) => {
+    const div = document.createElement('div');
+    div.className = 'group-card';
+    div.innerHTML = `
+      <div class="group-card-header">
+        <span class="group-badge">${cat}</span>
+        <div class="group-mini-stats">
+          N: <span>${s.n}</span> &nbsp; Média: <span>${fmt(s.mean)}</span> &nbsp; Mediana: <span>${fmt(s.median)}</span> &nbsp; DP: <span>${fmt(s.std)}</span>
+        </div>
+      </div>
+      <div class="group-card-body">
+        <div class="group-stat"><div class="group-stat-label">N</div><div class="group-stat-val">${s.n}</div></div>
+        <div class="group-stat"><div class="group-stat-label">Média</div><div class="group-stat-val">${fmt(s.mean)}</div></div>
+        <div class="group-stat"><div class="group-stat-label">Mediana</div><div class="group-stat-val">${fmt(s.median)}</div></div>
+        <div class="group-stat"><div class="group-stat-label">Desv. Pad.</div><div class="group-stat-val">${fmt(s.std)}</div></div>
+        <div class="group-stat"><div class="group-stat-label">Min</div><div class="group-stat-val">${fmtShort(s.min)}</div></div>
+        <div class="group-stat"><div class="group-stat-label">Max</div><div class="group-stat-val">${fmtShort(s.max)}</div></div>
+        <div class="group-stat"><div class="group-stat-label">Q1</div><div class="group-stat-val">${fmt(s.q1)}</div></div>
+        <div class="group-stat"><div class="group-stat-label">Q3</div><div class="group-stat-val">${fmt(s.q3)}</div></div>
+        <div class="group-stat"><div class="group-stat-label">Outliers</div><div class="group-stat-val">${s.outlierCount}</div></div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  document.getElementById('groupedSection').style.display = 'block';
+  document.getElementById('tabBarGroup').style.display = '';
+  return results;
+}
+
+// ══════════════════════════════════════════════
+//  CHARTS
+// ══════════════════════════════════════════════
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+const CHART_COLORS = {
+  accent: 'rgba(245,166,35,',
+  green: 'rgba(52,211,153,',
+  blue: 'rgba(96,165,250,',
+  purple: 'rgba(167,139,250,',
+  teal: 'rgba(45,212,191,',
+  red: 'rgba(248,113,113,',
+};
+
+function buildHistogram(values, numBins=30) {
+  const min = Math.min(...values), max = Math.max(...values);
+  const binW = (max-min)/numBins;
+  const bins = Array(numBins).fill(0);
+  values.forEach(v => {
+    let i = Math.floor((v-min)/binW);
+    if (i === numBins) i = numBins-1;
+    bins[i]++;
+  });
+  const labels = bins.map((_,i) => fmtShort(min + i*binW));
+
+  // KDE
+  const bw = 1.06 * Math.sqrt(values.reduce((s,v)=>s+(v-values.reduce((a,b)=>a+b)/values.length)**2,0)/(values.length-1)) * Math.pow(values.length,-0.2);
+  const kde = bins.map((_,i) => {
+    const x = min + (i+0.5)*binW;
+    return values.reduce((s,v)=>s + Math.exp(-0.5*((x-v)/bw)**2)/(bw*Math.sqrt(2*Math.PI)),0)/values.length * binW * values.length;
+  });
+
+  return { labels, bins, kde };
+}
+
+function renderCharts(s, grouped) {
+  const { values, sorted } = s;
+
+  // ── HISTOGRAM + KDE
+  destroyChart('histogram');
+  const hData = buildHistogram(values);
+  charts.histogram = new Chart(document.getElementById('chartHistogram'), {
+    data: {
+      labels: hData.labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Frequência',
+          data: hData.bins,
+          backgroundColor: CHART_COLORS.accent + '0.5)',
+          borderColor: CHART_COLORS.accent + '0.8)',
+          borderWidth: 1,
+          borderRadius: 3,
+        },
+        {
+          type: 'line',
+          label: 'KDE (Densidade)',
+          data: hData.kde,
+          borderColor: CHART_COLORS.teal + '1)',
+          borderWidth: 2.5,
+          pointRadius: 0,
+          tension: 0.4,
+          fill: true,
+          backgroundColor: CHART_COLORS.teal + '0.06)',
+          yAxisID: 'y',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 600, easing: 'easeOutQuart' },
+      plugins: { legend: { labels: { color: '#8892a4', font: { family: 'JetBrains Mono', size: 11 } } },
+        tooltip: { backgroundColor: '#111318', titleColor: '#e8eaf0', bodyColor: '#8892a4', borderColor: '#1e2330', borderWidth: 1 }
+      },
+      scales: {
+        x: { ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 }, maxRotation: 45 }, grid: { color: '#1e2330' } },
+        y: { ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 } }, grid: { color: '#1e2330' } }
+      }
+    }
+  });
+
+  // ── BOX PLOT (simulated with scatter/line)
+  destroyChart('boxplot');
+  const bpData = [];
+  // Whisker low → Q1 → Median → Q3 → Whisker high
+  const whiskerLo = Math.max(s.min, s.q1 - 1.5*s.iqr);
+  const whiskerHi = Math.min(s.max, s.q3 + 1.5*s.iqr);
+
+  charts.boxplot = new Chart(document.getElementById('chartBoxplot'), {
+    type: 'bar',
+    data: {
+      labels: ['Distribuição'],
+      datasets: [
+        { label: 'Min → Q1', data: [s.q1 - whiskerLo], backgroundColor: 'transparent', borderColor: 'transparent', stack: 'bp' },
+        { label: 'Q1 → Mediana', data: [s.median - s.q1], backgroundColor: CHART_COLORS.blue+'0.4)', borderColor: CHART_COLORS.blue+'0.8)', borderWidth: 1, stack: 'bp' },
+        { label: 'Mediana → Q3', data: [s.q3 - s.median], backgroundColor: CHART_COLORS.accent+'0.4)', borderColor: CHART_COLORS.accent+'0.8)', borderWidth: 1, stack: 'bp' },
+        { label: 'Q3 → Max', data: [whiskerHi - s.q3], backgroundColor: 'transparent', borderColor: 'transparent', stack: 'bp' },
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      animation: { duration: 600 },
+      plugins: {
+        legend: { labels: { color: '#8892a4', font: { family: 'JetBrains Mono', size: 11 } } },
+        tooltip: {
+          backgroundColor: '#111318', titleColor: '#e8eaf0', bodyColor: '#8892a4', borderColor: '#1e2330', borderWidth: 1,
+          callbacks: {
+            label: ctx => {
+              const labels = [`Q1: ${fmt(s.q1)}`, `Mediana: ${fmt(s.median)}`, `Q3: ${fmt(s.q3)}`, `IQR: ${fmt(s.iqr)}`];
+              return labels;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 } }, grid: { color: '#1e2330' } },
+        y: { stacked: true, ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 } }, grid: { color: '#1e2330' } }
+      }
+    }
+  });
+
+  // ── SCATTER / OUTLIERS
+  destroyChart('scatter');
+  const lo = s.q1-1.5*s.iqr, hi = s.q3+1.5*s.iqr;
+  const normalPts = values.map((v,i)=>({x:i,y:v})).filter(p=>p.y>=lo && p.y<=hi);
+  const outlierPts = values.map((v,i)=>({x:i,y:v})).filter(p=>p.y<lo || p.y>hi);
+
+  charts.scatter = new Chart(document.getElementById('chartScatter'), {
+    type: 'scatter',
+    data: {
+      datasets: [
+        {
+          label: 'Valores Normais',
+          data: normalPts,
+          backgroundColor: CHART_COLORS.blue+'0.5)',
+          pointRadius: 3,
+          pointHoverRadius: 5,
+        },
+        {
+          label: `Outliers (${outlierPts.length})`,
+          data: outlierPts,
+          backgroundColor: CHART_COLORS.red+'0.8)',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+        {
+          label: 'Média',
+          data: [{x:0,y:s.mean},{x:values.length-1,y:s.mean}],
+          type: 'line',
+          borderColor: CHART_COLORS.accent+'1)',
+          borderWidth: 1.5,
+          borderDash: [6,4],
+          pointRadius: 0,
+        },
+        {
+          label: 'Média ± 2σ (sup)',
+          data: [{x:0,y:s.mean+2*s.std},{x:values.length-1,y:s.mean+2*s.std}],
+          type: 'line',
+          borderColor: CHART_COLORS.green+'0.5)',
+          borderWidth: 1,
+          borderDash: [3,3],
+          pointRadius: 0,
+        },
+        {
+          label: 'Média ± 2σ (inf)',
+          data: [{x:0,y:s.mean-2*s.std},{x:values.length-1,y:s.mean-2*s.std}],
+          type: 'line',
+          borderColor: CHART_COLORS.green+'0.5)',
+          borderWidth: 1,
+          borderDash: [3,3],
+          pointRadius: 0,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 600 },
+      plugins: {
+        legend: { labels: { color: '#8892a4', font: { family: 'JetBrains Mono', size: 11 } } },
+        tooltip: { backgroundColor: '#111318', titleColor: '#e8eaf0', bodyColor: '#8892a4', borderColor: '#1e2330', borderWidth: 1 }
+      },
+      scales: {
+        x: { ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 } }, grid: { color: '#1e2330' } },
+        y: { ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 } }, grid: { color: '#1e2330' } }
+      }
+    }
+  });
+
+  // ── ECDF
+  destroyChart('ecdf');
+  const ecdfStep = Math.max(1, Math.floor(sorted.length/200));
+  const ecdfX = sorted.filter((_,i)=>i%ecdfStep===0);
+  const ecdfY = ecdfX.map((_,i)=>((i*ecdfStep+1)/sorted.length));
+
+  charts.ecdf = new Chart(document.getElementById('chartEcdf'), {
+    type: 'line',
+    data: {
+      labels: ecdfX.map(v=>fmtShort(v)),
+      datasets: [{
+        label: 'ECDF',
+        data: ecdfY,
+        borderColor: CHART_COLORS.purple+'1)',
+        backgroundColor: CHART_COLORS.purple+'0.08)',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        fill: true,
+        tension: 0,
+        stepped: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      animation: { duration: 600 },
+      plugins: {
+        legend: { labels: { color: '#8892a4', font: { family: 'JetBrains Mono', size: 11 } } },
+        tooltip: { backgroundColor: '#111318', titleColor: '#e8eaf0', bodyColor: '#8892a4', borderColor: '#1e2330', borderWidth: 1 }
+      },
+      scales: {
+        x: { ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 10 }, grid: { color: '#1e2330' } },
+        y: { min: 0, max: 1, ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 }, callback: v => (v*100).toFixed(0)+'%' }, grid: { color: '#1e2330' } }
+      }
+    }
+  });
+
+  // ── BAR GROUP (if grouped)
+  if (grouped && grouped.length) {
+    destroyChart('bargroup');
+    const grpLabels = grouped.map(g => g.cat);
+    const grpMeans = grouped.map(g => g.s.mean);
+    const grpStds = grouped.map(g => g.s.std);
+
+    charts.bargroup = new Chart(document.getElementById('chartBarGroup'), {
+      type: 'bar',
+      data: {
+        labels: grpLabels,
+        datasets: [
+          {
+            label: 'Média por Grupo',
+            data: grpMeans,
+            backgroundColor: grpLabels.map((_,i) => `hsl(${30+i*40},80%,55%,0.6)`),
+            borderColor: grpLabels.map((_,i) => `hsl(${30+i*40},80%,65%,1)`),
+            borderWidth: 1,
+            borderRadius: 6,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        animation: { duration: 600 },
+        plugins: {
+          legend: { labels: { color: '#8892a4', font: { family: 'JetBrains Mono', size: 11 } } },
+          tooltip: {
+            backgroundColor: '#111318', titleColor: '#e8eaf0', bodyColor: '#8892a4', borderColor: '#1e2330', borderWidth: 1,
+            callbacks: {
+              afterLabel: ctx => `σ: ${fmt(grpStds[ctx.dataIndex])}`
+            }
+          }
+        },
+        scales: {
+          x: { ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 }, maxRotation: 45 }, grid: { color: '#1e2330' } },
+          y: { ticks: { color: '#4a5568', font: { family: 'JetBrains Mono', size: 9 } }, grid: { color: '#1e2330' } }
+        }
+      }
+    });
+  }
+}
+
+// ══════════════════════════════════════════════
+//  CHART TABS
+// ══════════════════════════════════════════════
+function switchChart(name, btn) {
+  document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.chart-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+//  RUN ANALYSIS
+// ══════════════════════════════════════════════
+function runAnalysis() {
+  const numCol = document.getElementById('numericCol').value;
+  const catCol = document.getElementById('categoryCol').value;
+
+  if (!numCol) {
+    alert('Selecione uma coluna numérica para analisar.');
+    return;
+  }
+
+  const values = parseValues(numCol);
+  if (values.length < 2) {
+    alert('Dados insuficientes na coluna selecionada.');
+    return;
+  }
+
+  const s = calcStats(values);
+  currentStats = s;
+
+  renderStats(s, document.getElementById('statGroupsContainer'));
+
+  let grouped = null;
+  if (catCol) {
+    grouped = renderGrouped(numCol, catCol);
+    currentGrouped = grouped;
+  } else {
+    document.getElementById('groupedSection').style.display = 'none';
+    document.getElementById('tabBarGroup').style.display = 'none';
+    currentGrouped = null;
+  }
+
+  renderCharts(s, grouped);
+
+  document.getElementById('resultsSection').classList.add('show');
+  document.getElementById('divider1').style.display = 'block';
+
+  // Reset tabs
+  document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.chart-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('.chart-tab').classList.add('active');
+  document.getElementById('panel-histogram').classList.add('active');
+
+  setTimeout(() => {
+    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ══════════════════════════════════════════════
+//  EXPORT / IMPORT
+// ══════════════════════════════════════════════
+function exportJSON() {
+  if (!currentStats) { alert('Calcule as estatísticas primeiro.'); return; }
+
+  const output = {
+    meta: {
+      exportedAt: new Date().toISOString(),
+      column: document.getElementById('numericCol').value,
+      groupBy: document.getElementById('categoryCol').value || null,
+      n: currentStats.n,
+    },
+    statistics: {
+      n: currentStats.n,
+      missing: currentStats.missing,
+      unique: currentStats.unique,
+      mean: currentStats.mean,
+      median: currentStats.median,
+      trimmedMean: currentStats.trimmedMean,
+      modes: currentStats.modes,
+      std: currentStats.std,
+      variance: currentStats.variance,
+      cv: currentStats.cv,
+      range: currentStats.range,
+      min: currentStats.min,
+      max: currentStats.max,
+      q1: currentStats.q1,
+      q2: currentStats.q2,
+      q3: currentStats.q3,
+      iqr: currentStats.iqr,
+      pct5: currentStats.pct5,
+      pct95: currentStats.pct95,
+      outlierCount: currentStats.outlierCount,
+      skewness: currentStats.skewness,
+      kurtosis: currentStats.kurtosis,
+    },
+    grouped: currentGrouped ? currentGrouped.map(g => ({
+      category: g.cat,
+      n: g.s.n,
+      mean: g.s.mean,
+      median: g.s.median,
+      std: g.s.std,
+      min: g.s.min,
+      max: g.s.max,
+      q1: g.s.q1,
+      q3: g.s.q3,
+      outliers: g.s.outlierCount,
+    })) : null
+  };
+
+  const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `datalab_${Date.now()}.json`;
+  a.click();
+}
+
+function exportCSV() {
+  if (!currentStats) { alert('Calcule as estatísticas primeiro.'); return; }
+  const s = currentStats;
+
+  let csv = 'Estatística,Valor\n';
+  const rows = [
+    ['N', s.n], ['Valores Nulos', s.missing], ['Valores Únicos', s.unique],
+    ['Média', s.mean], ['Mediana', s.median], ['Média Aparada 5%', s.trimmedMean],
+    ['Moda', s.modes ? s.modes.join(' | ') : 'Sem moda'],
+    ['Desvio Padrão', s.std], ['Variância', s.variance], ['CV%', s.cv],
+    ['Amplitude', s.range], ['Mínimo', s.min], ['Máximo', s.max],
+    ['Q1 (25%)', s.q1], ['Mediana Q2 (50%)', s.q2], ['Q3 (75%)', s.q3], ['IQR', s.iqr],
+    ['Percentil 5', s.pct5], ['Percentil 95', s.pct95],
+    ['Outliers', s.outlierCount], ['Assimetria', s.skewness], ['Curtose', s.kurtosis],
+  ];
+  rows.forEach(([k,v]) => { csv += `"${k}","${v}"\n`; });
+
+  if (currentGrouped) {
+    csv += '\nAnálise por Grupo\n';
+    csv += 'Grupo,N,Média,Mediana,Desv.Pad.,Min,Max,Q1,Q3,Outliers\n';
+    currentGrouped.forEach(g => {
+      csv += `"${g.cat}",${g.s.n},${g.s.mean.toFixed(4)},${g.s.median.toFixed(4)},${g.s.std.toFixed(4)},${g.s.min},${g.s.max},${g.s.q1.toFixed(4)},${g.s.q3.toFixed(4)},${g.s.outlierCount}\n`;
+    });
+  }
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `datalab_${Date.now()}.csv`;
+  a.click();
+}
+
+function importResults(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.statistics) { alert('Arquivo JSON inválido. Exporte primeiro via DataLab.'); return; }
+
+      const s = data.statistics;
+      s.values = [];
+      s.sorted = [];
+      s.modes = s.modes || null;
+      currentStats = s;
+
+      document.getElementById('divider1').style.display = 'block';
+      document.getElementById('resultsSection').classList.add('show');
+      renderStats(s, document.getElementById('statGroupsContainer'));
+
+      if (data.grouped) {
+        currentGrouped = data.grouped.map(g => ({
+          cat: g.category,
+          s: { n:g.n, mean:g.mean, median:g.median, std:g.std, min:g.min, max:g.max, q1:g.q1, q3:g.q3, outlierCount:g.outliers }
+        }));
+        const container = document.getElementById('groupedContainer');
+        container.innerHTML = '';
+        currentGrouped.forEach(({ cat, s }) => {
+          const div = document.createElement('div');
+          div.className = 'group-card';
+          div.innerHTML = `
+            <div class="group-card-header">
+              <span class="group-badge">${cat}</span>
+              <div class="group-mini-stats">N: <span>${s.n}</span> &nbsp; Média: <span>${fmt(s.mean)}</span></div>
+            </div>
+            <div class="group-card-body">
+              <div class="group-stat"><div class="group-stat-label">N</div><div class="group-stat-val">${s.n}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Média</div><div class="group-stat-val">${fmt(s.mean)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Mediana</div><div class="group-stat-val">${fmt(s.median)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Desv.Pad.</div><div class="group-stat-val">${fmt(s.std)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Min</div><div class="group-stat-val">${fmtShort(s.min)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Max</div><div class="group-stat-val">${fmtShort(s.max)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Q1</div><div class="group-stat-val">${fmt(s.q1)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Q3</div><div class="group-stat-val">${fmt(s.q3)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Outliers</div><div class="group-stat-val">${s.outlierCount}</div></div>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+        document.getElementById('groupedSection').style.display = 'block';
+      }
+
+      alert(`✅ Resultados importados com sucesso!\n📅 Exportado em: ${new Date(data.meta?.exportedAt).toLocaleString('pt-BR')}`);
+    } catch(err) {
+      alert('Erro ao importar: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+</script>
+</body>
+</html>
