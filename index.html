@@ -1138,11 +1138,9 @@
     margin-top: 2px;
   }
 
-  /* ── NEW: COLLAPSIBLE GROUP EXPLANATION (INTERPRETATION) ── */
   .group-explain {
     border-top: 1px solid var(--border);
-    background: var(--surface2);
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    margin-top: 0;
   }
   .group-explain summary {
     display: flex;
@@ -1152,35 +1150,62 @@
     cursor: pointer;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--accent);
+    color: var(--teal);
     letter-spacing: 0.5px;
     list-style: none;
     outline: none;
     user-select: none;
-    transition: background 0.2s;
+    transition: color 0.2s, background 0.2s;
+    background: rgba(45,212,191,0.04);
   }
-  .group-explain summary:hover { background: rgba(255,255,255,0.02); }
   .group-explain summary::-webkit-details-marker { display: none; }
   .group-explain summary::before {
     content: '▸';
     font-size: 10px;
-    color: var(--accent);
+    color: var(--teal);
     transition: transform 0.2s;
     display: inline-block;
   }
   .group-explain[open] summary::before { transform: rotate(90deg); }
+  .group-explain summary:hover { color: var(--text); background: rgba(45,212,191,0.08); }
   .group-explain-body {
-    padding: 4px 20px 20px 38px;
+    padding: 16px 20px 20px 20px;
+    background: rgba(45,212,191,0.03);
+    border-top: 1px solid rgba(45,212,191,0.1);
   }
   .group-explain-body p {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text2);
-    line-height: 1.6;
-    margin-bottom: 8px;
+    line-height: 1.8;
+    margin-bottom: 10px;
   }
   .group-explain-body p:last-child { margin-bottom: 0; }
-  .group-explain-body strong { color: var(--text); font-weight: 600; }
+  .group-explain-body p strong { color: var(--teal); font-weight: 600; }
+  .group-explain-dyn {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid rgba(45,212,191,0.2);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .group-explain-conclusion {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(245,166,35,0.06);
+    border: 1px solid rgba(245,166,35,0.2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.7;
+  }
 
   /* ── BINS SLIDER ── */
   .bins-control {
@@ -1293,6 +1318,344 @@
     color: var(--red);
     letter-spacing: 0.3px;
   }
+
+  /* ── PRE-ANALYSIS FILTER PANEL ── */
+  .filter-panel {
+    margin-top: 20px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    animation: fadeIn 0.35s ease;
+  }
+
+  .filter-panel-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    cursor: pointer;
+    background: var(--surface2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+    list-style: none;
+    outline: none;
+    user-select: none;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 1px solid transparent;
+  }
+
+  .filter-panel-summary::-webkit-details-marker { display: none; }
+  .filter-panel-summary::before {
+    content: '▸';
+    font-size: 10px;
+    color: var(--accent);
+    transition: transform 0.2s;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .filter-panel[open] .filter-panel-summary::before { transform: rotate(90deg); }
+  .filter-panel[open] .filter-panel-summary { border-bottom-color: var(--border); background: var(--surface2); color: var(--text); }
+  .filter-panel-summary:hover { color: var(--text); }
+
+  .filter-panel-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .filter-panel-badge.active {
+    background: rgba(245,166,35,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(245,166,35,0.3);
+  }
+  .filter-panel-badge.inactive {
+    background: var(--border);
+    color: var(--text3);
+    border: 1px solid transparent;
+  }
+
+  .filter-panel-body {
+    padding: 20px;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .filter-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+
+  .filter-cols-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  .filter-col-card {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+
+  .filter-col-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .filter-col-name .type-dot { flex-shrink: 0; }
+
+  /* Numeric range filter */
+  .filter-range-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-range-inputs {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .filter-range-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 6px 10px;
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 0;
+  }
+
+  .filter-range-input:focus { border-color: var(--accent); }
+
+  .filter-range-sep {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    flex-shrink: 0;
+  }
+
+  .filter-range-info {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 0.3px;
+  }
+
+  /* Categorical checkbox filter */
+  .filter-cat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+
+  .filter-cat-list::-webkit-scrollbar { width: 4px; }
+  .filter-cat-list::-webkit-scrollbar-track { background: transparent; }
+  .filter-cat-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 999px; }
+
+  .filter-cat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    cursor: pointer;
+  }
+
+  .filter-cat-item input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .filter-cat-item label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    cursor: pointer;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+
+  .filter-cat-item:has(input:checked) label { color: var(--text); }
+
+  .filter-cat-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .filter-cat-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    color: var(--text3);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .filter-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 4px;
+    border-top: 1px solid var(--border);
+  }
+
+  .filter-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  .filter-status strong { color: var(--accent); }
+
+  .filter-clear-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .filter-clear-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── REMOVED DATA DETAILS PANEL ── */
+  .removed-data-details {
+    border: 1px solid rgba(248,113,113,0.18);
+    border-radius: var(--radius);
+    margin-top: 12px;
+    overflow: hidden;
+  }
+
+  .removed-data-details summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    background: rgba(248,113,113,0.05);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 0.3px;
+    list-style: none;
+    outline: none;
+    user-select: none;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 1px solid transparent;
+  }
+
+  .removed-data-details summary::-webkit-details-marker { display: none; }
+  .removed-data-details summary::before {
+    content: '▸';
+    font-size: 9px;
+    color: var(--red);
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+  .removed-data-details[open] summary::before { transform: rotate(90deg); }
+  .removed-data-details[open] summary { border-bottom-color: rgba(248,113,113,0.15); color: var(--text); }
+  .removed-data-details summary:hover { color: var(--text); background: rgba(248,113,113,0.08); }
+
+  .removed-data-table-wrap {
+    overflow-x: auto;
+    background: var(--surface);
+  }
+
+  .removed-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .removed-data-table thead tr { background: var(--surface2); border-bottom: 1px solid var(--border2); }
+
+  .removed-data-table th {
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text3);
+    font-weight: 500;
+    border-right: 1px solid var(--border);
+  }
+
+  .removed-data-table th:last-child { border-right: none; }
+
+  .removed-data-table td {
+    padding: 6px 12px;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .removed-data-table td:last-child { border-right: none; }
+  .removed-data-table tbody tr:last-child td { border-bottom: none; }
+  .removed-data-table tbody tr:hover td { background: var(--surface2); }
+
+  .removed-data-table td.idx-cell { color: var(--text3); font-size: 10px; text-align: right; }
+  .removed-data-table td.outlier-val { color: var(--red); font-weight: 600; }
+
+  .reason-pill {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .reason-tukey    { background: rgba(248,113,113,0.12); color: var(--red);    border: 1px solid rgba(248,113,113,0.25); }
+  .reason-tukey-x  { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.25); }
+  .reason-tukey-y  { background: rgba(248,113,113,0.12); color: var(--red);    border: 1px solid rgba(248,113,113,0.25); }
+  .reason-tukey-xy { background: rgba(245,166,35,0.12);  color: var(--accent); border: 1px solid rgba(245,166,35,0.25); }
+  .reason-cook     { background: rgba(45,212,191,0.12);  color: var(--teal);   border: 1px solid rgba(45,212,191,0.25); }
+  .reason-filter   { background: rgba(96,165,250,0.12);  color: var(--blue);   border: 1px solid rgba(96,165,250,0.25); }
 
   /* ── PERCENTILE INPUT ── */
   .pct-query-wrap {
@@ -1604,10 +1967,29 @@
     white-space: nowrap;
     z-index: 20;
   }
+
+  .btn-learn-mode {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(45,212,191,0.4);
+    background: rgba(45,212,191,0.08);
+    color: var(--teal);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn-learn-mode:hover {
+    background: rgba(45,212,191,0.18);
+    border-color: var(--teal);
+    box-shadow: 0 0 16px rgba(45,212,191,0.2);
+  }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
   <div class="logo">
     <div class="logo-icon">DL</div>
@@ -1616,10 +1998,15 @@
     </div>
   </div>
   <div class="header-tag">Análise Estatística v1.0</div>
+  <button class="btn-learn-mode" onclick="openLearningMode()" title="Abrir Modo Aprendizado em nova aba">
+    🎓 Modo Aprendizado
+  </button>
 </header>
 
+<!-- MAIN -->
 <main>
 
+  <!-- STEP 1: UPLOAD -->
   <div class="space-y">
     <p class="section-title">01 — importar dados</p>
 
@@ -1646,8 +2033,9 @@
     </div>
   </div>
 
+  <!-- DATA PREVIEW TABLE -->
   <div class="data-preview-section" id="dataPreviewSection">
-    <p class="section-title">preview dos dados — primeiras 10 linhas</p>
+    <p class="section-title" id="dataPreviewTitle">preview dos dados — primeiras 10 linhas</p>
     <div class="data-preview-wrap">
       <table class="data-preview-table" id="dataPreviewTable">
         <thead id="dataPreviewHead"></thead>
@@ -1656,6 +2044,31 @@
     </div>
   </div>
 
+  <!-- PRE-ANALYSIS FILTER PANEL -->
+  <div id="filterPanelSection" style="display:none;">
+    <details class="filter-panel" id="filterPanel">
+      <summary class="filter-panel-summary">
+        ⚙ filtrar linhas antes da análise
+        <span class="filter-panel-badge inactive" id="filterBadge">sem filtros</span>
+      </summary>
+      <div class="filter-panel-body">
+        <div>
+          <div class="filter-section-label">colunas numéricas — intervalo</div>
+          <div class="filter-cols-grid" id="filterNumericCols"></div>
+        </div>
+        <div id="filterCatSection" style="display:none;">
+          <div class="filter-section-label">colunas categóricas — categorias incluídas</div>
+          <div class="filter-cols-grid" id="filterCatCols"></div>
+        </div>
+        <div class="filter-footer">
+          <div class="filter-status" id="filterStatus">— / — linhas selecionadas</div>
+          <button class="filter-clear-btn" onclick="clearAllFilters()">✕ Limpar filtros</button>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- STEP 2: COLUMN SELECTION -->
   <div id="configSection" style="display:none; animation: fadeIn 0.4s ease;" class="mt-8">
     <p class="section-title">02 — configurar análise</p>
 
@@ -1697,10 +2110,13 @@
     </div>
   </div>
 
+  <!-- DIVIDER -->
   <div class="divider" id="divider1" style="display:none"></div>
 
+  <!-- RESULTS -->
   <div class="results-section" id="resultsSection">
 
+    <!-- EXPORT / IMPORT BAR -->
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:28px;">
       <p class="section-title" style="margin:0; flex:1">03 — resultados</p>
       <div class="action-bar" style="margin:0">
@@ -1717,23 +2133,22 @@
       </div>
     </div>
 
+    <!-- STAT GROUPS CONTAINER -->
     <div id="statGroupsContainer" class="stat-groups"></div>
 
+    <!-- REMOVED DATA PANEL -->
+    <div id="removedDataPanel" style="display:none; margin-top:8px;"></div>
+
+    <!-- GROUPED RESULTS -->
     <div id="groupedSection" style="display:none; margin-top:32px;">
       <p class="section-title">análise por categoria</p>
       <div id="groupedContainer" class="group-results"></div>
-      
-      <details class="chart-explain" style="margin-top:12px">
-        <summary>como interpretar a Análise por Categoria</summary>
-        <div class="chart-explain-body">
-          <p>Esta seção compara subpopulações dos seus dados. Analise se as <strong>Médias</strong> e <strong>Medianas</strong> variam significativamente entre os grupos, o que indica que a categoria influencia o resultado numérico.</p>
-          <p>Verifique também o <strong>Desvio Padrão (DP)</strong>: um grupo com DP muito maior possui maior volatilidade e é menos previsível que os demais.</p>
-        </div>
-      </details>
     </div>
 
+    <!-- COMPARISON BLOCK (Step 5) -->
     <div id="comparisonSection" style="display:none; margin-top:32px;"></div>
 
+    <!-- CHARTS -->
     <div class="mt-8">
       <p class="section-title">visualizações</p>
 
@@ -1833,18 +2248,21 @@
         </details>
       </div>
 
+      <!-- REGRESSION PANEL -->
       <div class="chart-panel chart-panel-wrap" id="panel-regression" style="position:relative; display:none;">
         <button class="btn-png-download visible" onclick="downloadPNG('regression')">⬇ PNG</button>
         <canvas id="chartRegression" style="width:100%;"></canvas>
         <div class="ecdf-tooltip-div" id="regressionTooltip"></div>
       </div>
 
+      <!-- CORRELATION HEATMAP PANEL -->
       <div class="chart-panel chart-panel-wrap" id="panel-correlation" style="position:relative; display:none;">
         <button class="btn-png-download visible" onclick="downloadPNG('correlation')">⬇ PNG</button>
         <canvas id="chartCorrelation" style="width:100%;"></canvas>
         <div class="corr-tooltip-div" id="corrTooltip"></div>
       </div>
 
+      <!-- BIPLOT PANEL -->
       <div class="chart-panel chart-panel-wrap" id="panel-biplot" style="position:relative; display:none;">
         <button class="btn-png-download visible" onclick="downloadPNG('biplot')">⬇ PNG</button>
         <canvas id="chartBiplot" style="width:100%;"></canvas>
@@ -1866,6 +2284,21 @@ let currentGrouped = null;
 let charts = {};
 let currentValues = []; // filtered or raw values used in last analysis
 let globalPct = null;   // exposed percentile function from last calcStats
+
+// ── FILTER STATE ──
+let activeFilters = {};      // { col: { type:'numeric', min, max } | { type:'cat', include: Set } }
+let filteredData = [];       // rawData after user filters applied
+
+// ── Injeta bloco "como interpretar" num stat-group pelo ID do seu container ──
+function setGroupExplain(containerId, staticHTML, dynHTML, conclusionHTML) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  let html = '';
+  if (staticHTML) html += `<p>${staticHTML}</p>`;
+  if (dynHTML)    html += `<div class="group-explain-dyn">${dynHTML}</div>`;
+  if (conclusionHTML) html += `<div class="group-explain-conclusion">💡 ${conclusionHTML}</div>`;
+  el.innerHTML = html;
+}
 
 // ══════════════════════════════════════════════
 //  FILE HANDLING
@@ -1923,8 +2356,10 @@ function processFile(file) {
         document.getElementById('fileMeta').textContent =
           `${rawData.length.toLocaleString('pt-BR')} registros · ${headers.length} colunas · ${(file.size/1024).toFixed(1)} KB`;
 
+        filteredData = [...rawData];
         populateSelectors();
         renderDataPreview();
+        buildFilterPanel();
         document.getElementById('configSection').style.display = 'block';
         hideResults();
       } catch(err) {
@@ -1937,10 +2372,11 @@ function processFile(file) {
 }
 
 function clearFile() {
-  rawData = []; headers = [];
+  rawData = []; headers = []; filteredData = []; activeFilters = {};
   document.getElementById('fileInfo').classList.remove('show');
   document.getElementById('configSection').style.display = 'none';
   document.getElementById('dataPreviewSection').classList.remove('show');
+  document.getElementById('filterPanelSection').style.display = 'none';
   dropZone.classList.remove('loaded');
   document.getElementById('dropIcon').textContent = '📂';
   document.getElementById('dropTitle').textContent = 'Arraste seu arquivo aqui';
@@ -1969,7 +2405,7 @@ function renderDataPreview() {
     ${headers.map(h => `<th>${h}</th>`).join('')}
   </tr>`;
 
-  // First 10 rows
+  // First 10 rows — at this point filteredData == rawData (set right after)
   const rows = rawData.slice(0, 10);
   tbody.innerHTML = rows.map((row, i) => `
     <tr>
@@ -1977,6 +2413,9 @@ function renderDataPreview() {
       ${headers.map(h => `<td>${row[h] === '' || row[h] === null || row[h] === undefined ? '<span style="color:var(--text3)">—</span>' : row[h]}</td>`).join('')}
     </tr>
   `).join('');
+
+  const titleEl = document.getElementById('dataPreviewTitle');
+  if (titleEl) titleEl.textContent = `preview dos dados — ${rawData.length.toLocaleString('pt-BR')} linhas · ${headers.length} colunas`;
 
   document.getElementById('dataPreviewSection').classList.add('show');
 }
@@ -2047,7 +2486,7 @@ function onCorrelateColChange() {
 //  STATISTICS ENGINE
 // ══════════════════════════════════════════════
 function parseValues(col) {
-  return rawData
+  return filteredData
     .map(r => parseFloat(String(r[col]).replace(',','.')))
     .filter(v => !isNaN(v));
 }
@@ -2100,7 +2539,7 @@ function calcStats(values, rawTotal) {
   const kurtosis = values.reduce((s,v)=>s+((v-mean)/std)**4,0)/n - 3;
 
   // Missing
-  const missing = (rawTotal !== undefined ? rawTotal : rawData.length) - values.length;
+  const missing = (rawTotal !== undefined ? rawTotal : filteredData.length || rawData.length) - values.length;
   const unique = new Set(values).size;
 
   // Harmonic & Geometric means
@@ -2460,6 +2899,7 @@ function renderStats(s, container, outlierInfo) {
 
   const html = `
     ${outlierBadge}
+    <!-- GROUP 1: RESUMO -->
     <div class="stat-group">
       <div class="stat-group-header">
         <span class="stat-group-icon">🧮</span>
@@ -2474,7 +2914,7 @@ function renderStats(s, container, outlierInfo) {
         <div class="stat-card">
           <div class="stat-card-label">Valores Nulos</div>
           <div class="stat-card-value ${s.missing>0?'red':'green'}">${s.missing}</div>
-          <div class="stat-card-sub">${((s.missing/rawData.length)*100).toFixed(1)}% do total</div>
+          <div class="stat-card-sub">${((s.missing/filteredData.length)*100).toFixed(1)}% do total</div>
         </div>
         <div class="stat-card">
           <div class="stat-card-label">Valores Únicos</div>
@@ -2494,16 +2934,14 @@ function renderStats(s, container, outlierInfo) {
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar estes resultados</summary>
-        <div class="group-explain-body">
-          <p><strong>N (Registros):</strong> Total de linhas com valores numéricos válidos. Um N baixo diminui a confiabilidade matemática das análises subsequentes.</p>
-          <p><strong>Valores Nulos:</strong> Dados em branco ou mal formatados. Uma proporção alta (ex: >10%) exige investigação pois pode enviesar o modelo.</p>
-          <p><strong>Valores Únicos:</strong> Avalia a granularidade da variável. Poucos valores únicos indicam que a variável age mais como categorias discretas do que métricas contínuas.</p>
-          <p><strong>Amplitude:</strong> Distância entre o maior e o menor valor. Mostra rapidamente toda a extensão que o dado alcança no mundo real.</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-resumo">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
     </div>
 
+    <!-- GROUP 2: TENDÊNCIA CENTRAL + IC -->
     <div class="stat-group">
       <div class="stat-group-header">
         <span class="stat-group-icon">🎯</span>
@@ -2542,6 +2980,7 @@ function renderStats(s, container, outlierInfo) {
           <div class="stat-card-sub">${s.geometricMean !== null ? 'ideal para crescimento e razões' : 'requer valores > 0'}</div>
         </div>
 
+        <!-- CONFIDENCE INTERVAL SUB-SECTION -->
         <div class="ci-section">
           <div class="ci-section-title">
             📊 Intervalo de Confiança para a Média
@@ -2584,16 +3023,14 @@ function renderStats(s, container, outlierInfo) {
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar estes resultados</summary>
-        <div class="group-explain-body">
-          <p><strong>Média vs Mediana:</strong> Se a Média for muito diferente da Mediana, a distribuição sofre com assimetria (valores atípicos puxam a média). A Mediana (o valor exato do meio) é mais resistente a isso.</p>
-          <p><strong>Média Aparada:</strong> Remove os 5% maiores e menores registros. Muito útil quando não se quer excluir outliers permanentemente, mas sim ter uma métrica limpa de centro.</p>
-          <p><strong>Médias Especiais:</strong> Use <em>Geométrica</em> se o seu dado for taxa de retorno/juros acumulados. Use <em>Harmônica</em> se for medida de proporção fixa (como Km/h).</p>
-          <p><strong>Intervalo de Confiança (IC):</strong> O IC mostra que, com base na sua amostra, a <em>verdadeira média da população total</em> tem X% de chance de estar dentro deste limite. Margens (±) pequenas indicam alta precisão estatística na amostra atual.</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-tendencia">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
     </div>
 
+    <!-- GROUP 3: DISPERSÃO -->
     <div class="stat-group">
       <div class="stat-group-header">
         <span class="stat-group-icon">📏</span>
@@ -2626,16 +3063,14 @@ function renderStats(s, container, outlierInfo) {
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar estes resultados</summary>
-        <div class="group-explain-body">
-          <p><strong>Desvio Padrão (DP) e Variância:</strong> Medem a "largura" da curva dos seus dados. DPs altos significam alta variabilidade e incerteza. DPs baixos significam que os dados andam muito perto da Média.</p>
-          <p><strong>CV% (Coeficiente de Variação):</strong> Coloca o DP em percentual relativo à média. CV < 15% aponta estabilidade alta (homogêneo); CV > 30% sinaliza forte oscilação (heterogêneo).</p>
-          <p><strong>IQR:</strong> Tamanho dos 50% "centrais" dos dados. É a métrica mais estável de dispersão em cenários financeiros ou reais sujeitos a dados ruidosos e anômalos.</p>
-          <p><strong>Outliers:</strong> Valores fora do padrão normal estrito. Analise-os cuidadosamente: eles podem ser apenas erros operacionais de digitação ou o comportamento exato que você está caçando em predição de fraudes/falhas.</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-dispersao">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
     </div>
 
+    <!-- GROUP 4: PERCENTIS -->
     <div class="stat-group">
       <div class="stat-group-header">
         <span class="stat-group-icon">📐</span>
@@ -2687,15 +3122,14 @@ function renderStats(s, container, outlierInfo) {
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar estes resultados</summary>
-        <div class="group-explain-body">
-          <p><strong>Quartis (Q1, Q2, Q3):</strong> O Q1 indica que 25% dos dados são menores que este valor. Q2 é o "meio" (mediana), e Q3 representa o limite onde 75% dos dados já foram acumulados.</p>
-          <p><strong>Percentis P5 / P95:</strong> Indicam o "núcleo de normalidade" seguro. Extremamente útil se você precisar desconsiderar as piores margens ou picos absurdos (ignorando pontas curtas de 5%).</p>
-          <p><strong>Régua Visual:</strong> A barra central pintada (entre Q1 e Q3) representa visualmente para onde o IQR está "escorregando" caso não esteja perfeitamente no centro entre o mínimo e máximo (assimetria).</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-percentis">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
     </div>
 
+    <!-- GROUP 5: DISTRIBUIÇÃO -->
     <div class="stat-group">
       <div class="stat-group-header">
         <span class="stat-group-icon">📊</span>
@@ -2715,14 +3149,14 @@ function renderStats(s, container, outlierInfo) {
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar estes resultados</summary>
-        <div class="group-explain-body">
-          <p><strong>Assimetria (Skewness):</strong> ~0 representa formato de "sino". Valores positivos apontam uma cauda fina estendida para a direita (muitos valores baixos, raros valores muito altos - cenário comum em dados de salários, por exemplo). Valores negativos estendem a cauda para a esquerda.</p>
-          <p><strong>Curtose (Kurtosis):</strong> Avalia o peso das caudas e o pico central. <em>Mesocúrtica (~0)</em> é o padrão. <em>Leptocúrtica (>0)</em> significa que a distribuição tem picos mais acentuados no centro, porém com caudas grossas nas laterais (aumenta o risco inerente de observações extremas surgirem). <em>Platicúrtica (<0)</em> indica dados mais esparramados e "chatos" no topo.</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-forma">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
     </div>
 
+    <!-- GROUP 6: TESTE DE NORMALIDADE -->
     <div class="stat-group">
       <div class="stat-group-header">
         <span class="stat-group-icon">🔔</span>
@@ -2749,14 +3183,14 @@ function renderStats(s, container, outlierInfo) {
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar estes resultados</summary>
-        <div class="group-explain-body">
-          <p><strong>p-valor e a Curva Normal:</strong> Um p-valor abaixo de 0.05 falha no teste, significando estatisticamente que a sua população de dados não segue a famosa curva de "Sino" teórica (distribuição normal de Gauss).</p>
-          <p><strong>Por que isso importa?</strong> Muitos modelos preditivos e testes paramétricos tradicionais assumem que o dado é perfeitamente "Normal". Se não for, as predições ficam viciadas. Nesses casos, evite conclusões pautadas apenas na <em>Média e Desvio Padrão</em>, e opte por <em>Mediana, Percentis e testes Não-Paramétricos</em>, que independem da forma original.</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-normalidade">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
     </div>
 
+    <!-- GROUP 7: CALCULADORA DE PROBABILIDADE -->
     <div class="stat-group">
       <div class="stat-group-header">
         <span class="stat-group-icon">🎲</span>
@@ -2789,18 +3223,17 @@ function renderStats(s, container, outlierInfo) {
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar estes resultados</summary>
-        <div class="group-explain-body">
-          <p>Esta ferramenta parametriza seus dados numa equação contínua e estima probabilidades teóricas simuladas.</p>
-          <p><strong>P(X ≤ x):</strong> Mede probabilidade ou percentual acumulado inferido (ex: qual a chance de o processo completar em MENOS de X horas).</p>
-          <p><strong>P(X ≥ x):</strong> Avalia risco ou alcance de cauda (ex: qual a chance estatística do valor quebrar a barreira estipulada e ser MAIOR que X).</p>
-          <p><em>Lembrete:</em> Se os seus dados foram classificados no teste acima como "Não Normal", o resultado desta conta atua apenas como uma aproximação matemática e não como uma regra definitiva empírica.</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-prob">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
     </div>
 
+    <!-- GROUP 8: VALORES EXTREMOS -->
     ${buildExtremeValuesGroup(s)}
 
+    <!-- GROUP 9: SVD — rendered dynamically after container is inserted -->
     <div id="svdGroup"></div>
   `;
 
@@ -2810,8 +3243,209 @@ function renderStats(s, container, outlierInfo) {
   s._ci = ci;
   s._nt = nt;
 
+  // ── EXPLANATIONS ──────────────────────────────────────────────────────────
+
+  // ── 1. RESUMO RÁPIDO ──────────────────────────────────────────────────────
+  setGroupExplain('ge-resumo',
+    `<strong>N (Registros):</strong> Total de linhas com valores numéricos válidos.
+     Um N baixo (< 30) reduz a confiabilidade dos testes estatísticos.
+     <strong>Valores Nulos:</strong> Proporção > 10% exige investigação — podem enviesar médias e testes.
+     <strong>Amplitude:</strong> Distância entre o maior e o menor valor. Informa o alcance real da variável.`,
+    (() => {
+      const nullPct = s.missing > 0 ? ((s.missing / (s.n + s.missing)) * 100).toFixed(1) : 0;
+      let msg = `N = <strong>${s.n}</strong> registros válidos`;
+      if (s.missing > 0) msg += `, com <strong>${s.missing}</strong> valor${s.missing>1?'es':''} nulo${s.missing>1?'s':''} (${nullPct}%)`;
+      msg += `. Amplitude total: <strong>${fmt(s.range)}</strong> (de ${fmt(s.min)} a ${fmt(s.max)}).`;
+      return msg;
+    })(),
+    s.missing > s.n * 0.1
+      ? `Atenção: ${((s.missing/(s.n+s.missing))*100).toFixed(1)}% de nulos é elevado. Verifique a qualidade da coleta antes de interpretar os resultados.`
+      : s.n < 30
+      ? `Amostra pequena (N=${s.n}). Resultados são indicativos — interprete com cautela e evite generalizações.`
+      : `Dataset com qualidade adequada para análise (N=${s.n}, nulos aceitáveis).`
+  );
+
+  // ── 2. TENDÊNCIA CENTRAL ──────────────────────────────────────────────────
+  setGroupExplain('ge-tendencia',
+    `<strong>Média vs Mediana:</strong> Quando diferem muito, há assimetria — valores extremos puxam a média.
+     A mediana é mais resistente a outliers e representa melhor o "centro real" nesses casos.
+     <strong>Média Aparada 5%:</strong> Remove os 5% extremos de cada lado — boa métrica quando não se quer excluir
+     outliers permanentemente. <strong>IC (Intervalo de Confiança):</strong> Com X% de confiança, a verdadeira média
+     da população está dentro deste intervalo. Margens menores = amostra mais precisa.`,
+    (() => {
+      const diff = Math.abs(s.mean - s.median);
+      const diffPct = s.mean !== 0 ? ((diff / Math.abs(s.mean)) * 100).toFixed(1) : 0;
+      let msg = `Média = <strong>${fmt(s.mean)}</strong>, Mediana = <strong>${fmt(s.median)}</strong>`;
+      if (diffPct > 10) {
+        msg += ` — diferença de ${diffPct}%, indicando <strong>assimetria</strong>.`;
+      } else {
+        msg += ` — diferença de apenas ${diffPct}%, distribuição razoavelmente simétrica.`;
+      }
+      return msg;
+    })(),
+    (() => {
+      const diff = Math.abs(s.mean - s.median);
+      const diffPct = s.mean !== 0 ? ((diff / Math.abs(s.mean)) * 100).toFixed(1) : 0;
+      if (diffPct > 20) return `A média (${fmt(s.mean)}) está significativamente distorcida por valores extremos. Prefira a mediana (${fmt(s.median)}) como referência central para esta coluna.`;
+      if (diffPct > 10) return `Há alguma assimetria (${diffPct}%). Use a média aparada (${fmt(s.trimmedMean)}) como referência mais robusta.`;
+      return `Média e mediana são próximas — a distribuição é bem comportada. A média (${fmt(s.mean)}) é uma boa representação do centro.`;
+    })()
+  );
+
+  // ── 3. DISPERSÃO ──────────────────────────────────────────────────────────
+  setGroupExplain('ge-dispersao',
+    `<strong>Desvio Padrão (DP):</strong> Mede a "largura" da distribuição. 68% dos dados caem entre μ±1σ,
+     e 95% entre μ±2σ (se normal). <strong>CV% (Coeficiente de Variação):</strong> DP em percentual da média —
+     permite comparar dispersão entre variáveis de escalas diferentes.
+     CV < 15%: homogêneo · 15–30%: moderado · > 30%: heterogêneo.
+     <strong>IQR:</strong> Dispersão dos 50% centrais, imune a outliers.`,
+    (() => {
+      const cvClass = s.cv < 15 ? 'homogêneo' : s.cv < 30 ? 'moderadamente disperso' : 'muito heterogêneo';
+      return `DP = <strong>${fmt(s.std)}</strong> · CV = <strong>${fmt(s.cv)}%</strong> → dataset <strong>${cvClass}</strong>.
+              Faixa ±1σ: [${fmt(s.mean - s.std)}, ${fmt(s.mean + s.std)}] · IQR = <strong>${fmt(s.iqr)}</strong>.`;
+    })(),
+    (() => {
+      if (s.cv > 50) return `CV muito alto (${fmt(s.cv)}%) — os dados são extremamente dispersos. Verifique se há subgrupos distintos que deveriam ser analisados separadamente.`;
+      if (s.cv > 30) return `CV elevado (${fmt(s.cv)}%) — alta variabilidade. Considere agrupar por categoria para entender a fonte dessa dispersão.`;
+      if (s.outlierCount > s.n * 0.05) return `${s.outlierCount} outliers (${((s.outlierCount/s.n)*100).toFixed(1)}%) influenciam o DP. O IQR (${fmt(s.iqr)}) é uma medida de dispersão mais confiável aqui.`;
+      return `Dispersão controlada (CV = ${fmt(s.cv)}%). O desvio padrão (${fmt(s.std)}) é representativo da variabilidade real.`;
+    })()
+  );
+
+  // ── 4. PERCENTIS & POSIÇÃO ────────────────────────────────────────────────
+  setGroupExplain('ge-percentis',
+    `<strong>Q1 / Q2 / Q3:</strong> Q1 = 25% dos dados estão abaixo deste valor; Q2 = metade (mediana);
+     Q3 = 75%. O intervalo Q1–Q3 é o IQR, que contém o "núcleo central" da distribuição.
+     <strong>P5 / P95:</strong> Definem o intervalo de 90% dos dados, eliminando as caudas extremas.
+     Úteis para definir limites operacionais robustos.`,
+    (() => {
+      const spread = s.q3 - s.q1;
+      const center = (s.q1 + s.q3) / 2;
+      const bias = center > s.median ? 'acima' : 'abaixo';
+      return `Q1 = <strong>${fmt(s.q1)}</strong> · Q2 = <strong>${fmt(s.median)}</strong> · Q3 = <strong>${fmt(s.q3)}</strong>.
+              O centro do IQR (${fmt(center)}) está ${bias} da mediana, sugerindo leve assimetria interna.
+              90% dos dados caem entre <strong>${fmt(s.pct5)}</strong> e <strong>${fmt(s.pct95)}</strong>.`;
+    })(),
+    (() => {
+      const iqrCoverage = ((s.iqr / s.range) * 100).toFixed(0);
+      if (iqrCoverage < 25) return `O IQR cobre apenas ${iqrCoverage}% da amplitude total — os 50% centrais estão muito comprimidos, com caudas longas. Examine os valores extremos com atenção.`;
+      if (iqrCoverage > 60) return `O IQR cobre ${iqrCoverage}% da amplitude — distribuição compacta sem caudas pronunciadas.`;
+      return `Distribuição bem calibrada: os 50% centrais (${fmt(s.q1)}–${fmt(s.q3)}) cobrem ${iqrCoverage}% da amplitude total.`;
+    })()
+  );
+
+  // ── 5. FORMA DA DISTRIBUIÇÃO ──────────────────────────────────────────────
+  setGroupExplain('ge-forma',
+    `<strong>Assimetria (Skewness):</strong> ~0 = simétrico · > 0 = cauda direita longa (ex: salários, preços)
+     · < 0 = cauda esquerda longa. Valores |skew| > 1 são considerados forte assimetria.
+     <strong>Curtose (Kurtosis):</strong> ~0 = normal (mesocúrtica) · > 0 = pico alto com caudas pesadas
+     (leptocúrtica, mais risco de extremos) · < 0 = achatada (platicúrtica, mais uniforme).`,
+    (() => {
+      const sk = s.skewness, ku = s.kurtosis;
+      const skDir = sk > 0.3 ? 'assimetria positiva (cauda direita)' : sk < -0.3 ? 'assimetria negativa (cauda esquerda)' : 'aproximadamente simétrica';
+      const kuType = ku > 1 ? 'leptocúrtica (caudas pesadas)' : ku < -1 ? 'platicúrtica (achatada)' : 'mesocúrtica (normal)';
+      return `Skewness = <strong>${fmt(s.skewness, 3)}</strong> → ${skDir}.
+              Kurtosis = <strong>${fmt(s.kurtosis, 3)}</strong> → ${kuType}.`;
+    })(),
+    (() => {
+      const sk = Math.abs(s.skewness), ku = s.kurtosis;
+      if (sk > 1 && ku > 2) return `Distribuição fortemente assimétrica com caudas pesadas. Médias e desvio padrão são métricas pouco confiáveis — prefira mediana, IQR e percentis.`;
+      if (sk > 1) return `Assimetria forte (|skew| = ${fmt(Math.abs(s.skewness), 2)}). A média está sendo puxada para a cauda. Use a mediana (${fmt(s.median)}) como referência central.`;
+      if (ku > 2) return `Caudas pesadas (kurtosis = ${fmt(s.kurtosis, 2)}): maior probabilidade de valores extremos do que uma normal prevê. Mantenha atenção a outliers.`;
+      return `Forma bem comportada — assimetria e curtose dentro de limites normais. Métricas paramétricas (média, DP) são confiáveis.`;
+    })()
+  );
+
+  // ── 6. TESTE DE NORMALIDADE ───────────────────────────────────────────────
+  setGroupExplain('ge-normalidade',
+    `<strong>p-valor:</strong> Se p < 0.05, os dados diferem significativamente da distribuição normal —
+     o "sino perfeito" de Gauss. <strong>Por que importa:</strong> Testes paramétricos (t-test, ANOVA, regressão
+     clássica) assumem normalidade. Se violada, use alternativas não-paramétricas (Mann-Whitney,
+     Kruskal-Wallis) ou transforme os dados (log, raiz quadrada).`,
+    (() => {
+      const p = nt.pValue;
+      const verdict = p < 0.01 ? 'fortemente não-normal' : p < 0.05 ? 'não-normal (p < 0.05)' : p < 0.10 ? 'limítrofe' : 'compatível com normal';
+      return `${nt.name}: p = <strong>${isNaN(p)?'—':p.toFixed(4)}</strong> → distribuição <strong>${verdict}</strong>.`;
+    })(),
+    (() => {
+      const p = nt.pValue;
+      if (isNaN(p)) return 'Não foi possível calcular o teste. Verifique se há dados suficientes (N ≥ 8).';
+      if (p < 0.01) return `Distribuição claramente não-normal (p = ${p.toFixed(4)}). Evite usar média e DP como métricas principais. Prefira mediana, IQR e testes não-paramétricos.`;
+      if (p < 0.05) return `Evidência estatística contra normalidade (p = ${p.toFixed(4)}). Interprete resultados paramétricos com cautela.`;
+      if (p < 0.10) return `Resultado limítrofe (p = ${p.toFixed(4)}). A normalidade é plausível mas não confirmada.`;
+      return `Os dados são compatíveis com distribuição normal (p = ${p.toFixed(4)}). Testes paramétricos são adequados.`;
+    })()
+  );
+  // ── 7. CALCULADORA DE PROBABILIDADE ──────────────────────────────────────
+  setGroupExplain('ge-prob',
+    `<strong>P(X ≤ x):</strong> Probabilidade acumulada — "qual a chance de encontrar um valor abaixo de x?".
+     <strong>P(X ≥ x):</strong> Probabilidade de cauda — "qual a chance de superar x?".
+     <strong>P(a ≤ X ≤ b):</strong> Probabilidade de um intervalo específico.
+     Lembrete: se a distribuição não for normal, esses valores são aproximações baseadas em μ e σ.`,
+    `Parametrizado com μ = <strong>${fmt(s.mean)}</strong> e σ = <strong>${fmt(s.std)}</strong>.
+     Digite um valor nos campos acima para calcular probabilidades.`,
+    nt && nt.pValue < 0.05
+      ? `Como a distribuição não é normal (p = ${nt.pValue?.toFixed(4)}), as probabilidades calculadas aqui são aproximações — use-as como referência, não como valores definitivos.`
+      : `Distribuição compatível com normal — as probabilidades calculadas são estatisticamente confiáveis.`
+  );
+
   // Render SVD group if ≥2 numeric columns
   renderSVDGroup(s);
+}
+
+// ══════════════════════════════════════════════
+//  ALL GROUP EXPLAINS (groups 8–11)
+// ══════════════════════════════════════════════
+function renderAllGroupExplains(s, nt, grouped, corrCol) {
+  // ── 8. VALORES EXTREMOS ───────────────────────────────────────────────
+  setGroupExplain('ge-extremos',
+    `Os 5 maiores e 5 menores valores mapeados de volta nas linhas originais do dataset.
+     Verifique se os extremos são observações reais ou erros de digitação/codificação
+     (ex: "999" como código de erro interpretado como valor numérico).`,
+    (() => {
+      const vals = s.values || s.sorted || [];
+      if (!vals.length) return '';
+      const sorted = [...vals].sort((a,b) => b-a);
+      return `Maior valor: <strong>${fmt(sorted[0])}</strong> · Menor: <strong>${fmt(sorted[sorted.length-1])}</strong>.
+              Os extremos representam ${(((sorted[0]-sorted[sorted.length-1])/Math.abs(s.mean||1))*100).toFixed(0)}× a média.`;
+    })(),
+    s.outlierCount > 0
+      ? `${s.outlierCount} outlier${s.outlierCount>1?'s':''} detectado${s.outlierCount>1?'s':''} pelo critério de Tukey. Cruce os valores extremos com o painel de "Dados Removidos" para auditoria completa.`
+      : `Nenhum outlier detectado pelo critério de Tukey. Os extremos são consistentes com a distribuição geral.`
+  );
+  // ── 9. REGRESSÃO ─────────────────────────────────────────────────────
+  if (corrCol) {
+    const rEl = document.getElementById('ge-regressao');
+    if (rEl) {
+      rEl.innerHTML = `<p><strong>R² (Coeficiente de Determinação):</strong> Percentual da variação de Y explicado por X.
+        R² = 0.8 significa que 80% da variação de Y é explicada linearmente por X.</p>
+        <p><strong>Coeficiente angular (β₁):</strong> Para cada +1 unidade em X, Y varia β₁ unidades.
+        <strong>Intercepto (β₀):</strong> Valor estimado de Y quando X = 0.</p>
+        <p><strong>Cook's Distance:</strong> Identifica pontos com influência desproporcional no modelo.
+        Pontos com D > 4/n são destacados com anel teal — considere analisá-los separadamente.</p>
+        <div class="group-explain-dyn" id="ge-regressao-dyn">Calcule para ver a interpretação dinâmica.</div>`;
+    }
+  }
+  // ── 10. SVD / PCA ────────────────────────────────────────────────────
+  setGroupExplain('ge-svd',
+    `O <strong>SVD</strong> reorganiza as colunas numéricas para encontrar "direções" que maximizam a variância.
+     <strong>Variância Explicada:</strong> Quanto da complexidade total é resumida por aquele componente.
+     PC1 com > 70% significa que uma única dimensão oculta controla a maioria do comportamento dos dados.
+     <strong>Biplot:</strong> Disponível quando PC1+PC2 ≥ 50% — visualiza todos os dados em 2D simplificado.`,
+    '',
+    ''
+  );
+  // ── 11. COMPARAÇÃO ENTRE COLUNAS ────────────────────────────────────
+  if (corrCol) {
+    setGroupExplain('ge-comparacao',
+      `<strong>Δ Média:</strong> Diferença absoluta e relativa entre as médias das duas colunas.
+       Útil para análises "antes/depois" ou comparação de grupos equivalentes.
+       <strong>Correlação de Pearson (r):</strong> Varia de -1 a 1. Mede a força e direção da relação linear.
+       |r| > 0.7 = forte · 0.4–0.7 = moderada · < 0.4 = fraca.`,
+      '',
+      ''
+    );
+  }
 }
 
 // ══════════════════════════════════════════════
@@ -2819,7 +3453,7 @@ function renderStats(s, container, outlierInfo) {
 // ══════════════════════════════════════════════
 function renderGrouped(numCol, catCol) {
   const groups = {};
-  rawData.forEach(row => {
+  filteredData.forEach(row => {
     const cat = String(row[catCol] ?? 'N/A');
     const val = parseFloat(String(row[numCol]).replace(',','.'));
     if (!isNaN(val)) {
@@ -3416,15 +4050,16 @@ function buildExtremeValuesGroup(s) {
   const excludeEl = document.getElementById('excludeOutliersToggle');
   const exclude = excludeEl ? excludeEl.checked : false;
 
-  // Create index mapping based on rawData
+  // Create index mapping based on filteredData, but show original rawData row numbers
   const indexMap = {};
-  if (numCol && rawData.length) {
-    rawData.forEach((row, i) => {
+  if (numCol && filteredData.length) {
+    filteredData.forEach((row) => {
       const v = parseFloat(String(row[numCol]).replace(',','.'));
       if (!isNaN(v)) {
         const key = String(v);
         if (!indexMap[key]) indexMap[key] = [];
-        indexMap[key].push(i + 1); // 1-based row number
+        const origIdx = rawData.indexOf(row);
+        indexMap[key].push(origIdx + 1); // 1-based original row number
       }
     });
   }
@@ -3469,10 +4104,9 @@ function buildExtremeValuesGroup(s) {
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar estes resultados</summary>
-        <div class="group-explain-body">
-          <p>Exibe os top 5 valores mais altos e mais baixos mapeados de volta na tabela raiz original.</p>
-          <p>Crucial para uma última auditoria nos dados: verifique se estes picos e fundos correspondem a anomalias reais, ou erros na extração (como um "999" sinalizando código de falha interpretado como valor de salário).</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-extremos">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
     </div>
@@ -3605,7 +4239,7 @@ function runAnalysis() {
     return;
   }
 
-  const rawValues = parseValues(numCol);
+  const rawValues = parseValues(numCol); // already uses filteredData
   if (rawValues.length < 2) {
     alert('Dados insuficientes na coluna selecionada.');
     return;
@@ -3613,12 +4247,48 @@ function runAnalysis() {
 
   let values = rawValues;
   let outlierInfo = null;
+  // removedRows: [{rowIndex, origRow, col, value, reason}]
+  let removedRows = [];
+
+  // Track rows removed by user filters
+  const filterRemovedCount = rawData.length - filteredData.length;
+  if (filterRemovedCount > 0) {
+    rawData.forEach((row, ri) => {
+      if (!filteredData.includes(row)) {
+        removedRows.push({ rowIndex: ri, origRow: row, col: '—', value: '—', reason: 'filter' });
+      }
+    });
+  }
 
   if (excludeOutliers) {
     const tempS = calcStats(rawValues);
     const loF = tempS.q1 - 1.5 * tempS.iqr;
     const hiF = tempS.q3 + 1.5 * tempS.iqr;
-    values = rawValues.filter(v => v >= loF && v <= hiF);
+
+    // Map values back to filteredData rows
+    let valIdx = 0;
+    const outlierValIdxSet = new Set();
+    filteredData.forEach((row, fi) => {
+      const v = parseFloat(String(row[numCol] ?? '').replace(',', '.'));
+      if (!isNaN(v)) {
+        if (v < loF || v > hiF) outlierValIdxSet.add(valIdx);
+        valIdx++;
+      }
+    });
+
+    let vi2 = 0;
+    filteredData.forEach((row, fi) => {
+      const v = parseFloat(String(row[numCol] ?? '').replace(',', '.'));
+      if (!isNaN(v)) {
+        if (outlierValIdxSet.has(vi2)) {
+          const origIdx = rawData.indexOf(row);
+          removedRows.push({ rowIndex: origIdx, origRow: row, col: numCol, value: v, reason: 'tukey' });
+        }
+        vi2++;
+      }
+    });
+
+    values = rawValues.filter((_, i) => !outlierValIdxSet.has(i));
     const removed = rawValues.length - values.length;
     outlierInfo = {
       removed,
@@ -3632,13 +4302,11 @@ function runAnalysis() {
   currentValues = values;
   globalPct = s.pct;
 
-  // Reset bins slider value
   const binsSlider = document.getElementById('binsSlider');
-  if (binsSlider) {
-    document.getElementById('binsVal').textContent = binsSlider.value;
-  }
+  if (binsSlider) document.getElementById('binsVal').textContent = binsSlider.value;
 
   renderStats(s, document.getElementById('statGroupsContainer'), outlierInfo);
+  renderRemovedDataPanel(removedRows, numCol);
 
   let grouped = null;
   if (catCol) {
@@ -3652,25 +4320,21 @@ function runAnalysis() {
 
   renderCharts(s, grouped);
 
-  // ── Step 5: dynamic tabs ──────────────────────
   const numericCols = headers.filter(h => detectNumeric(h));
 
-  // Regression tab — show only if second col selected
   const tabReg = document.getElementById('tabRegression');
   const panelReg = document.getElementById('panel-regression');
   if (corrCol && corrCol !== numCol) {
     tabReg.style.display = '';
     panelReg.style.display = '';
     renderColumnComparison(numCol, corrCol, excludeOutliers ? values : rawValues);
-    // renderRegression will be called when tab is clicked, also pre-render
-    renderRegressionCanvas(numCol, corrCol, grouped);
+    renderRegressionCanvas(numCol, corrCol, grouped, excludeOutliers, removedRows);
   } else {
     tabReg.style.display = 'none';
     panelReg.style.display = 'none';
     document.getElementById('comparisonSection').style.display = 'none';
   }
 
-  // Correlation heatmap tab — show if ≥3 numeric cols
   const tabCorr = document.getElementById('tabCorrelation');
   const panelCorr = document.getElementById('panel-correlation');
   if (numericCols.length >= 3) {
@@ -3682,13 +4346,9 @@ function runAnalysis() {
     panelCorr.style.display = 'none';
   }
 
-  // Biplot tab — shown after SVD if PC1+PC2 ≥ 70%
-  // (handled inside renderSVDGroup via currentSVDResult)
-
   document.getElementById('resultsSection').classList.add('show');
   document.getElementById('divider1').style.display = 'block';
 
-  // Reset tabs
   document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.chart-panel').forEach(p => {
     p.classList.remove('active');
@@ -3702,6 +4362,8 @@ function runAnalysis() {
   setTimeout(() => {
     document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 100);
+
+  renderAllGroupExplains(s, s._nt, grouped, corrCol);
 }
 
 // ══════════════════════════════════════════════
@@ -4343,7 +5005,7 @@ function downloadPNG(chartName) {
   const ts = Date.now();
   const filename = `datalab_${chartName}_${ts}.png`;
 
-  // Canvas-based charts (QQ, Violin, ECDF)
+  // Canvas-based charts
   const canvasCharts = {
     qq: 'chartQQ', violin: 'chartViolin', ecdf: 'chartEcdf',
     regression: 'chartRegression', correlation: 'chartCorrelation', biplot: 'chartBiplot'
@@ -4351,8 +5013,6 @@ function downloadPNG(chartName) {
   if (canvasCharts[chartName]) {
     const canvas = document.getElementById(canvasCharts[chartName]);
     if (!canvas) return;
-    // Redraw with solid background
-    const dpr = window.devicePixelRatio || 1;
     const tmpCanvas = document.createElement('canvas');
     tmpCanvas.width = canvas.width;
     tmpCanvas.height = canvas.height;
@@ -4499,15 +5159,7 @@ function exportCSV() {
     csv += '\nAnálise por Grupo\n';
     csv += 'Grupo,N,Média,Mediana,Desv.Pad.,Min,Max,Q1,Q3,Outliers\n';
     currentGrouped.forEach(g => {
-      csv += `"${g.cat}",${g.s.n},${g.s.mean.toFixed(4)},${g.s.median.toFixed(4)},${g.s.std.toFixed(4)},${g.s.min},${g.s.max},${g.s.q1},${g.s.q3},${g.s.outlierCount}\n`;
-    });
-  }
-
-  if (typeof currentSVDResult !== 'undefined' && currentSVDResult) {
-    csv += '\nSVD (Decomposição em Valores Singulares)\n';
-    csv += 'Componente,Valor Singular,Variância Explicada\n';
-    currentSVDResult.components.forEach(c => {
-      csv += `"${c.label}",${c.singularValue.toFixed(4)},${(c.varianceExplained * 100).toFixed(2)}%\n`;
+      csv += `"${g.cat}",${g.s.n},${g.s.mean.toFixed(4)},${g.s.median.toFixed(4)},${g.s.std.toFixed(4)},${g.s.min},${g.s.max},${g.s.q1.toFixed(4)},${g.s.q3.toFixed(4)},${g.s.outlierCount}\n`;
     });
   }
 
@@ -4518,710 +5170,1580 @@ function exportCSV() {
   a.click();
 }
 
-function importResults(e) {
-  const file = e.target.files[0];
+function importResults(event) {
+  const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
+  reader.onload = e => {
     try {
-      const data = JSON.parse(ev.target.result);
-      
-      document.getElementById('numericCol').innerHTML = `<option value="${data.meta.column}">${data.meta.column}</option>`;
-      document.getElementById('numericCol').value = data.meta.column;
-      if (data.meta.groupBy) {
-        document.getElementById('categoryCol').innerHTML = `<option value="${data.meta.groupBy}">${data.meta.groupBy}</option>`;
-        document.getElementById('categoryCol').value = data.meta.groupBy;
-      }
+      const data = JSON.parse(e.target.result);
+      if (!data.statistics) { alert('Arquivo JSON inválido. Exporte primeiro via DataLab.'); return; }
 
       const s = data.statistics;
-      s._nt = data.inference?.normalityTest;
-      s._ci = data.inference?.confidenceIntervals;
-      
-      currentStats = s;
-      currentValues = []; 
-      globalPct = null;   
-      
-      currentNormality = s._nt;
-      
-      // Remonta estatísticas
-      renderStats(s, document.getElementById('statGroupsContainer'), null);
+      s.values = [];
+      s.sorted = [];
+      s.modes = s.modes || null;
 
-      // Remonta grupos (se houver)
+      // Restore inference if present
+      if (data.inference) {
+        s._nt = data.inference.normalityTest || null;
+        s._ci = data.inference.confidenceIntervals || null;
+        currentNormality = s._nt;
+      }
+
+      currentStats = s;
+
+      document.getElementById('divider1').style.display = 'block';
+      document.getElementById('resultsSection').classList.add('show');
+      renderStats(s, document.getElementById('statGroupsContainer'));
+
       if (data.grouped) {
+        currentGrouped = data.grouped.map(g => ({
+          cat: g.category,
+          s: { n:g.n, mean:g.mean, median:g.median, std:g.std, min:g.min, max:g.max, q1:g.q1, q3:g.q3, outlierCount:g.outliers }
+        }));
         const container = document.getElementById('groupedContainer');
         container.innerHTML = '';
-        data.grouped.forEach(g => {
+        currentGrouped.forEach(({ cat, s }) => {
           const div = document.createElement('div');
           div.className = 'group-card';
           div.innerHTML = `
             <div class="group-card-header">
-              <span class="group-badge">${g.category}</span>
-              <div class="group-mini-stats">
-                N: <span>${g.n}</span> &nbsp; Média: <span>${fmt(g.mean)}</span> &nbsp; Mediana: <span>${fmt(g.median)}</span> &nbsp; DP: <span>${fmt(g.std)}</span>
-              </div>
+              <span class="group-badge">${cat}</span>
+              <div class="group-mini-stats">N: <span>${s.n}</span> &nbsp; Média: <span>${fmt(s.mean)}</span></div>
             </div>
             <div class="group-card-body">
-              <div class="group-stat"><div class="group-stat-label">N</div><div class="group-stat-val">${g.n}</div></div>
-              <div class="group-stat"><div class="group-stat-label">Média</div><div class="group-stat-val">${fmt(g.mean)}</div></div>
-              <div class="group-stat"><div class="group-stat-label">Mediana</div><div class="group-stat-val">${fmt(g.median)}</div></div>
-              <div class="group-stat"><div class="group-stat-label">Desv.Pad.</div><div class="group-stat-val">${fmt(g.std)}</div></div>
-              <div class="group-stat"><div class="group-stat-label">Min</div><div class="group-stat-val">${fmtShort(g.min)}</div></div>
-              <div class="group-stat"><div class="group-stat-label">Max</div><div class="group-stat-val">${fmtShort(g.max)}</div></div>
-              <div class="group-stat"><div class="group-stat-label">Q1</div><div class="group-stat-val">${fmt(g.q1)}</div></div>
-              <div class="group-stat"><div class="group-stat-label">Q3</div><div class="group-stat-val">${fmt(g.q3)}</div></div>
-              <div class="group-stat"><div class="group-stat-label">Outliers</div><div class="group-stat-val">${g.outliers}</div></div>
+              <div class="group-stat"><div class="group-stat-label">N</div><div class="group-stat-val">${s.n}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Média</div><div class="group-stat-val">${fmt(s.mean)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Mediana</div><div class="group-stat-val">${fmt(s.median)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Desv.Pad.</div><div class="group-stat-val">${fmt(s.std)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Min</div><div class="group-stat-val">${fmtShort(s.min)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Max</div><div class="group-stat-val">${fmtShort(s.max)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Q1</div><div class="group-stat-val">${fmt(s.q1)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Q3</div><div class="group-stat-val">${fmt(s.q3)}</div></div>
+              <div class="group-stat"><div class="group-stat-label">Outliers</div><div class="group-stat-val">${s.outlierCount}</div></div>
             </div>
           `;
           container.appendChild(div);
         });
         document.getElementById('groupedSection').style.display = 'block';
-      } else {
-        document.getElementById('groupedSection').style.display = 'none';
       }
 
       alert(`✅ Resultados importados com sucesso!\n📅 Exportado em: ${new Date(data.meta?.exportedAt).toLocaleString('pt-BR')}`);
-      
-      document.getElementById('resultsSection').classList.add('show');
-      document.getElementById('divider1').style.display = 'block';
-      
     } catch(err) {
-      alert('Erro ao importar JSON: ' + err.message);
+      alert('Erro ao importar: ' + err.message);
     }
   };
   reader.readAsText(file);
+  event.target.value = '';
 }
 
 // ══════════════════════════════════════════════
-//  STEP 5: SVD (Singular Value Decomposition)
+//  FUNÇÃO 1 — SVD via Power Iteration + deflação de Hotelling
 // ══════════════════════════════════════════════
 let currentSVDResult = null;
 
-function computeSVD(matrix) {
-  const m = matrix.length;
-  const n = matrix[0].length;
-  
-  // Center data
-  const means = Array(n).fill(0);
-  for (let i=0; i<m; i++) for (let j=0; j<n; j++) means[j] += matrix[i][j];
-  for (let j=0; j<n; j++) means[j] /= m;
-  
-  const centered = matrix.map(row => row.map((val, j) => val - means[j]));
-  
-  // Covariance matrix (X^T * X / (m-1))
-  const cov = Array(n).fill(0).map(()=>Array(n).fill(0));
-  for (let i=0; i<n; i++) {
-    for (let j=i; j<n; j++) {
-      let sum = 0;
-      for (let k=0; k<m; k++) sum += centered[k][i] * centered[k][j];
-      cov[i][j] = sum / (m-1);
-      cov[j][i] = cov[i][j]; // symmetric
+function computeSVD(numericCols) {
+  // Build data matrix — only rows with valid values in ALL columns
+  const n = filteredData.length;
+  const p = numericCols.length;
+
+  const rows = [];
+  for (let i = 0; i < n; i++) {
+    const row = numericCols.map(col => parseFloat(String(filteredData[i][col]).replace(',', '.')));
+    if (row.every(v => !isNaN(v))) rows.push(row);
+  }
+  const nRows = rows.length;
+  if (nRows < 3 || p < 2) return null;
+
+  // Z-score standardization per column
+  const means = numericCols.map((_, j) => rows.reduce((s, r) => s + r[j], 0) / nRows);
+  const stds  = numericCols.map((_, j) => {
+    const v = rows.reduce((s, r) => s + (r[j] - means[j]) ** 2, 0) / (nRows - 1);
+    return Math.sqrt(v) || 1;
+  });
+  const X = rows.map(r => r.map((v, j) => (v - means[j]) / stds[j]));
+
+  // Covariance matrix C = Xᵀ X / (n-1)
+  const C = Array.from({ length: p }, (_, i) =>
+    Array.from({ length: p }, (_, j) =>
+      X.reduce((s, r) => s + r[i] * r[j], 0) / (nRows - 1)
+    )
+  );
+
+  // Trace
+  const traceC = C.reduce((s, _, i) => s + C[i][i], 0);
+
+  // Matrix × vector
+  const matVec = (M, v) => M.map(row => row.reduce((s, mij, j) => s + mij * v[j], 0));
+
+  // Power Iteration with Hotelling deflation
+  const k = Math.min(p, nRows, 10);
+  const components = [];
+  const loadingsMatrix = []; // shape k × p
+  let Cd = C.map(row => [...row]);
+
+  for (let comp = 0; comp < k; comp++) {
+    // random unit vector
+    let v = Array.from({ length: p }, () => Math.random() - 0.5);
+    const norm0 = Math.sqrt(v.reduce((s, x) => s + x * x, 0));
+    v = v.map(x => x / norm0);
+
+    for (let iter = 0; iter < 1000; iter++) {
+      const Cv = matVec(Cd, v);
+      const nrm = Math.sqrt(Cv.reduce((s, x) => s + x * x, 0));
+      if (nrm < 1e-14) break;
+      const vNew = Cv.map(x => x / nrm);
+      const diff = Math.sqrt(vNew.reduce((s, x, i) => s + (x - v[i]) ** 2, 0));
+      v = vNew;
+      if (diff < 1e-10) break;
     }
+
+    const Cv = matVec(Cd, v);
+    const sigma = Math.sqrt(Cv.reduce((s, x) => s + x * x, 0));
+    const varExplained = traceC > 0 ? sigma / traceC : 0;
+
+    components.push({ index: comp + 1, singularValue: sigma, varianceExplained: varExplained });
+    loadingsMatrix.push([...v]);
+
+    // Hotelling deflation: Cd ← Cd − σ · v · vᵀ
+    for (let i = 0; i < p; i++)
+      for (let j = 0; j < p; j++)
+        Cd[i][j] -= sigma * v[i] * v[j];
   }
 
-  // Very simplified Jacobi eigenvalue algorithm for symmetric matrix (2x2 or general small n)
-  // For DataLab, we limit to numeric columns, typically 2-10.
-  let eVec = Array(n).fill(0).map((_,i)=>Array(n).fill(0).map((__,j)=>i===j?1:0));
-  let eVal = cov.map(row => [...row]);
-  const maxIter = 100;
-  for (let iter=0; iter<maxIter; iter++) {
-    let maxOffDiag = 0, p = 0, q = 1;
-    for (let i=0; i<n; i++) {
-      for (let j=i+1; j<n; j++) {
-        if (Math.abs(eVal[i][j]) > maxOffDiag) {
-          maxOffDiag = Math.abs(eVal[i][j]); p = i; q = j;
-        }
-      }
-    }
-    if (maxOffDiag < 1e-9) break;
-    
-    const theta = (eVal[q][q] - eVal[p][p]) / (2 * eVal[p][q]);
-    const t = Math.sign(theta) / (Math.abs(theta) + Math.sqrt(theta*theta + 1)) || 1;
-    const c = 1 / Math.sqrt(t*t + 1);
-    const s = t * c;
-    
-    for (let i=0; i<n; i++) {
-      if (i !== p && i !== q) {
-        const eip = eVal[i][p], eiq = eVal[i][q];
-        eVal[i][p] = eVal[p][i] = c * eip - s * eiq;
-        eVal[i][q] = eVal[q][i] = s * eip + c * eiq;
-      }
-    }
-    const epp = eVal[p][p], eqq = eVal[q][q], epq = eVal[p][q];
-    eVal[p][p] = c*c*epp - 2*c*s*epq + s*s*eqq;
-    eVal[q][q] = s*s*epp + 2*c*s*epq + c*c*eqq;
-    eVal[p][q] = eVal[q][p] = 0;
-    
-    for (let i=0; i<n; i++) {
-      const vip = eVec[i][p], viq = eVec[i][q];
-      eVec[i][p] = c * vip - s * viq;
-      eVec[i][q] = s * vip + c * viq;
-    }
-  }
+  // Cumulative variance
+  let cum = 0;
+  components.forEach(c => { cum += c.varianceExplained; c.cumulativeVariance = cum; });
 
-  // Extract eigenvalues (variance) and eigenvectors (loadings)
-  const results = [];
-  for (let i=0; i<n; i++) {
-    results.push({ eigenvalue: eVal[i][i], loading: eVec.map(row => row[i]) });
-  }
-  
-  // Sort by eigenvalue desc
-  results.sort((a,b) => b.eigenvalue - a.eigenvalue);
-  
-  const totalVar = results.reduce((sum, r) => sum + Math.max(0, r.eigenvalue), 0);
-  
-  const components = results.map((r, i) => ({
-    label: `PC${i+1}`,
-    singularValue: Math.sqrt(Math.max(0, r.eigenvalue) * (m-1)), // approx singular value
-    variance: Math.max(0, r.eigenvalue),
-    varianceExplained: totalVar > 0 ? Math.max(0, r.eigenvalue) / totalVar : 0,
-    loading: r.loading
-  }));
+  // Scores: X · V  (nRows × k)
+  const scores = X.map(row =>
+    loadingsMatrix.map(v => row.reduce((s, x, j) => s + x * v[j], 0))
+  );
 
-  return { components, means };
+  // Loadings table: for each column, its weight on each PC
+  const loadings = numericCols.map((col, j) => {
+    const entry = { column: col };
+    loadingsMatrix.forEach((v, ci) => { entry[`pc${ci + 1}`] = v[j]; });
+    return entry;
+  });
+
+  return { components, loadings, scores, colNames: numericCols };
 }
 
+// ══════════════════════════════════════════════
+//  FUNÇÃO 2 — renderSVDGroup
+// ══════════════════════════════════════════════
 function renderSVDGroup(s) {
-  const container = document.getElementById('svdGroup');
-  const numericCols = headers.filter(h => detectNumeric(h));
-  
-  if (numericCols.length < 2 || rawData.length < 3) {
-    container.innerHTML = '';
-    currentSVDResult = null;
+  const svdGroup = document.getElementById('svdGroup');
+  if (!svdGroup) return;
+
+  const numericCols = headers.filter(detectNumeric);
+  if (numericCols.length < 2) {
+    svdGroup.innerHTML = '';
     return;
   }
 
-  // Build matrix (only rows where ALL numeric cols are valid)
-  const matrix = [];
-  rawData.forEach(row => {
-    let valid = true;
-    const vRow = [];
-    for (const col of numericCols) {
-      const v = parseFloat(String(row[col]).replace(',','.'));
-      if (isNaN(v)) { valid = false; break; }
-      vRow.push(v);
-    }
-    if (valid) matrix.push(vRow);
-  });
-
-  if (matrix.length < 3) {
-    container.innerHTML = '';
-    currentSVDResult = null;
+  const result = computeSVD(numericCols);
+  if (!result) {
+    svdGroup.innerHTML = '';
     return;
   }
+  currentSVDResult = result;
 
-  const svd = computeSVD(matrix);
-  svd.cols = numericCols;
-  svd.matrix = matrix;
-  currentSVDResult = svd;
+  const { components, loadings } = result;
+  const pc1var = (components[0]?.varianceExplained * 100 || 0).toFixed(1);
+  const pc2var = (components[1]?.varianceExplained * 100 || 0).toFixed(1);
+  const cumPC2 = (components[1]?.cumulativeVariance * 100 || 0);
 
-  let compRows = '';
-  let accVar = 0;
-  svd.components.forEach(c => {
-    accVar += c.varianceExplained * 100;
-    compRows += `
-      <tr>
-        <td class="pc-label">${c.label}</td>
-        <td>${fmt(c.singularValue, 4)}</td>
-        <td>${fmt(c.varianceExplained * 100, 2)}%</td>
-        <td>${fmt(accVar, 2)}%</td>
-      </tr>
-    `;
-  });
+  // Rows for components table
+  const compRows = components.map(c => `
+    <tr>
+      <td>PC${c.index}</td>
+      <td>${c.singularValue.toFixed(4)}</td>
+      <td>${(c.varianceExplained * 100).toFixed(2)}%</td>
+      <td>${(c.cumulativeVariance * 100).toFixed(2)}%</td>
+    </tr>`).join('');
 
-  const html = `
-    <div class="stat-group mt-6" style="border-color: var(--blue);">
-      <div class="stat-group-header" style="background: rgba(96,165,250,0.05);">
-        <span class="stat-group-icon">🔠</span>
-        <span class="stat-group-title">SVD / PCA (Redução de Dimensionalidade)</span>
-        <span class="stat-group-desc">${numericCols.length} dimensões · base: matriz de covariância</span>
+  // Loadings table (PC1 + PC2 only)
+  const loadingRows = loadings.map(l => {
+    const pc1 = l.pc1 ?? 0;
+    const pc2 = l.pc2 ?? 0;
+    const colPC1 = Math.abs(pc1) < 0.15 ? 'var(--text3)' : pc1 > 0 ? 'var(--green)' : 'var(--red)';
+    const colPC2 = Math.abs(pc2) < 0.15 ? 'var(--text3)' : pc2 > 0 ? 'var(--green)' : 'var(--red)';
+    return `<tr>
+      <td>${l.column}</td>
+      <td style="color:${colPC1};font-family:'JetBrains Mono',monospace">${pc1.toFixed(4)}</td>
+      <td style="color:${colPC2};font-family:'JetBrains Mono',monospace">${pc2.toFixed(4)}</td>
+    </tr>`;
+  }).join('');
+
+  svdGroup.innerHTML = `
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">🔭</span>
+        <span class="stat-group-title">Decomposição SVD — Componentes Principais</span>
+        <span class="stat-group-desc">análise de variância explicada</span>
       </div>
       <div class="svd-section">
         <table class="svd-table">
-          <thead>
-            <tr>
-              <th>Componente Principal</th>
-              <th>Valor Singular (σ)</th>
-              <th>Variância Explicada</th>
-              <th>Var. Acumulada</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${compRows}
-          </tbody>
+          <thead><tr><th>Componente</th><th>Valor Singular</th><th>Var. Explicada</th><th>Var. Acumulada</th></tr></thead>
+          <tbody>${compRows}</tbody>
+        </table>
+        <canvas id="svdScreeCanvas" width="400" height="180" style="width:100%;max-width:480px;display:block;margin:12px 0;border-radius:8px;background:var(--surface2)"></canvas>
+      </div>
+      <div class="svd-section" style="margin-top:12px">
+        <div style="font-size:12px;color:var(--text2);font-family:'JetBrains Mono',monospace;margin-bottom:8px;">Loadings — PC1 (${pc1var}%) e PC2 (${pc2var}%)</div>
+        <table class="svd-table">
+          <thead><tr><th>Coluna</th><th>PC1</th><th>PC2</th></tr></thead>
+          <tbody>${loadingRows}</tbody>
         </table>
       </div>
       <details class="group-explain">
-        <summary>como interpretar o SVD / PCA</summary>
-        <div class="group-explain-body">
-          <p>O <strong>SVD (Singular Value Decomposition)</strong> e o PCA reorganizam suas colunas numéricas para encontrar as "direções" que mais explicam a variação dos dados.</p>
-          <p><strong>Variância Explicada:</strong> Indica o quanto de toda a complexidade do dataset é resumida por aquele componente. Se o <strong>PC1</strong> tiver 80% de variância explicada, isso significa que uma única métrica oculta controla a maioria do comportamento dos seus dados.</p>
-          <p>Se a <em>Variância Acumulada</em> de PC1 + PC2 chegar próximo ou passar de 70%, a aba "Biplot" ficará disponível para você visualizar todos os dados num gráfico 2D simplificado.</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-svd">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
-    </div>
-  `;
-  
-  container.innerHTML = html;
+    </div>`;
 
-  // Ativar/Desativar aba Biplot baseado na variância dos 2 primeiros componentes
-  const tabBiplot = document.getElementById('tabBiplot');
-  if (svd.components.length >= 2) {
-    const varTop2 = svd.components[0].varianceExplained + svd.components[1].varianceExplained;
-    if (varTop2 >= 0.5) { // Threshold for meaningful biplot
-      tabBiplot.style.display = '';
-      document.getElementById('panel-biplot').style.display = '';
-    } else {
-      tabBiplot.style.display = 'none';
-      document.getElementById('panel-biplot').style.display = 'none';
+  // Draw scree plot
+  requestAnimationFrame(() => {
+    const canvas = document.getElementById('svdScreeCanvas');
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.offsetWidth || 400;
+    const H = 180;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const pad = { top: 24, right: 16, bottom: 36, left: 44 };
+    const chartW = W - pad.left - pad.right;
+    const chartH = H - pad.top - pad.bottom;
+    const n = components.length;
+    const barW = Math.max(8, Math.floor(chartW / n) - 6);
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Y axis grid + labels
+    ctx.font = '9px JetBrains Mono, monospace';
+    ctx.fillStyle = '#4a5568';
+    ctx.textAlign = 'right';
+    for (let p = 0; p <= 100; p += 20) {
+      const y = pad.top + chartH - (p / 100) * chartH;
+      ctx.fillText(p + '%', pad.left - 6, y + 3);
+      ctx.strokeStyle = '#1e2330';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(pad.left + chartW, y);
+      ctx.stroke();
     }
-  } else {
-    tabBiplot.style.display = 'none';
-    document.getElementById('panel-biplot').style.display = 'none';
+
+    // Bars
+    components.forEach((c, i) => {
+      const x = pad.left + i * (chartW / n) + (chartW / n - barW) / 2;
+      const barH = (c.varianceExplained) * chartH;
+      const y = pad.top + chartH - barH;
+      const alpha = 1 - i * 0.07;
+      ctx.fillStyle = `rgba(245,166,35,${Math.max(0.25, alpha)})`;
+      ctx.beginPath();
+      ctx.roundRect(x, y, barW, barH, 3);
+      ctx.fill();
+
+      // X label
+      ctx.fillStyle = '#8892a4';
+      ctx.textAlign = 'center';
+      ctx.font = '9px JetBrains Mono, monospace';
+      ctx.fillText('PC' + c.index, x + barW / 2, pad.top + chartH + 14);
+
+      // Value on top
+      ctx.fillStyle = '#e8eaf0';
+      ctx.font = '8px JetBrains Mono, monospace';
+      ctx.fillText((c.varianceExplained * 100).toFixed(1) + '%', x + barW / 2, y - 4);
+    });
+
+    // Title
+    ctx.fillStyle = '#8892a4';
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('Scree Plot — Variância Explicada por PC', pad.left, 14);
+  });
+
+  // Show biplot tab if PC1+PC2 >= 70%
+  const tabBiplot = document.getElementById('tabBiplot');
+  if (tabBiplot) {
+    tabBiplot.style.display = cumPC2 >= 70 ? '' : 'none';
   }
 }
 
 // ══════════════════════════════════════════════
-//  STEP 5: COMPARISON (2 Columns)
+//  FUNÇÃO 3 — renderBiplotCanvas
 // ══════════════════════════════════════════════
-function renderColumnComparison(col1, col2, baseValuesCol1) {
-  // Extract paired valid values
-  const pairs = [];
-  rawData.forEach(row => {
-    const v1 = parseFloat(String(row[col1]).replace(',','.'));
-    const v2 = parseFloat(String(row[col2]).replace(',','.'));
-    if (!isNaN(v1) && !isNaN(v2)) {
-      // If outliers were excluded, we only keep rows where v1 is in baseValuesCol1
-      if (!baseValuesCol1 || baseValuesCol1.includes(v1)) {
-        pairs.push({ v1, v2 });
+function renderBiplotCanvas() {
+  if (!currentSVDResult) return;
+  const { scores, loadings, components } = currentSVDResult;
+
+  const canvas = document.getElementById('chartBiplot');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const panel = canvas.closest('.chart-panel') || canvas.parentElement;
+  const W = (panel?.clientWidth || canvas.offsetWidth || 500) - 32;
+  const H = Math.min(W, 440);
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { top: 32, right: 32, bottom: 48, left: 56 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+
+  const pc1pct = (components[0]?.varianceExplained * 100 || 0).toFixed(1);
+  const pc2pct = (components[1]?.varianceExplained * 100 || 0).toFixed(1);
+
+  // Compute ranges for scores
+  const xs = scores.map(s => s[0]);
+  const ys = scores.map(s => s[1] ?? 0);
+  const xMin = Math.min(...xs), xMax = Math.max(...xs);
+  const yMin = Math.min(...ys), yMax = Math.max(...ys);
+  const xRng = xMax - xMin || 1;
+  const yRng = yMax - yMin || 1;
+
+  const toCanvasX = x => pad.left + ((x - xMin) / xRng) * chartW;
+  const toCanvasY = y => pad.top + chartH - ((y - yMin) / yRng) * chartH;
+
+  // Grid
+  ctx.strokeStyle = '#1e2330';
+  ctx.lineWidth = 0.5;
+  for (let t = 0; t <= 4; t++) {
+    const gx = pad.left + (t / 4) * chartW;
+    const gy = pad.top + (t / 4) * chartH;
+    ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, pad.top + chartH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left + chartW, gy); ctx.stroke();
+  }
+
+  // Scatter scores
+  scores.forEach(s => {
+    const cx = toCanvasX(s[0]);
+    const cy = toCanvasY(s[1] ?? 0);
+    ctx.beginPath();
+    ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(96,165,250,0.55)';
+    ctx.fill();
+  });
+
+  // Loading vectors
+  const scale = Math.min(chartW, chartH) * 0.4;
+  const oX = toCanvasX(0);
+  const oY = toCanvasY(0);
+
+  loadings.forEach(l => {
+    const pc1 = l.pc1 ?? 0;
+    const pc2 = l.pc2 ?? 0;
+    const ex = oX + pc1 * scale;
+    const ey = oY - pc2 * scale;
+
+    ctx.beginPath();
+    ctx.moveTo(oX, oY);
+    ctx.lineTo(ex, ey);
+    ctx.strokeStyle = 'rgba(245,166,35,0.85)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Arrowhead
+    const ang = Math.atan2(ey - oY, ex - oX);
+    ctx.beginPath();
+    ctx.moveTo(ex, ey);
+    ctx.lineTo(ex - 8 * Math.cos(ang - 0.4), ey - 8 * Math.sin(ang - 0.4));
+    ctx.lineTo(ex - 8 * Math.cos(ang + 0.4), ey - 8 * Math.sin(ang + 0.4));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(245,166,35,0.85)';
+    ctx.fill();
+
+    ctx.font = 'bold 10px JetBrains Mono, monospace';
+    ctx.fillStyle = '#f5a623';
+    ctx.textAlign = pc1 >= 0 ? 'left' : 'right';
+    ctx.fillText(l.column, ex + (pc1 >= 0 ? 5 : -5), ey - 4);
+  });
+
+  // Axes labels
+  ctx.font = '11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#8892a4';
+  ctx.textAlign = 'center';
+  ctx.fillText(`PC1 (${pc1pct}%)`, pad.left + chartW / 2, H - 8);
+  ctx.save();
+  ctx.translate(14, pad.top + chartH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(`PC2 (${pc2pct}%)`, 0, 0);
+  ctx.restore();
+
+  // Title
+  ctx.fillStyle = '#e8eaf0';
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('Biplot', pad.left, 18);
+}
+
+// ══════════════════════════════════════════════
+//  FUNÇÃO 4 — renderRegressionCanvas
+// ══════════════════════════════════════════════
+function renderRegressionCanvas(numCol, corrCol, grouped, excludeOutliers, removedRowsRef) {
+  const canvas = document.getElementById('chartRegression');
+  if (!canvas || !numCol || !corrCol) return;
+
+  const groupCol = document.getElementById('categoryCol')?.value || '';
+
+  // Build pairs from filteredData
+  const allPairs = [];
+  const allLabels = [];
+  for (let i = 0; i < filteredData.length; i++) {
+    const xv = parseFloat(String(filteredData[i][numCol]).replace(',', '.'));
+    const yv = parseFloat(String(filteredData[i][corrCol]).replace(',', '.'));
+    if (!isNaN(xv) && !isNaN(yv)) {
+      allPairs.push({ x: xv, y: yv, rowIndex: rawData.indexOf(filteredData[i]) });
+      allLabels.push(grouped && groupCol ? (filteredData[i][groupCol] ?? '') : '');
+    }
+  }
+
+  if (allPairs.length < 3) return;
+
+  // ── Bivariate Tukey filter ──
+  let pairs = allPairs;
+  let labels = [...allLabels];
+
+  if (excludeOutliers) {
+    const tukeyBounds = col => {
+      const vals = allPairs.map(p => col === 'x' ? p.x : p.y).sort((a,b) => a-b);
+      const n = vals.length;
+      const q1 = vals[Math.floor((n-1)*0.25)] + (vals[Math.ceil((n-1)*0.25)]-vals[Math.floor((n-1)*0.25)])*((n-1)*0.25%1);
+      const q3 = vals[Math.floor((n-1)*0.75)] + (vals[Math.ceil((n-1)*0.75)]-vals[Math.floor((n-1)*0.75)])*((n-1)*0.75%1);
+      const iqr = q3 - q1;
+      return [q1 - 1.5*iqr, q3 + 1.5*iqr];
+    };
+    const [xLo, xHi] = tukeyBounds('x');
+    const [yLo, yHi] = tukeyBounds('y');
+
+    const kept = [], keptLabels = [];
+    allPairs.forEach((p, i) => {
+      const xOut = p.x < xLo || p.x > xHi;
+      const yOut = p.y < yLo || p.y > yHi;
+      if (xOut || yOut) {
+        if (removedRowsRef) {
+          const reason = (xOut && yOut) ? 'tukey-xy' : xOut ? 'tukey-x' : 'tukey-y';
+          const exists = removedRowsRef.find(r => r.rowIndex === p.rowIndex);
+          if (!exists) {
+            removedRowsRef.push({ rowIndex: p.rowIndex, origRow: rawData[p.rowIndex], col: xOut ? numCol : corrCol, value: xOut ? p.x : p.y, reason });
+          } else if (xOut && yOut) {
+            exists.reason = 'tukey-xy';
+          }
+        }
+      } else {
+        kept.push(p);
+        keptLabels.push(allLabels[i]);
       }
+    });
+    pairs = kept;
+    labels = keptLabels;
+    if (removedRowsRef && removedRowsRef.length > 0) {
+      renderRemovedDataPanel(removedRowsRef, numCol);
+    }
+  }
+
+  if (pairs.length < 3) return;
+
+  const xs = pairs.map(p => p.x);
+  const ys = pairs.map(p => p.y);
+  const n = pairs.length;
+
+  const xMean = xs.reduce((s,v) => s+v, 0) / n;
+  const yMean = ys.reduce((s,v) => s+v, 0) / n;
+  const Sxx = xs.reduce((s,v) => s+(v-xMean)**2, 0);
+  const Sxy = xs.reduce((s,v,i) => s+(v-xMean)*(ys[i]-yMean), 0);
+  const Syy = ys.reduce((s,v) => s+(v-yMean)**2, 0);
+
+  const b1 = Sxx > 0 ? Sxy/Sxx : 0;
+  const b0 = yMean - b1*xMean;
+  const yHat = xs.map(x => b0+b1*x);
+  const SSres = ys.reduce((s,v,i) => s+(v-yHat[i])**2, 0);
+  const SStot = Syy;
+  const R2 = SStot > 0 ? 1-SSres/SStot : 0;
+  const r = (Sxx > 0 && Syy > 0) ? Sxy/Math.sqrt(Sxx*Syy) : 0;
+  const SE = n > 2 ? Math.sqrt(SSres/(n-2)) : 0;
+  const tStar = tQuantile(Math.max(1, n-2), 0.95);
+  const MSres = n > 2 ? SSres/(n-2) : 0;
+
+  // Cook's distance: D_i = (e_i² / (2*MSres)) * (h_ii / (1-h_ii)²)
+  const cookThreshold = 4/n;
+  const cookD = pairs.map((p,i) => {
+    const hii = 1/n + (p.x-xMean)**2/(Sxx||1);
+    const ei = ys[i]-yHat[i];
+    return MSres > 0 ? (ei**2/(2*MSres))*(hii/((1-hii)**2)) : 0;
+  });
+
+  // Canvas sizing
+  const dpr = window.devicePixelRatio || 1;
+  const panelEl = canvas.closest('.panel-regression') || canvas.parentElement;
+  const W = Math.max(300, (panelEl?.clientWidth || 500) - 32);
+  const H = Math.min(W*0.65, 420);
+  canvas.width = W*dpr; canvas.height = H*dpr;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { top: 32, right: 24, bottom: 52, left: 60 };
+  const chartW = W-pad.left-pad.right;
+  const chartH = H-pad.top-pad.bottom;
+
+  const xMin = Math.min(...xs), xMax = Math.max(...xs);
+  const yMin = Math.min(...ys), yMax = Math.max(...ys);
+  const xRng = xMax-xMin||1, yRng = yMax-yMin||1;
+  const xL = xMin-xRng*0.06, xR = xMax+xRng*0.06;
+  const yB = yMin-yRng*0.06, yT = yMax+yRng*0.06;
+
+  const cx = x => pad.left+((x-xL)/(xR-xL))*chartW;
+  const cy = y => pad.top+chartH-((y-yB)/(yT-yB))*chartH;
+
+  // Grid
+  ctx.strokeStyle = '#1e2330'; ctx.lineWidth = 0.5;
+  const nTicks = 5;
+  for (let t = 0; t <= nTicks; t++) {
+    const gx = pad.left+(t/nTicks)*chartW, gy = pad.top+(t/nTicks)*chartH;
+    ctx.beginPath(); ctx.moveTo(gx,pad.top); ctx.lineTo(gx,pad.top+chartH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.left,gy); ctx.lineTo(pad.left+chartW,gy); ctx.stroke();
+  }
+
+  // Confidence band
+  const bandXs = Array.from({length:80},(_,i) => xL+(i/79)*(xR-xL));
+  ctx.beginPath();
+  bandXs.forEach((bx,i) => {
+    const byHat = b0+b1*bx;
+    const hw = tStar*SE*Math.sqrt(1/n+(bx-xMean)**2/Sxx);
+    if (i===0) ctx.moveTo(cx(bx), cy(byHat+hw));
+    else ctx.lineTo(cx(bx), cy(byHat+hw));
+  });
+  [...bandXs].reverse().forEach(bx => {
+    const byHat = b0+b1*bx;
+    const hw = tStar*SE*Math.sqrt(1/n+(bx-xMean)**2/Sxx);
+    ctx.lineTo(cx(bx), cy(byHat-hw));
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(245,166,35,0.08)';
+  ctx.fill();
+
+  // Regression line
+  ctx.beginPath();
+  ctx.moveTo(cx(xL), cy(b0+b1*xL));
+  ctx.lineTo(cx(xR), cy(b0+b1*xR));
+  ctx.strokeStyle = '#f5a623'; ctx.lineWidth = 2; ctx.stroke();
+
+  // Groups color map
+  const uniqueGroups = grouped ? [...new Set(labels)] : [];
+  const groupColorMap = {};
+  uniqueGroups.forEach((g,i) => { groupColorMap[g] = `hsl(${i*60},65%,55%)`; });
+
+  // Points — teal ring for Cook's D > 4/n
+  pairs.forEach((p,i) => {
+    const influential = cookD[i] > cookThreshold;
+    const baseColor = grouped && labels[i] !== '' ? groupColorMap[labels[i]] : 'rgba(96,165,250,0.6)';
+    ctx.beginPath();
+    ctx.arc(cx(p.x), cy(p.y), influential ? 5 : 3, 0, Math.PI*2);
+    ctx.fillStyle = baseColor;
+    ctx.fill();
+    if (influential) {
+      ctx.strokeStyle = '#2dd4bf'; ctx.lineWidth = 1.5; ctx.stroke();
     }
   });
 
-  if (pairs.length < 2) {
-    document.getElementById('comparisonSection').style.display = 'none';
+  // Axes
+  ctx.fillStyle = '#4a5568'; ctx.font = '9px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  for (let t = 0; t <= nTicks; t++) {
+    const xv = xL+(t/nTicks)*(xR-xL), yv = yB+(t/nTicks)*(yT-yB);
+    ctx.fillText(fmtShort(xv), cx(xv), pad.top+chartH+14);
+    ctx.textAlign = 'right'; ctx.fillText(fmtShort(yv), pad.left-6, cy(yv)+3); ctx.textAlign = 'center';
+  }
+  ctx.fillStyle = '#8892a4'; ctx.font = '11px JetBrains Mono, monospace';
+  ctx.fillText(numCol, pad.left+chartW/2, H-8);
+  ctx.save(); ctx.translate(14, pad.top+chartH/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText(corrCol, 0, 0); ctx.restore();
+
+  // Metrics overlay
+  const influentialCount = cookD.filter(d => d > cookThreshold).length;
+  const cookNote = influentialCount > 0 ? `   ◉ ${influentialCount} Cook` : '';
+  const metricsText = `r = ${r.toFixed(4)}   R² = ${R2.toFixed(4)}   β₀ = ${b0.toFixed(2)}   β₁ = ${b1.toFixed(2)}   SE = ${SE.toFixed(2)}${cookNote}`;
+  ctx.font = '11px JetBrains Mono, monospace';
+  const tw = ctx.measureText(metricsText).width + 16;
+  ctx.fillStyle = 'rgba(10,12,16,0.75)';
+  ctx.beginPath(); ctx.roundRect(pad.left+4, pad.top+4, tw, 22, 4); ctx.fill();
+  ctx.fillStyle = '#e8eaf0'; ctx.textAlign = 'left';
+  ctx.fillText(metricsText, pad.left+12, pad.top+18);
+
+  // Legend for groups
+  if (grouped && uniqueGroups.length > 0 && uniqueGroups.length <= 10) {
+    const lx = pad.left+chartW-8; let ly = pad.top+10;
+    ctx.font = '10px JetBrains Mono, monospace';
+    uniqueGroups.forEach(g => {
+      ctx.fillStyle = groupColorMap[g]; ctx.fillRect(lx-60, ly, 10, 10);
+      ctx.fillStyle = '#e8eaf0'; ctx.textAlign = 'left';
+      ctx.fillText(String(g).substring(0,8), lx-46, ly+9); ly += 16;
+    });
+  }
+
+  // Tooltip
+  canvas._regrPairs = pairs; canvas._regrCx = cx; canvas._regrCy = cy; canvas._cookD = cookD; canvas._cookThr = cookThreshold;
+  canvas.onmousemove = function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX-rect.left, my = e.clientY-rect.top;
+    let best = null, bestD = Infinity;
+    canvas._regrPairs.forEach((p,i) => {
+      const d = Math.hypot(canvas._regrCx(p.x)-mx, canvas._regrCy(p.y)-my);
+      if (d < bestD) { bestD = d; best = {p,i}; }
+    });
+    const tooltip = document.getElementById('regressionTooltip');
+    if (tooltip) {
+      if (best && bestD < 20) {
+        const cook = canvas._cookD[best.i];
+        const inf = cook > canvas._cookThr ? `  ◉ Cook: ${cook.toFixed(3)}` : '';
+        tooltip.style.display = 'block';
+        tooltip.style.left = (e.clientX+12)+'px';
+        tooltip.style.top  = (e.clientY-28)+'px';
+        tooltip.textContent = `${numCol}: ${fmt(best.p.x,4)}   ${corrCol}: ${fmt(best.p.y,4)}${inf}`;
+      } else { tooltip.style.display = 'none'; }
+    }
+  };
+  canvas.onmouseleave = function() {
+    const t = document.getElementById('regressionTooltip');
+    if (t) t.style.display = 'none';
+  };
+}
+
+// ══════════════════════════════════════════════
+//  FUNÇÃO 5 — renderCorrelationHeatmap
+// ══════════════════════════════════════════════
+function renderCorrelationHeatmap(numericCols) {
+  const canvas = document.getElementById('chartCorrelation');
+  if (!canvas || !numericCols || numericCols.length < 2) return;
+
+  const ncols = numericCols.length;
+
+  // Build data arrays per column
+  const colData = numericCols.map(col =>
+    filteredData.map(r => parseFloat(String(r[col]).replace(',', '.'))).filter(v => !isNaN(v))
+  );
+
+  // Pearson matrix — pairwise (only rows valid in both)
+  const pearson = (colA, colB) => {
+    const pairsX = [], pairsY = [];
+    filteredData.forEach(r => {
+      const x = parseFloat(String(r[colA]).replace(',', '.'));
+      const y = parseFloat(String(r[colB]).replace(',', '.'));
+      if (!isNaN(x) && !isNaN(y)) { pairsX.push(x); pairsY.push(y); }
+    });
+    const n = pairsX.length;
+    if (n < 3) return NaN;
+    const mx = pairsX.reduce((s, v) => s + v, 0) / n;
+    const my = pairsY.reduce((s, v) => s + v, 0) / n;
+    const Sxx = pairsX.reduce((s, v) => s + (v - mx) ** 2, 0);
+    const Syy = pairsY.reduce((s, v) => s + (v - my) ** 2, 0);
+    const Sxy = pairsX.reduce((s, v, i) => s + (v - mx) * (pairsY[i] - my), 0);
+    return (Sxx > 0 && Syy > 0) ? Sxy / Math.sqrt(Sxx * Syy) : NaN;
+  };
+
+  const matrix = numericCols.map((colA, i) =>
+    numericCols.map((colB, j) => i === j ? 1 : pearson(colA, colB))
+  );
+
+  // Dimensions
+  const panelEl = canvas.closest('.panel-correlation') || canvas.parentElement;
+  const panelW = (panelEl?.clientWidth || 500) - 32;
+  const labelArea = 110;
+  const cellSize = Math.max(18, Math.min(60, Math.floor((panelW - labelArea) / ncols)));
+  const W = labelArea + ncols * cellSize + 16;
+  const H = labelArea + ncols * cellSize + 16;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const offX = labelArea, offY = labelArea;
+
+  // Color interpolation: r=-1→blue(96,165,250), r=0→surface2(24,28,36), r=1→accent(245,166,35)
+  const lerpColor = (r) => {
+    if (isNaN(r)) return '#252c3a';
+    if (r >= 0) {
+      const t = r;
+      const R = Math.round(24 + t * (245 - 24));
+      const G = Math.round(28 + t * (166 - 28));
+      const B = Math.round(36 + t * (35  - 36));
+      return `rgb(${R},${G},${B})`;
+    } else {
+      const t = -r;
+      const R = Math.round(24 + t * (96  - 24));
+      const G = Math.round(28 + t * (165 - 28));
+      const B = Math.round(36 + t * (250 - 36));
+      return `rgb(${R},${G},${B})`;
+    }
+  };
+
+  // Column labels X (rotated 45°)
+  ctx.save();
+  ctx.font = '11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#8892a4';
+  numericCols.forEach((col, i) => {
+    ctx.save();
+    ctx.translate(offX + i * cellSize + cellSize / 2, offY - 8);
+    ctx.rotate(-Math.PI / 4);
+    ctx.textAlign = 'left';
+    ctx.fillText(col.length > 12 ? col.substring(0, 12) + '…' : col, 0, 0);
+    ctx.restore();
+  });
+  ctx.restore();
+
+  // Column labels Y
+  ctx.font = '11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#8892a4';
+  ctx.textAlign = 'right';
+  numericCols.forEach((col, i) => {
+    ctx.fillText(
+      col.length > 12 ? col.substring(0, 12) + '…' : col,
+      offX - 6, offY + i * cellSize + cellSize / 2 + 4
+    );
+  });
+
+  // Cells
+  ctx.font = '10px JetBrains Mono, monospace';
+  ctx.textAlign = 'center';
+  for (let i = 0; i < ncols; i++) {
+    for (let j = 0; j < ncols; j++) {
+      const r = matrix[i][j];
+      const x = offX + j * cellSize;
+      const y = offY + i * cellSize;
+
+      if (i === j) {
+        ctx.fillStyle = 'rgba(245,166,35,0.4)';
+        ctx.fillRect(x, y, cellSize, cellSize);
+        ctx.fillStyle = '#f5a623';
+        ctx.fillText('—', x + cellSize / 2, y + cellSize / 2 + 4);
+      } else {
+        ctx.fillStyle = lerpColor(r);
+        ctx.fillRect(x, y, cellSize, cellSize);
+        const textColor = !isNaN(r) && Math.abs(r) > 0.5 ? '#ffffff' : '#8892a4';
+        ctx.fillStyle = textColor;
+        ctx.fillText(isNaN(r) ? 'NaN' : r.toFixed(2), x + cellSize / 2, y + cellSize / 2 + 4);
+      }
+
+      // Cell border
+      ctx.strokeStyle = '#0a0c10';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(x, y, cellSize, cellSize);
+    }
+  }
+
+  // Tooltip
+  canvas._corrMatrix = matrix;
+  canvas._corrCols = numericCols;
+  canvas._corrOffX = offX;
+  canvas._corrOffY = offY;
+  canvas._corrCellSize = cellSize;
+  canvas.onmousemove = function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const scaleY = H / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    const col = Math.floor((mx - canvas._corrOffX) / canvas._corrCellSize);
+    const row = Math.floor((my - canvas._corrOffY) / canvas._corrCellSize);
+    const tooltip = document.getElementById('corrTooltip');
+    if (tooltip) {
+      if (col >= 0 && col < ncols && row >= 0 && row < ncols) {
+        const rv = canvas._corrMatrix[row][col];
+        tooltip.style.display = 'block';
+        tooltip.style.left = (e.clientX + 12) + 'px';
+        tooltip.style.top  = (e.clientY - 36) + 'px';
+        if (row === col) {
+          tooltip.textContent = `${canvas._corrCols[row]} — diagonal`;
+        } else {
+          const rStr = isNaN(rv) ? 'NaN' : rv.toFixed(4);
+          const r2Str = isNaN(rv) ? 'NaN' : (rv * rv).toFixed(4);
+          tooltip.textContent = `Correlação entre ${canvas._corrCols[row]} e ${canvas._corrCols[col]}: r=${rStr}, R²=${r2Str}`;
+        }
+      } else {
+        tooltip.style.display = 'none';
+      }
+    }
+  };
+  canvas.onmouseleave = function() {
+    const t = document.getElementById('corrTooltip');
+    if (t) t.style.display = 'none';
+  };
+}
+
+// ══════════════════════════════════════════════
+//  FUNÇÃO 6 — renderColumnComparison
+// ══════════════════════════════════════════════
+function renderColumnComparison(numCol, corrCol, valuesCol1) {
+  const section = document.getElementById('comparisonSection');
+  if (!section || !numCol || !corrCol) return;
+
+  const valuesCol2 = parseValues(corrCol);
+  if (!valuesCol1 || valuesCol1.length === 0 || valuesCol2.length === 0) {
+    section.style.display = 'none';
     return;
   }
 
-  const vals1 = pairs.map(p => p.v1);
-  const vals2 = pairs.map(p => p.v2);
-  const s1 = calcStats(vals1);
-  const s2 = calcStats(vals2);
+  const s1 = calcStats(valuesCol1);
+  const s2 = calcStats(valuesCol2);
+  if (!s1 || !s2) { section.style.display = 'none'; return; }
 
-  const deltaMu = s2.mean - s1.mean;
+  // Pearson r between the two columns (pairwise valid rows)
+  const pairsX = [], pairsY = [];
+  filteredData.forEach(r => {
+    const x = parseFloat(String(r[numCol]).replace(',', '.'));
+    const y = parseFloat(String(r[corrCol]).replace(',', '.'));
+    if (!isNaN(x) && !isNaN(y)) { pairsX.push(x); pairsY.push(y); }
+  });
+  const np = pairsX.length;
+  let rPearson = NaN;
+  if (np >= 3) {
+    const mx = pairsX.reduce((s, v) => s + v, 0) / np;
+    const my = pairsY.reduce((s, v) => s + v, 0) / np;
+    const Sxx = pairsX.reduce((s, v) => s + (v - mx) ** 2, 0);
+    const Syy = pairsY.reduce((s, v) => s + (v - my) ** 2, 0);
+    const Sxy = pairsX.reduce((s, v, i) => s + (v - mx) * (pairsY[i] - my), 0);
+    rPearson = (Sxx > 0 && Syy > 0) ? Sxy / Math.sqrt(Sxx * Syy) : NaN;
+  }
+
+  const absr = Math.abs(rPearson);
+  const rStrength = absr < 0.2 ? 'muito fraca' : absr < 0.4 ? 'fraca' : absr < 0.6 ? 'moderada' : absr < 0.8 ? 'forte' : 'muito forte';
+  const rSign    = rPearson >= 0 ? 'positiva' : 'negativa';
+  const rColor   = absr < 0.2 ? 'var(--text3)' : absr < 0.5 ? 'var(--text2)' : absr < 0.7 ? 'var(--blue)' : 'var(--green)';
+
+  const deltaMu    = s2.mean - s1.mean;
   const deltaMuPct = s1.mean !== 0 ? (deltaMu / Math.abs(s1.mean)) * 100 : NaN;
-  
-  // Covariance & Pearson r
-  let cov = 0;
-  for(let i=0; i<pairs.length; i++) cov += (vals1[i]-s1.mean)*(vals2[i]-s2.mean);
-  cov /= (pairs.length-1);
-  const r = (s1.std>0 && s2.std>0) ? cov / (s1.std * s2.std) : 0;
 
-  const html = `
-    <p class="section-title">comparação bivariada</p>
+  const row = (label, v1, v2) => `
+    <tr>
+      <td style="color:var(--text2)">${label}</td>
+      <td style="font-family:'JetBrains Mono',monospace;text-align:right">${v1}</td>
+      <td style="font-family:'JetBrains Mono',monospace;text-align:right">${v2}</td>
+    </tr>`;
+
+  section.innerHTML = `
     <div class="comparison-block">
-      <table class="comparison-table">
+      <div class="stat-group-header" style="padding:0 0 12px 0;border-bottom:1px solid var(--border);margin-bottom:16px">
+        <span class="stat-group-icon">🔗</span>
+        <span class="stat-group-title">Comparação entre colunas</span>
+        <span class="stat-group-desc">${numCol} vs ${corrCol}</span>
+      </div>
+      <table class="comparison-table" style="width:100%;border-collapse:collapse;margin-bottom:16px">
         <thead>
           <tr>
-            <th style="width:25%">Estatística</th>
-            <th class="col-label">${col1} <span style="color:var(--text3)">(X)</span></th>
-            <th class="col-label">${col2} <span style="color:var(--text3)">(Y)</span></th>
+            <th style="text-align:left;color:var(--text3);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--border)">Métrica</th>
+            <th style="text-align:right;color:var(--accent);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--border)">${numCol}</th>
+            <th style="text-align:right;color:var(--blue);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--border)">${corrCol}</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td class="stat-row-label">N (Pares Validos)</td><td>${s1.n}</td><td>${s2.n}</td></tr>
-          <tr><td class="stat-row-label">Média</td><td style="color:var(--accent);font-weight:600">${fmt(s1.mean)}</td><td style="color:var(--accent);font-weight:600">${fmt(s2.mean)}</td></tr>
-          <tr><td class="stat-row-label">Mediana</td><td>${fmt(s1.median)}</td><td>${fmt(s2.median)}</td></tr>
-          <tr><td class="stat-row-label">Desvio Padrão</td><td>${fmt(s1.std)}</td><td>${fmt(s2.std)}</td></tr>
-          <tr><td class="stat-row-label">Mín / Máx</td><td>${fmtShort(s1.min)} / ${fmtShort(s1.max)}</td><td>${fmtShort(s2.min)} / ${fmtShort(s2.max)}</td></tr>
-          <tr><td class="stat-row-label">CV%</td><td>${s1.cv !== null ? fmt(s1.cv) + '%' : '—'}</td><td>${s2.cv !== null ? fmt(s2.cv) + '%' : '—'}</td></tr>
+          ${row('n', s1.n, s2.n)}
+          ${row('Média', fmt(s1.mean), fmt(s2.mean))}
+          ${row('Mediana', fmt(s1.median), fmt(s2.median))}
+          ${row('Desvio Padrão', fmt(s1.std), fmt(s2.std))}
+          ${row('Mín', fmtShort(s1.min), fmtShort(s2.min))}
+          ${row('Máx', fmtShort(s1.max), fmtShort(s2.max))}
+          ${row('CV%', s1.cv !== null ? fmt(s1.cv) + '%' : '—', s2.cv !== null ? fmt(s2.cv) + '%' : '—')}
         </tbody>
       </table>
-      <div class="comparison-metrics">
-        <div class="comparison-metric">
-          <div class="comparison-metric-label">Δ Média (Y − X)</div>
-          <div class="comparison-metric-value" style="color:${deltaMu >= 0 ? 'var(--green)' : 'var(--red)'}">
-            ${deltaMu >= 0 ? '+' : ''}${fmt(deltaMu)}
-          </div>
-          <div class="comparison-metric-sub">
-            ${isNaN(deltaMuPct) ? '' : (deltaMuPct >= 0 ? '+' : '') + fmt(deltaMuPct) + '% relativo'}
+      <div class="comparison-metrics" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="stat-card">
+          <div class="stat-card-label">Δμ (μ₂ − μ₁)</div>
+          <div class="stat-card-value" style="color:${deltaMu >= 0 ? 'var(--green)' : 'var(--red)'}">${fmt(deltaMu)}</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">
+            ${isNaN(deltaMuPct) ? '' : (deltaMuPct >= 0 ? '+' : '') + fmt(deltaMuPct) + '%'}
           </div>
         </div>
-        <div class="comparison-metric">
-          <div class="comparison-metric-label">Correlação (Pearson r)</div>
-          <div class="comparison-metric-value" style="color:var(--blue)">
-            ${fmt(r, 4)}
-          </div>
-          <div class="comparison-metric-sub">
-            ${Math.abs(r)>0.7?'Forte':Math.abs(r)>0.4?'Moderada':'Fraca'} ${r>0?'Positiva':'Negativa'}
+        <div class="stat-card">
+          <div class="stat-card-label">r de Pearson</div>
+          <div class="stat-card-value" style="color:${rColor}">${isNaN(rPearson) ? '—' : fmt(rPearson, 4)}</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text2)">
+            ${isNaN(rPearson) ? '' : rStrength + ' · ' + rSign}
           </div>
         </div>
       </div>
       <details class="group-explain">
-        <summary>como interpretar esta comparação</summary>
-        <div class="group-explain-body">
-          <p><strong>Δ Média:</strong> Mostra o ganho absoluto e relativo da coluna Y em relação à coluna X. Útil para métricas de "Antes" e "Depois".</p>
-          <p><strong>Correlação (Pearson):</strong> Varia de -1 a 1. Valores próximos de <strong>1</strong> indicam que quando X cresce, Y cresce junto. Valores próximos de <strong>-1</strong> indicam o inverso (quando X cresce, Y cai). Valores próximos de <strong>0</strong> indicam que não há relação matemática linear visível entre as colunas.</p>
+        <summary>💡 como interpretar estes resultados</summary>
+        <div class="group-explain-body" id="ge-comparacao">
+          <p style="color:var(--text3);font-size:11px;">Calcule as estatísticas para ver a interpretação.</p>
         </div>
       </details>
-    </div>
-  `;
-  
-  const sec = document.getElementById('comparisonSection');
-  sec.innerHTML = html;
-  sec.style.display = 'block';
+    </div>`;
+
+  section.style.display = 'block';
 }
 
 // ══════════════════════════════════════════════
-//  STEP 5: CANVAS REGRESSION PLOT
+//  PRE-ANALYSIS FILTER PANEL
 // ══════════════════════════════════════════════
-function renderRegressionCanvas(colX, colY, grouped) {
-  const canvas = document.getElementById('chartRegression');
-  if (!canvas) return;
+function buildFilterPanel() {
+  if (!rawData.length) return;
+  activeFilters = {};
+  filteredData = [...rawData];
 
-  const panel = document.getElementById('panel-regression');
-  const dpr = window.devicePixelRatio || 1;
-  const W = panel.clientWidth - 56;
-  const H = Math.max(380, Math.min(W * 0.65, 480));
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
+  const numericCols = headers.filter(h => detectNumeric(h));
+  const catCols = headers.filter(h => !detectNumeric(h));
 
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
+  // ── Numeric sliders ──
+  const numContainer = document.getElementById('filterNumericCols');
+  numContainer.innerHTML = '';
+  numericCols.forEach(col => {
+    const vals = rawData.map(r => parseFloat(String(r[col]).replace(',','.'))).filter(v => !isNaN(v));
+    if (!vals.length) return;
+    const mn = Math.min(...vals), mx = Math.max(...vals);
+    activeFilters[col] = { type: 'numeric', min: mn, max: mx, absMin: mn, absMax: mx };
 
-  const PAD_L = 60, PAD_R = 30, PAD_T = 30, PAD_B = 50;
-  const pw = W - PAD_L - PAD_R;
-  const ph = H - PAD_T - PAD_B;
-
-  ctx.fillStyle = '#111318';
-  ctx.fillRect(0, 0, W, H);
-
-  // Extract points
-  const pts = [];
-  rawData.forEach(row => {
-    const x = parseFloat(String(row[colX]).replace(',','.'));
-    const y = parseFloat(String(row[colY]).replace(',','.'));
-    if (!isNaN(x) && !isNaN(y)) pts.push({x, y});
+    const card = document.createElement('div');
+    card.className = 'filter-col-card';
+    card.innerHTML = `
+      <div class="filter-col-name">
+        <span class="type-dot numeric"></span>${col}
+      </div>
+      <div class="filter-range-wrap">
+        <div class="filter-range-inputs">
+          <input class="filter-range-input" type="number" id="fmin_${col}" value="${mn}" step="any"
+            onchange="onNumericFilterChange('${col}')" placeholder="mín">
+          <span class="filter-range-sep">—</span>
+          <input class="filter-range-input" type="number" id="fmax_${col}" value="${mx}" step="any"
+            onchange="onNumericFilterChange('${col}')" placeholder="máx">
+        </div>
+        <div class="filter-range-info" id="finfo_${col}">intervalo original: ${fmtShort(mn)} — ${fmtShort(mx)}</div>
+      </div>`;
+    numContainer.appendChild(card);
   });
 
-  if (pts.length < 2) return;
+  // ── Categorical checkboxes ──
+  const catContainer = document.getElementById('filterCatCols');
+  catContainer.innerHTML = '';
+  const catSection = document.getElementById('filterCatSection');
 
-  const xs = pts.map(p=>p.x), ys = pts.map(p=>p.y);
-  const xMin = Math.min(...xs), xMax = Math.max(...xs);
-  const yMin = Math.min(...ys), yMax = Math.max(...ys);
-  
-  const xPad = (xMax - xMin)*0.05 || 1;
-  const yPad = (yMax - yMin)*0.05 || 1;
-  const xLo = xMin - xPad, xHi = xMax + xPad;
-  const yLo = yMin - yPad, yHi = yMax + yPad;
+  if (catCols.length > 0) {
+    catSection.style.display = '';
+    catCols.forEach(col => {
+      const unique = [...new Set(rawData.map(r => String(r[col] ?? '')))].filter(v => v !== '').sort();
+      if (unique.length === 0 || unique.length > 200) return;
+      activeFilters[col] = { type: 'cat', include: new Set(unique) };
 
-  const toX = v => PAD_L + (v - xLo)/(xHi - xLo)*pw;
-  const toY = v => PAD_T + ph - (v - yLo)/(yHi - yLo)*ph;
-
-  // Regression params
-  const n = pts.length;
-  let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-  pts.forEach(p => { sumX += p.x; sumY += p.y; sumXY += p.x*p.y; sumXX += p.x*p.x; });
-  const slope = (n*sumXY - sumX*sumY) / (n*sumXX - sumX*sumX);
-  const intercept = (sumY - slope*sumX) / n;
-
-  // Grid
-  ctx.strokeStyle = '#1e2330'; ctx.lineWidth = 1;
-  for(let i=1; i<5; i++) {
-    const x = xLo + (xHi-xLo)*(i/5);
-    ctx.beginPath(); ctx.moveTo(toX(x), PAD_T); ctx.lineTo(toX(x), PAD_T+ph); ctx.stroke();
-    const y = yLo + (yHi-yLo)*(i/5);
-    ctx.beginPath(); ctx.moveTo(PAD_L, toY(y)); ctx.lineTo(PAD_L+pw, toY(y)); ctx.stroke();
+      const card = document.createElement('div');
+      card.className = 'filter-col-card';
+      const checksId = `fcat_${col.replace(/\W/g,'_')}`;
+      card.innerHTML = `
+        <div class="filter-col-name">
+          <span class="type-dot category"></span>${col}
+        </div>
+        <div class="filter-cat-controls">
+          <button class="filter-cat-btn" onclick="setCatAll('${col}', true)">todos</button>
+          <button class="filter-cat-btn" onclick="setCatAll('${col}', false)">nenhum</button>
+        </div>
+        <div class="filter-cat-list" id="${checksId}">
+          ${unique.map(val => `
+            <label class="filter-cat-item">
+              <input type="checkbox" checked data-col="${col}" data-val="${val.replace(/"/g,'&quot;')}"
+                onchange="onCatFilterChange('${col}')">
+              <label>${val}</label>
+            </label>`).join('')}
+        </div>`;
+      catContainer.appendChild(card);
+    });
+  } else {
+    catSection.style.display = 'none';
   }
 
-  // Axes
-  ctx.strokeStyle = '#252c3a'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(PAD_L, PAD_T); ctx.lineTo(PAD_L, PAD_T+ph); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(PAD_L, PAD_T+ph); ctx.lineTo(PAD_L+pw, PAD_T+ph); ctx.stroke();
-
-  // Points
-  ctx.fillStyle = 'rgba(96,165,250,0.6)';
-  pts.forEach(p => {
-    ctx.beginPath(); ctx.arc(toX(p.x), toY(p.y), 3, 0, 2*Math.PI); ctx.fill();
-  });
-
-  // Regression line
-  ctx.strokeStyle = '#f5a623'; ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(toX(xLo), toY(slope*xLo + intercept));
-  ctx.lineTo(toX(xHi), toY(slope*xHi + intercept));
-  ctx.stroke();
-
-  // Labels
-  ctx.fillStyle = '#8892a4'; ctx.font = '11px JetBrains Mono, monospace';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-  ctx.fillText(colX, PAD_L + pw/2, H-4);
-  
-  ctx.save();
-  ctx.translate(14, PAD_T + ph/2); ctx.rotate(-Math.PI/2);
-  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-  ctx.fillText(colY, 0, 0);
-  ctx.restore();
-
-  // Legend/Eq
-  ctx.fillStyle = '#111318'; ctx.fillRect(PAD_L+10, PAD_T+10, 180, 24);
-  ctx.strokeStyle = '#252c3a'; ctx.strokeRect(PAD_L+10, PAD_T+10, 180, 24);
-  ctx.fillStyle = '#f5a623'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  const sign = intercept < 0 ? '-' : '+';
-  ctx.fillText(`y = ${slope.toFixed(3)}x ${sign} ${Math.abs(intercept).toFixed(3)}`, PAD_L+16, PAD_T+22);
+  updateFilterStatus();
+  document.getElementById('filterPanelSection').style.display = '';
 }
 
-// ══════════════════════════════════════════════
-//  STEP 5: CANVAS CORRELATION HEATMAP
-// ══════════════════════════════════════════════
-function renderCorrelationHeatmap(numericCols) {
-  const canvas = document.getElementById('chartCorrelation');
-  if (!canvas) return;
+function onNumericFilterChange(col) {
+  const minEl = document.getElementById(`fmin_${col}`);
+  const maxEl = document.getElementById(`fmax_${col}`);
+  let mn = parseFloat(minEl.value), mx = parseFloat(maxEl.value);
+  if (isNaN(mn)) mn = activeFilters[col].absMin;
+  if (isNaN(mx)) mx = activeFilters[col].absMax;
+  if (mn > mx) { mn = mx; minEl.value = mn; }
+  activeFilters[col].min = mn;
+  activeFilters[col].max = mx;
+  applyFilters();
+}
 
-  const panel = document.getElementById('panel-correlation');
-  const dpr = window.devicePixelRatio || 1;
-  const W = panel.clientWidth - 56;
-  // Make it square-ish based on number of columns, but bounded
-  const H = Math.max(380, Math.min(W * 0.8, 500));
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
+function onCatFilterChange(col) {
+  const colId = `fcat_${col.replace(/\W/g,'_')}`;
+  const checks = document.querySelectorAll(`#${colId} input[type=checkbox]`);
+  const included = new Set();
+  checks.forEach(cb => { if (cb.checked) included.add(cb.dataset.val); });
+  activeFilters[col].include = included;
+  applyFilters();
+}
 
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
+function setCatAll(col, state) {
+  const colId = `fcat_${col.replace(/\W/g,'_')}`;
+  const checks = document.querySelectorAll(`#${colId} input[type=checkbox]`);
+  checks.forEach(cb => { cb.checked = state; });
+  onCatFilterChange(col);
+}
 
-  ctx.fillStyle = '#111318';
-  ctx.fillRect(0, 0, W, H);
-
-  const n = numericCols.length;
-  // Calculate correlation matrix
-  const matrix = Array(n).fill(0).map(()=>Array(n).fill(0));
-  const stats = numericCols.map(c => calcStats(parseValues(c)));
-
-  for(let i=0; i<n; i++) {
-    for(let j=0; j<n; j++) {
-      if (i === j) { matrix[i][j] = 1; continue; }
-      if (i > j) { matrix[i][j] = matrix[j][i]; continue; }
-      
-      const v1 = [], v2 = [];
-      rawData.forEach(row => {
-        const val1 = parseFloat(String(row[numericCols[i]]).replace(',','.'));
-        const val2 = parseFloat(String(row[numericCols[j]]).replace(',','.'));
-        if (!isNaN(val1) && !isNaN(val2)) { v1.push(val1); v2.push(val2); }
-      });
-      
-      if (v1.length < 2) { matrix[i][j] = 0; continue; }
-      const m1 = v1.reduce((s,v)=>s+v,0)/v1.length;
-      const m2 = v2.reduce((s,v)=>s+v,0)/v2.length;
-      let cov=0, var1=0, var2=0;
-      for(let k=0; k<v1.length; k++){
-        const d1 = v1[k]-m1, d2 = v2[k]-m2;
-        cov += d1*d2; var1 += d1*d1; var2 += d2*d2;
+function applyFilters() {
+  filteredData = rawData.filter(row => {
+    for (const [col, f] of Object.entries(activeFilters)) {
+      if (f.type === 'numeric') {
+        const v = parseFloat(String(row[col] ?? '').replace(',','.'));
+        if (!isNaN(v) && (v < f.min || v > f.max)) return false;
+      } else if (f.type === 'cat') {
+        const v = String(row[col] ?? '');
+        if (v !== '' && !f.include.has(v)) return false;
       }
-      matrix[i][j] = (var1>0 && var2>0) ? cov / Math.sqrt(var1*var2) : 0;
     }
+    return true;
+  });
+  updateFilterStatus();
+  updatePreviewWithFilter();
+}
+
+function clearAllFilters() {
+  headers.forEach(col => {
+    if (activeFilters[col]) {
+      if (activeFilters[col].type === 'numeric') {
+        document.getElementById(`fmin_${col}`).value = activeFilters[col].absMin;
+        document.getElementById(`fmax_${col}`).value = activeFilters[col].absMax;
+        activeFilters[col].min = activeFilters[col].absMin;
+        activeFilters[col].max = activeFilters[col].absMax;
+      } else {
+        setCatAll(col, true);
+        const unique = [...new Set(rawData.map(r => String(r[col] ?? '')))].filter(v => v !== '');
+        activeFilters[col].include = new Set(unique);
+      }
+    }
+  });
+  filteredData = [...rawData];
+  updateFilterStatus();
+  updatePreviewWithFilter();
+}
+
+function updateFilterStatus() {
+  const badge = document.getElementById('filterBadge');
+  const status = document.getElementById('filterStatus');
+  const total = rawData.length;
+  const kept = filteredData.length;
+  const removed = total - kept;
+
+  if (removed === 0) {
+    badge.textContent = 'sem filtros';
+    badge.className = 'filter-panel-badge inactive';
+  } else {
+    badge.textContent = `${removed} removida${removed !== 1 ? 's' : ''}`;
+    badge.className = 'filter-panel-badge active';
+  }
+  status.innerHTML = `<strong>${kept.toLocaleString('pt-BR')}</strong> / ${total.toLocaleString('pt-BR')} linhas selecionadas`;
+}
+
+function updatePreviewWithFilter() {
+  const thead = document.getElementById('dataPreviewHead');
+  const tbody = document.getElementById('dataPreviewBody');
+  if (!thead) return;
+
+  const rows = filteredData.slice(0, 10);
+  tbody.innerHTML = rows.map((row) => `
+    <tr>
+      <td class="row-num">${rawData.indexOf(row) + 1}</td>
+      ${headers.map(h => `<td>${row[h] === '' || row[h] === null || row[h] === undefined ? '<span style="color:var(--text3)">—</span>' : row[h]}</td>`).join('')}
+    </tr>
+  `).join('');
+
+  const titleEl = document.getElementById('dataPreviewTitle');
+  if (titleEl) {
+    const removed = rawData.length - filteredData.length;
+    titleEl.textContent = removed > 0
+      ? `preview dos dados — ${filteredData.length.toLocaleString('pt-BR')} de ${rawData.length.toLocaleString('pt-BR')} linhas · ${headers.length} colunas`
+      : `preview dos dados — ${rawData.length.toLocaleString('pt-BR')} linhas · ${headers.length} colunas`;
+  }
+}
+
+// ══════════════════════════════════════════════
+//  LEARNING MODE
+// ══════════════════════════════════════════════
+function openLearningMode() {
+  // ── a) Dataset fictício embutido ──
+  const LEARN_DATA = [
+    { vendedor: 'Ana Lima',       regiao: 'Sul',    vendas_mes: 22400, ticket_medio: 310,  satisfacao: 4.5, dias_ativo: 22 },
+    { vendedor: 'Bruno Melo',     regiao: 'Norte',  vendas_mes: 11200, ticket_medio: 175,  satisfacao: 3.8, dias_ativo: 18 },
+    { vendedor: 'Carla Souza',    regiao: 'Centro', vendas_mes: 18700, ticket_medio: 260,  satisfacao: 4.2, dias_ativo: 21 },
+    { vendedor: 'Diego Ramos',    regiao: 'Sul',    vendas_mes: 89000, ticket_medio: 980,  satisfacao: 4.9, dias_ativo: 25 },
+    { vendedor: 'Elisa Nunes',    regiao: 'Norte',  vendas_mes:  9800, ticket_medio: 145,  satisfacao: 3.6, dias_ativo: 16 },
+    { vendedor: 'Fábio Costa',    regiao: 'Centro', vendas_mes: 24100, ticket_medio: 340,  satisfacao: 4.3, dias_ativo: 23 },
+    { vendedor: 'Gabi Torres',    regiao: 'Sul',    vendas_mes: 31500, ticket_medio: 430,  satisfacao: 4.6, dias_ativo: 24 },
+    { vendedor: 'Hugo Dias',      regiao: 'Norte',  vendas_mes: 13600, ticket_medio: 200,  satisfacao: 3.9, dias_ativo: 19 },
+    { vendedor: 'Íris Pinto',     regiao: 'Centro', vendas_mes: 20300, ticket_medio: 285,  satisfacao: 4.1, dias_ativo: 22 },
+    { vendedor: 'João Araújo',    regiao: 'Sul',    vendas_mes: 27800, ticket_medio: 385,  satisfacao: 4.4, dias_ativo: 23 },
+    { vendedor: 'Karen Vieira',   regiao: 'Norte',  vendas_mes: 10400, ticket_medio: 160,  satisfacao: 3.7, dias_ativo: 17 },
+    { vendedor: 'Lucas Faria',    regiao: 'Centro', vendas_mes: 92000, ticket_medio: 1020, satisfacao: 4.8, dias_ativo: 26 },
+    { vendedor: 'Mariana Lopes',  regiao: 'Sul',    vendas_mes: 19500, ticket_medio: 270,  satisfacao: 4.0, dias_ativo: 21 },
+    { vendedor: 'Natan Cunha',    regiao: 'Norte',  vendas_mes: 12100, ticket_medio: 185,  satisfacao: 3.8, dias_ativo: 18 },
+    { vendedor: 'Olívia Barros',  regiao: 'Centro', vendas_mes: 21600, ticket_medio: 300,  satisfacao: 4.3, dias_ativo: 22 },
+    { vendedor: 'Paulo Gomes',    regiao: 'Sul',    vendas_mes: 33200, ticket_medio: 455,  satisfacao: 4.5, dias_ativo: 24 },
+    { vendedor: 'Queila Rocha',   regiao: 'Norte',  vendas_mes:  8600, ticket_medio: 130,  satisfacao: 3.5, dias_ativo: 15 },
+    { vendedor: 'Rafael Teles',   regiao: 'Centro', vendas_mes: 25700, ticket_medio: 360,  satisfacao: 4.2, dias_ativo: 23 },
+    { vendedor: 'Sara Mendes',    regiao: 'Sul',    vendas_mes: 16800, ticket_medio: 235,  satisfacao: 3.9, dias_ativo: 20 },
+    { vendedor: 'Tiago Alves',    regiao: 'Norte',  vendas_mes: 14200, ticket_medio: 210,  satisfacao: 4.0, dias_ativo: 19 },
+    { vendedor: 'Úrsula Fidalgo', regiao: 'Centro', vendas_mes: 23000, ticket_medio: 320,  satisfacao: 4.4, dias_ativo: 22 },
+    { vendedor: 'Vitor Cardoso',  regiao: 'Sul',    vendas_mes: 28900, ticket_medio: 400,  satisfacao: 4.5, dias_ativo: 24 },
+    { vendedor: 'Wesley Mota',    regiao: 'Norte',  vendas_mes: 11700, ticket_medio: 178,  satisfacao: 3.7, dias_ativo: 17 },
+    { vendedor: 'Ximena Reis',    regiao: 'Centro', vendas_mes: 19100, ticket_medio: 265,  satisfacao: 4.1, dias_ativo: 21 },
+    { vendedor: 'Yasmin Duarte',  regiao: 'Sul',    vendas_mes: 36400, ticket_medio: 495,  satisfacao: 4.7, dias_ativo: 25 },
+    { vendedor: 'Zeca Borges',    regiao: 'Norte',  vendas_mes:  9300, ticket_medio: 140,  satisfacao: 3.6, dias_ativo: 16 },
+    { vendedor: 'Alice Ferreira', regiao: 'Centro', vendas_mes: 26500, ticket_medio: 370,  satisfacao: 4.3, dias_ativo: 23 },
+    { vendedor: 'Bernardo Lima',  regiao: 'Sul',    vendas_mes: 15700, ticket_medio: 220,  satisfacao: 3.8, dias_ativo: 20 },
+    { vendedor: 'Cecília Neto',   regiao: 'Norte',  vendas_mes: 13000, ticket_medio: 195,  satisfacao: 3.9, dias_ativo: 18 },
+    { vendedor: 'Davi Martins',   regiao: 'Centro', vendas_mes: 22800, ticket_medio: 315,  satisfacao: 4.2, dias_ativo: 22 },
+    { vendedor: 'Eduarda Paz',    regiao: 'Sul',    vendas_mes: 30100, ticket_medio: 415,  satisfacao: 4.4, dias_ativo: 24 },
+    { vendedor: 'Felipe Assis',   regiao: 'Norte',  vendas_mes: 10900, ticket_medio: 165,  satisfacao: 3.7, dias_ativo: 17 },
+    { vendedor: 'Giovana Luz',    regiao: 'Centro', vendas_mes: 24600, ticket_medio: 345,  satisfacao: 4.3, dias_ativo: 23 },
+    { vendedor: 'Henrique Sal',   regiao: 'Sul',    vendas_mes: 17300, ticket_medio: 240,  satisfacao: 4.0, dias_ativo: 20 },
+    { vendedor: 'Isadora Melo',   regiao: 'Norte',  vendas_mes: 12600, ticket_medio: 190,  satisfacao: 3.8, dias_ativo: 18 },
+    { vendedor: 'Júlio César',    regiao: 'Centro', vendas_mes: 20800, ticket_medio: 290,  satisfacao: 4.1, dias_ativo: 21 },
+    { vendedor: 'Karina Soto',    regiao: 'Sul',    vendas_mes: 25200, ticket_medio: 350,  satisfacao: 4.3, dias_ativo: 23 },
+    { vendedor: 'Leonardo Rua',   regiao: 'Norte',  vendas_mes:  9700, ticket_medio: 148,  satisfacao: 3.6, dias_ativo: 16 },
+    { vendedor: 'Mirela Vaz',     regiao: 'Centro', vendas_mes: 27300, ticket_medio: 380,  satisfacao: 4.4, dias_ativo: 23 },
+    { vendedor: 'Nelson Cruz',    regiao: 'Sul',    vendas_mes: 21000, ticket_medio: 295,  satisfacao: 4.1, dias_ativo: 21 },
+    { vendedor: 'Olivia Matos',   regiao: 'Norte',  vendas_mes: 11400, ticket_medio: 172,  satisfacao: 3.7, dias_ativo: 17 },
+    { vendedor: 'Pamela Dinis',   regiao: 'Centro', vendas_mes: 23500, ticket_medio: 328,  satisfacao: 4.2, dias_ativo: 22 },
+    { vendedor: 'Quintino Ló',    regiao: 'Sul',    vendas_mes: 29600, ticket_medio: 408,  satisfacao: 4.5, dias_ativo: 24 },
+    { vendedor: 'Roberta Ivo',    regiao: 'Norte',  vendas_mes: 10100, ticket_medio: 155,  satisfacao: 3.7, dias_ativo: 16 },
+    { vendedor: 'Samuel Ouro',    regiao: 'Centro', vendas_mes: 18300, ticket_medio: 255,  satisfacao: 4.0, dias_ativo: 21 },
+    { vendedor: 'Tatiane Rios',   regiao: 'Sul',    vendas_mes: 34700, ticket_medio: 475,  satisfacao: 4.6, dias_ativo: 25 },
+    { vendedor: 'Ulisses Braga',  regiao: 'Norte',  vendas_mes: 13400, ticket_medio: 202,  satisfacao: 3.9, dias_ativo: 19 },
+    { vendedor: 'Vanessa Porto',  regiao: 'Centro', vendas_mes: 26000, ticket_medio: 363,  satisfacao: 4.3, dias_ativo: 23 },
+    { vendedor: 'William Sá',     regiao: 'Sul',    vendas_mes: 14900, ticket_medio: 215,  satisfacao: 3.9, dias_ativo: 20 },
+    { vendedor: 'Xiomara Lins',   regiao: 'Norte',  vendas_mes: 12800, ticket_medio: 192,  satisfacao: 3.8, dias_ativo: 18 },
+  ];
+
+  // ── b) Cálculos estatísticos inline sobre vendas_mes ──
+  const vals = LEARN_DATA.map(d => d.vendas_mes).sort((a, b) => a - b);
+  const n = vals.length;
+  const sum = vals.reduce((a, b) => a + b, 0);
+  const mean = sum / n;
+  const median = n % 2 === 0 ? (vals[n/2 - 1] + vals[n/2]) / 2 : vals[Math.floor(n/2)];
+  const variance = vals.reduce((a, v) => a + Math.pow(v - mean, 2), 0) / (n - 1);
+  const std = Math.sqrt(variance);
+  const minVal = vals[0];
+  const maxVal = vals[n - 1];
+  const q1 = vals[Math.floor(n * 0.25)];
+  const q3 = vals[Math.floor(n * 0.75)];
+  const iqr = q3 - q1;
+  const cv = (std / mean) * 100;
+  const skew = vals.reduce((a, v) => a + Math.pow((v - mean) / std, 3), 0) / n;
+
+  // ── Médias por região ──
+  const regioes = ['Sul', 'Norte', 'Centro'];
+  const regMedias = {};
+  regioes.forEach(function(r) {
+    const rv = LEARN_DATA.filter(d => d.regiao === r).map(d => d.vendas_mes);
+    regMedias[r] = rv.reduce((a, b) => a + b, 0) / rv.length;
+  });
+
+  function fmtK(v) { return 'R$' + (v / 1000).toFixed(1).replace('.', ',') + 'k'; }
+  function fmt(v)  { return 'R$' + Math.round(v).toLocaleString('pt-BR'); }
+
+  // ── c) HTML completo da página educativa ──
+  const htmlString = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataLab \u2014 Modo Aprendizado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0c10;--surface:#111318;--surface2:#181c24;--border:#1e2330;--border2:#252c3a;
+    --accent:#f5a623;--accent2:#e8891a;--accent-dim:rgba(245,166,35,0.12);--accent-glow:rgba(245,166,35,0.25);
+    --text:#e8eaf0;--text2:#8892a4;--text3:#4a5568;
+    --green:#34d399;--blue:#60a5fa;--red:#f87171;--purple:#a78bfa;--teal:#2dd4bf;
+    --radius:12px;--radius-lg:18px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+  body::after{content:'';position:fixed;inset:0;
+    background-image:linear-gradient(rgba(45,212,191,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(45,212,191,0.025) 1px,transparent 1px);
+    background-size:48px 48px;pointer-events:none;z-index:0}
+  header{position:relative;z-index:10;padding:24px 40px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    background:rgba(10,12,16,0.9);backdrop-filter:blur(12px)}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo-icon{width:38px;height:38px;background:var(--teal);border-radius:8px;
+    display:grid;place-items:center;font-family:'JetBrains Mono',monospace;
+    font-weight:700;font-size:18px;color:#000;box-shadow:0 0 20px rgba(45,212,191,0.3)}
+  .logo-text{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+  .logo-text span{color:var(--teal)}
+  .header-badge{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 14px;
+    border-radius:6px;border:1px solid rgba(45,212,191,0.35);background:rgba(45,212,191,0.07);
+    color:var(--teal);letter-spacing:0.5px}
+  main{position:relative;z-index:10;max-width:1060px;margin:0 auto;
+    padding:48px 24px 100px;display:flex;flex-direction:column;gap:48px}
+  .section-title{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:500;
+    letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:20px;
+    display:flex;align-items:center;gap:10px}
+  .section-title::after{content:'';flex:1;height:1px;
+    background:linear-gradient(90deg,rgba(45,212,191,0.3),transparent)}
+  .about-block{background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius-lg);padding:28px 32px}
+  .about-block h2{font-size:18px;font-weight:700;margin-bottom:12px}
+  .about-block p{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px}
+  .col-table{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:12px}
+  .col-table th{text-align:left;padding:8px 14px;background:var(--surface2);color:var(--text2);
+    letter-spacing:1px;font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--border2)}
+  .col-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);
+    vertical-align:top;line-height:1.5}
+  .col-table tr:last-child td{border-bottom:none}
+  .col-type{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+  .col-type.num{background:rgba(245,166,35,0.12);color:var(--accent);border:1px solid rgba(245,166,35,0.3)}
+  .col-type.cat{background:rgba(96,165,250,0.12);color:var(--blue);border:1px solid rgba(96,165,250,0.3)}
+  .learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+  .learn-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px 20px;transition:border-color 0.2s}
+  .learn-card:hover{border-color:rgba(45,212,191,0.4)}
+  .learn-card-icon{font-size:22px;margin-bottom:10px;display:block}
+  .learn-card-title{font-size:13px;font-weight:700;margin-bottom:6px}
+  .learn-card-desc{font-size:12px;color:var(--text2);line-height:1.5;font-family:'JetBrains Mono',monospace}
+  .stat-group{background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius-lg);overflow:hidden}
+  .stat-group-header{padding:16px 20px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:12px;background:var(--surface2)}
+  .stat-group-icon{font-size:18px}
+  .stat-group-title{font-size:13px;font-weight:700}
+  .stat-group-desc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);
+    margin-left:auto;letter-spacing:0.5px}
+  .stat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:1px;background:var(--border)}
+  .stat-card{background:var(--surface);padding:20px 18px;cursor:default}
+  .stat-card:hover{background:var(--surface2)}
+  .stat-card-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);
+    text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+  .stat-card-value{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;
+    color:var(--text);letter-spacing:-0.5px;line-height:1}
+  .stat-card-value.accent{color:var(--accent)}.stat-card-value.green{color:var(--green)}
+  .stat-card-value.blue{color:var(--blue)}.stat-card-value.red{color:var(--red)}
+  .stat-card-value.teal{color:var(--teal)}.stat-card-value.purple{color:var(--purple)}
+  .stat-card-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px}
+  .insight-box{background:rgba(45,212,191,0.05);border:1px solid rgba(45,212,191,0.2);
+    border-left:3px solid var(--teal);border-radius:var(--radius);padding:18px 22px}
+  .insight-box-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;
+    text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+  .insight-box p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:8px}
+  .insight-box p:last-child{margin-bottom:0}
+  .insight-box strong{color:var(--text);font-weight:700}
+  .insight-box code{font-family:'JetBrains Mono',monospace;font-size:12px;
+    background:rgba(45,212,191,0.08);color:var(--teal);padding:1px 6px;border-radius:4px}
+  .region-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px}
+  .region-card{background:var(--surface2);border:1px solid var(--border);
+    border-radius:var(--radius);padding:18px 20px;text-align:center}
+  .region-name{font-size:13px;font-weight:700;margin-bottom:6px}
+  .region-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--accent)}
+  .region-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px}
+  .try-block{background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius-lg);padding:32px;display:flex;gap:32px;align-items:flex-start}
+  .try-steps{flex:1}
+  .try-steps h3{font-size:16px;font-weight:700;margin-bottom:14px}
+  .step-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+  .step-list li{display:flex;gap:12px;font-size:13px;color:var(--text2);line-height:1.6;align-items:flex-start}
+  .step-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;
+    background:rgba(45,212,191,0.12);border:1px solid rgba(45,212,191,0.3);color:var(--teal);
+    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:grid;place-items:center}
+  .btn-download{font-family:'JetBrains Mono',monospace;font-size:12px;padding:12px 22px;
+    border-radius:8px;border:1px solid rgba(45,212,191,0.4);background:rgba(45,212,191,0.08);
+    color:var(--teal);cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;
+    display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+  .btn-download:hover{background:rgba(45,212,191,0.18);border-color:var(--teal);
+    box-shadow:0 0 16px rgba(45,212,191,0.2)}
+  footer{position:relative;z-index:10;padding:24px 40px;border-top:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;background:rgba(10,12,16,0.9)}
+  .footer-back{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);
+    cursor:pointer;background:none;border:1px solid var(--border2);padding:8px 16px;
+    border-radius:8px;transition:all 0.2s;letter-spacing:0.5px}
+  .footer-back:hover{border-color:var(--teal);color:var(--teal)}
+  .footer-copy{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">\u{1F393}</div>
+    <div><div class="logo-text">Data<span>Lab</span> &mdash; Modo Aprendizado</div></div>
+  </div>
+  <div class="header-badge">\u{1F393} dataset de exemplo: loja_vendas_2024.csv</div>
+</header>
+
+<main>
+
+  <section>
+    <div class="section-title">01 &middot; sobre este dataset</div>
+    <div class="about-block">
+      <h2>loja_vendas_2024.csv</h2>
+      <p>Dataset fict&iacute;cio com <strong>50 registros</strong> simulando o desempenho mensal de vendedores de uma rede varejista com opera&ccedil;&otilde;es nas regi&otilde;es Sul, Norte e Centro do Brasil. Os dados foram constru&iacute;dos para demonstrar os principais padr&otilde;es estat&iacute;sticos que voc&ecirc; encontrar&aacute; em datasets reais: assimetria, outliers, correla&ccedil;&atilde;o e varia&ccedil;&atilde;o entre grupos.</p>
+      <table class="col-table">
+        <thead><tr><th>coluna</th><th>tipo</th><th>descri&ccedil;&atilde;o</th><th>exemplo</th></tr></thead>
+        <tbody>
+          <tr><td>vendedor</td><td><span class="col-type cat">texto</span></td><td>Nome do vendedor</td><td>Ana Lima</td></tr>
+          <tr><td>regiao</td><td><span class="col-type cat">texto</span></td><td>Regi&atilde;o de atua&ccedil;&atilde;o (Sul, Norte, Centro)</td><td>Sul</td></tr>
+          <tr><td>vendas_mes</td><td><span class="col-type num">num&eacute;rico</span></td><td>Total de vendas no m&ecirc;s (R$) &mdash; apresenta outliers e assimetria positiva</td><td>22.400</td></tr>
+          <tr><td>ticket_medio</td><td><span class="col-type num">num&eacute;rico</span></td><td>Valor m&eacute;dio por venda (R$) &mdash; correlaciona com vendas_mes</td><td>310</td></tr>
+          <tr><td>satisfacao</td><td><span class="col-type num">num&eacute;rico</span></td><td>Nota m&eacute;dia de satisfa&ccedil;&atilde;o dos clientes (1&ndash;5)</td><td>4.5</td></tr>
+          <tr><td>dias_ativo</td><td><span class="col-type num">num&eacute;rico</span></td><td>Dias trabalhados no m&ecirc;s</td><td>22</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">02 &middot; o que voc&ecirc; vai aprender</div>
+    <div class="learn-grid">
+      <div class="learn-card"><span class="learn-card-icon">&#128202;</span><div class="learn-card-title">Medidas de Posi&ccedil;&atilde;o</div><div class="learn-card-desc">M&eacute;dia vs mediana: por que a m&eacute;dia mente na presen&ccedil;a de outliers e quando usar cada uma</div></div>
+      <div class="learn-card"><span class="learn-card-icon">&#128208;</span><div class="learn-card-title">Dispers&atilde;o e Variabilidade</div><div class="learn-card-desc">Desvio padr&atilde;o, coeficiente de varia&ccedil;&atilde;o e IQR &mdash; como medir o quanto os dados &ldquo;espalham&rdquo;</div></div>
+      <div class="learn-card"><span class="learn-card-icon">&#9888;</span><div class="learn-card-title">Detec&ccedil;&atilde;o de Outliers</div><div class="learn-card-desc">Regra de Tukey (1.5&times;IQR), z-score e como outliers distorcem an&aacute;lises</div></div>
+      <div class="learn-card"><span class="learn-card-icon">&#128200;</span><div class="learn-card-title">Assimetria (Skewness)</div><div class="learn-card-desc">Por que dados de vendas e renda sempre t&ecirc;m cauda direita longa &mdash; e o que isso implica</div></div>
+      <div class="learn-card"><span class="learn-card-icon">&#128279;</span><div class="learn-card-title">Correla&ccedil;&atilde;o</div><div class="learn-card-desc">Rela&ccedil;&atilde;o entre vendas_mes e ticket_medio: scatter plot, Pearson e interpreta&ccedil;&atilde;o</div></div>
+      <div class="learn-card"><span class="learn-card-icon">&#128506;</span><div class="learn-card-title">An&aacute;lise por Grupos</div><div class="learn-card-desc">Compara&ccedil;&atilde;o das regi&otilde;es Sul, Norte e Centro &mdash; boxplot, ANOVA e diferen&ccedil;as de m&eacute;dia</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">03 &middot; estat&iacute;sticas de vendas_mes</div>
+
+    <div class="stat-group" style="margin-bottom:16px">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">&#128205;</span>
+        <span class="stat-group-title">Medidas de Posi&ccedil;&atilde;o</span>
+        <span class="stat-group-desc">tend&ecirc;ncia central</span>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card"><div class="stat-card-label">M&eacute;dia</div><div class="stat-card-value accent" id="sc-mean"></div><div class="stat-card-sub">puxada pelos outliers</div></div>
+        <div class="stat-card"><div class="stat-card-label">Mediana</div><div class="stat-card-value green" id="sc-median"></div><div class="stat-card-sub">valor central real</div></div>
+        <div class="stat-card"><div class="stat-card-label">M&iacute;nimo</div><div class="stat-card-value" id="sc-min"></div><div class="stat-card-sub">menor valor</div></div>
+        <div class="stat-card"><div class="stat-card-label">M&aacute;ximo</div><div class="stat-card-value red" id="sc-max"></div><div class="stat-card-sub">outlier confirmado</div></div>
+      </div>
+    </div>
+    <div class="insight-box" style="margin-bottom:28px" id="insight-pos"></div>
+
+    <div class="stat-group" style="margin-bottom:16px">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">&#128208;</span>
+        <span class="stat-group-title">Dispers&atilde;o</span>
+        <span class="stat-group-desc">variabilidade</span>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card"><div class="stat-card-label">Desvio Padr&atilde;o</div><div class="stat-card-value teal" id="sc-std"></div><div class="stat-card-sub">sens&iacute;vel a outliers</div></div>
+        <div class="stat-card"><div class="stat-card-label">CV</div><div class="stat-card-value purple" id="sc-cv"></div><div class="stat-card-sub">coef. varia&ccedil;&atilde;o</div></div>
+        <div class="stat-card"><div class="stat-card-label">Q1 (25%)</div><div class="stat-card-value" id="sc-q1"></div><div class="stat-card-sub">1&ordm; quartil</div></div>
+        <div class="stat-card"><div class="stat-card-label">Q3 (75%)</div><div class="stat-card-value" id="sc-q3"></div><div class="stat-card-sub">3&ordm; quartil</div></div>
+        <div class="stat-card"><div class="stat-card-label">IQR</div><div class="stat-card-value blue" id="sc-iqr"></div><div class="stat-card-sub">amplitude interquartil</div></div>
+        <div class="stat-card"><div class="stat-card-label">Assimetria</div><div class="stat-card-value accent" id="sc-skew"></div><div class="stat-card-sub">cauda direita</div></div>
+      </div>
+    </div>
+    <div class="insight-box" style="margin-bottom:28px" id="insight-disp"></div>
+
+    <div class="stat-group" style="margin-bottom:16px">
+      <div class="stat-group-header">
+        <span class="stat-group-icon">&#128506;</span>
+        <span class="stat-group-title">M&eacute;dia de Vendas por Regi&atilde;o</span>
+        <span class="stat-group-desc">an&aacute;lise grupal</span>
+      </div>
+      <div class="region-grid" id="region-grid"></div>
+    </div>
+    <div class="insight-box" id="insight-reg"></div>
+  </section>
+
+  <section>
+    <div class="section-title">04 &middot; tente voc&ecirc; mesmo</div>
+    <div class="try-block">
+      <div class="try-steps">
+        <h3>Carregue este dataset no DataLab</h3>
+        <ol class="step-list">
+          <li><span class="step-num">1</span><span>Baixe o CSV usando o bot&atilde;o ao lado &mdash; o arquivo <code>loja_vendas_2024.csv</code> cont&eacute;m os 50 registros deste exemplo</span></li>
+          <li><span class="step-num">2</span><span>Volte ao DataLab (aba anterior) e arraste o CSV para a zona de upload</span></li>
+          <li><span class="step-num">3</span><span>Selecione a coluna <strong>vendas_mes</strong> e rode a an&aacute;lise univariada &mdash; confirme os outliers com o boxplot</span></li>
+          <li><span class="step-num">4</span><span>Use <strong>regiao</strong> como vari&aacute;vel categ&oacute;rica e <strong>vendas_mes</strong> como num&eacute;rica na an&aacute;lise bigrupo para comparar as regi&otilde;es</span></li>
+          <li><span class="step-num">5</span><span>Explore a correla&ccedil;&atilde;o entre <strong>vendas_mes</strong> e <strong>ticket_medio</strong> no m&oacute;dulo de regress&atilde;o</span></li>
+        </ol>
+      </div>
+      <div>
+        <button class="btn-download" onclick="downloadCSV()">&#11015; Baixar dataset de exemplo (CSV)</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <button class="footer-back" onclick="window.close()">&larr; Voltar ao DataLab</button>
+  <div class="footer-copy">DataLab &middot; Modo Aprendizado &middot; dataset fict&iacute;cio para fins educativos</div>
+</footer>
+
+<script>
+  var DATA = ${JSON.stringify(LEARN_DATA)};
+
+  var vs = DATA.map(function(d){return d.vendas_mes}).sort(function(a,b){return a-b});
+  var n  = vs.length;
+  var sm = vs.reduce(function(a,b){return a+b},0);
+  var mn = sm/n;
+  var md = n%2===0?(vs[n/2-1]+vs[n/2])/2:vs[Math.floor(n/2)];
+  var vr = vs.reduce(function(a,v){return a+Math.pow(v-mn,2)},0)/(n-1);
+  var sd = Math.sqrt(vr);
+  var mi = vs[0], mx = vs[n-1];
+  var q1 = vs[Math.floor(n*0.25)], q3 = vs[Math.floor(n*0.75)], iq = q3-q1;
+  var cv = (sd/mn)*100;
+  var sk = vs.reduce(function(a,v){return a+Math.pow((v-mn)/sd,3)},0)/n;
+
+  var rm = {};
+  ['Sul','Norte','Centro'].forEach(function(r){
+    var rv=DATA.filter(function(d){return d.regiao===r}).map(function(d){return d.vendas_mes});
+    rm[r]=rv.reduce(function(a,b){return a+b},0)/rv.length;
+  });
+
+  function fK(v){return 'R$'+(v/1000).toFixed(1).replace('.',',')+'k'}
+  function fR(v){return 'R$'+Math.round(v).toLocaleString('pt-BR')}
+
+  document.getElementById('sc-mean').textContent   = fK(mn);
+  document.getElementById('sc-median').textContent = fK(md);
+  document.getElementById('sc-min').textContent    = fK(mi);
+  document.getElementById('sc-max').textContent    = fK(mx);
+  document.getElementById('sc-std').textContent    = fK(sd);
+  document.getElementById('sc-cv').textContent     = cv.toFixed(1)+'%';
+  document.getElementById('sc-q1').textContent     = fK(q1);
+  document.getElementById('sc-q3').textContent     = fK(q3);
+  document.getElementById('sc-iqr').textContent    = fK(iq);
+  document.getElementById('sc-skew').textContent   = sk.toFixed(2);
+
+  document.getElementById('insight-pos').innerHTML =
+    '<div class="insight-box-title">\uD83D\uDCA1 interpreta\u00E7\u00E3o \u2014 posi\u00E7\u00E3o</div>'+
+    '<p>A <strong>m\u00E9dia de '+fR(mn)+'</strong> est\u00E1 bem acima da <strong>mediana de '+fR(md)+'</strong> \u2014 uma diferen\u00E7a de <strong>'+fR(mn-md)+'</strong>. Esse gap \u00E9 o sinal cl\u00E1ssico de <strong>assimetria positiva</strong>: os 2 vendedores com vendas acima de R$89.000 (<code>Diego Ramos</code> e <code>Lucas Faria</code>) est\u00E3o puxando a m\u00E9dia para cima sem representar o comportamento t\u00EDpico.</p>'+
+    '<p>Em dados de vendas, sal\u00E1rios ou renda, <strong>sempre prefira a mediana</strong> como medida de \u201Cvalor t\u00EDpico\u201D. A m\u00E9dia s\u00F3 \u00E9 confi\u00E1vel quando a distribui\u00E7\u00E3o \u00E9 aproximadamente sim\u00E9trica.</p>';
+
+  document.getElementById('insight-disp').innerHTML =
+    '<div class="insight-box-title">\uD83D\uDCA1 interpreta\u00E7\u00E3o \u2014 dispers\u00E3o</div>'+
+    '<p>O <strong>desvio padr\u00E3o de '+fK(sd)+'</strong> parece grande, mas \u00E9 distorcido pelos outliers. O <strong>IQR de '+fK(iq)+'</strong> \u00E9 mais honesto: os 50% centrais dos vendedores t\u00EAm vendas entre <code>'+fK(q1)+'</code> e <code>'+fK(q3)+'</code>.</p>'+
+    '<p>O <strong>CV de '+cv.toFixed(1)+'%</strong> indica alta heterogeneidade. A <strong>assimetria de '+sk.toFixed(2)+'</strong> confirma a cauda direita longa.</p>'+
+    '<p>Outlier detection (Tukey): limite superior = Q3 + 1.5 \u00D7 IQR = <code>'+fR(q3)+' + 1.5 \u00D7 '+fR(iq)+' = '+fR(q3+1.5*iq)+'</code>. Os valores R$89.000 e R$92.000 ultrapassam esse limite.</p>';
+
+  var rg = document.getElementById('region-grid');
+  ['Sul','Centro','Norte'].forEach(function(r){
+    var c = document.createElement('div');
+    c.className='region-card';
+    c.innerHTML='<div class="region-name">'+r+'</div><div class="region-val">'+fK(rm[r])+'</div><div class="region-sub">m\u00E9dia mensal</div>';
+    rg.appendChild(c);
+  });
+
+  document.getElementById('insight-reg').innerHTML =
+    '<div class="insight-box-title">\uD83D\uDCA1 interpreta\u00E7\u00E3o \u2014 grupos</div>'+
+    '<p>A regi\u00E3o <strong>Sul</strong> lidera com m\u00E9dia de <code>'+fK(rm['Sul'])+'</code>, seguida do <strong>Centro</strong> com <code>'+fK(rm['Centro'])+'</code>. O <strong>Norte</strong> tem desempenho menor (<code>'+fK(rm['Norte'])+'</code>).</p>'+
+    '<p>As m\u00E9dias regionais incluem os 2 outliers (Sul e Centro). Use o DataLab para comparar <strong>medianas por grupo</strong> ap\u00F3s remover os outliers \u2014 essa \u00E9 a an\u00E1lise correta.</p>';
+
+  function downloadCSV() {
+    var cols=['vendedor','regiao','vendas_mes','ticket_medio','satisfacao','dias_ativo'];
+    var rows=DATA.map(function(r){
+      return cols.map(function(c){
+        var v=r[c];
+        return (typeof v==='string'&&v.indexOf(',')>=0)?'"'+v+'"':v;
+      }).join(',');
+    });
+    var csv=[cols.join(',')].concat(rows).join('\\n');
+    var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download='loja_vendas_2024.csv';a.click();
+    URL.revokeObjectURL(url);
+  }
+<\/script>
+</body>
+</html>`;
+
+  // ── d) Abrir em nova janela ──
+  var win = window.open('', '_blank', 'width=1100,height=900');
+  if (!win) {
+    alert('Pop-up bloqueado pelo navegador. Por favor, permita pop-ups para este site e tente novamente.');
+    return;
+  }
+  win.document.write(htmlString);
+  win.document.close();
+}
+
+// ══════════════════════════════════════════════
+//  REMOVED DATA PANEL
+// ══════════════════════════════════════════════
+function renderRemovedDataPanel(removedRows, numCol) {
+  const panel = document.getElementById('removedDataPanel');
+  if (!panel) return;
+
+  if (!removedRows || removedRows.length === 0) {
+    panel.style.display = 'none';
+    panel.innerHTML = '';
+    return;
   }
 
-  // Layout
-  const PAD_L = 100, PAD_R = 80, PAD_T = 20, PAD_B = 100;
-  const pw = W - PAD_L - PAD_R;
-  const ph = H - PAD_T - PAD_B;
-  const cellSize = Math.min(pw/n, ph/n);
-  const startX = PAD_L + (pw - cellSize*n)/2;
-  const startY = PAD_T + (ph - cellSize*n)/2;
-
-  // Color map function (RdBu from -1 to 1)
-  const getColor = val => {
-    // val is -1 to +1
-    const p = (val + 1) / 2; // 0 to 1
-    // Red for -1, White for 0, Blue for 1
-    if (p < 0.5) {
-      const f = p * 2; // 0 to 1
-      return `rgb(248, ${Math.round(113 + f*(255-113))}, ${Math.round(113 + f*(255-113))})`;
-    } else {
-      const f = (p - 0.5) * 2; // 0 to 1
-      return `rgb(${Math.round(255 - f*(255-96))}, ${Math.round(255 - f*(255-165))}, ${Math.round(255 - f*(255-250))})`;
-    }
+  const reasonLabel = {
+    'filter':   '<span class="reason-pill reason-filter">filtro</span>',
+    'tukey':    '<span class="reason-pill reason-tukey">outlier Y</span>',
+    'tukey-x':  '<span class="reason-pill reason-tukey-x">outlier X</span>',
+    'tukey-y':  '<span class="reason-pill reason-tukey-y">outlier Y</span>',
+    'tukey-xy': '<span class="reason-pill reason-tukey-xy">outlier X+Y</span>',
+    'cook':     '<span class="reason-pill reason-cook">influente (Cook)</span>',
   };
 
-  ctx.font = '10px JetBrains Mono, monospace';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const colsToShow = [...new Set([numCol, ...headers.filter(h => h !== numCol)])].slice(0, 8);
 
-  // Draw cells
-  for(let i=0; i<n; i++) {
-    for(let j=0; j<n; j++) {
-      const x = startX + j*cellSize;
-      const y = startY + i*cellSize;
-      const val = matrix[i][j];
-      
-      ctx.fillStyle = getColor(val);
-      ctx.fillRect(x, y, cellSize, cellSize);
-      
-      // Text
-      ctx.fillStyle = Math.abs(val) > 0.6 ? '#111318' : '#e8eaf0';
-      ctx.fillText(val.toFixed(2), x + cellSize/2, y + cellSize/2);
-    }
-  }
+  const rows = removedRows.slice(0, 200);
+  const overflow = removedRows.length > 200;
 
-  // Grid
-  ctx.strokeStyle = '#252c3a'; ctx.lineWidth = 1;
-  for(let i=0; i<=n; i++) {
-    ctx.beginPath(); ctx.moveTo(startX, startY + i*cellSize); ctx.lineTo(startX + n*cellSize, startY + i*cellSize); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(startX + i*cellSize, startY); ctx.lineTo(startX + i*cellSize, startY + n*cellSize); ctx.stroke();
-  }
-
-  // Labels
-  ctx.fillStyle = '#8892a4';
-  ctx.textAlign = 'right';
-  for(let i=0; i<n; i++) {
-    let lbl = numericCols[i];
-    if (lbl.length > 12) lbl = lbl.substring(0,10)+'…';
-    ctx.fillText(lbl, startX - 8, startY + i*cellSize + cellSize/2);
-  }
-  ctx.textAlign = 'left';
-  ctx.save();
-  for(let j=0; j<n; j++) {
-    let lbl = numericCols[j];
-    if (lbl.length > 12) lbl = lbl.substring(0,10)+'…';
-    ctx.translate(startX + j*cellSize + cellSize/2, startY + n*cellSize + 8);
-    ctx.rotate(Math.PI/4);
-    ctx.fillText(lbl, 0, 0);
-    ctx.rotate(-Math.PI/4);
-    ctx.translate(-(startX + j*cellSize + cellSize/2), -(startY + n*cellSize + 8));
-  }
-  ctx.restore();
-
-  // Legend bar
-  const legX = startX + n*cellSize + 20;
-  const legY = startY;
-  const legH = n*cellSize;
-  const legW = 15;
-  const grad = ctx.createLinearGradient(0, legY+legH, 0, legY);
-  grad.addColorStop(0, 'rgb(248,113,113)');
-  grad.addColorStop(0.5, 'rgb(255,255,255)');
-  grad.addColorStop(1, 'rgb(96,165,250)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(legX, legY, legW, legH);
-  ctx.strokeRect(legX, legY, legW, legH);
-  
-  ctx.fillStyle = '#8892a4'; ctx.textAlign = 'left';
-  ctx.fillText('+1.0', legX+legW+6, legY+6);
-  ctx.fillText(' 0.0', legX+legW+6, legY+legH/2);
-  ctx.fillText('-1.0', legX+legW+6, legY+legH-6);
-}
-
-// ══════════════════════════════════════════════
-//  STEP 5: CANVAS BIPLOT (PCA)
-// ══════════════════════════════════════════════
-function renderBiplotCanvas() {
-  if (!currentSVDResult) return;
-  const svd = currentSVDResult;
-  if (svd.components.length < 2) return;
-
-  const canvas = document.getElementById('chartBiplot');
-  if (!canvas) return;
-
-  const panel = document.getElementById('panel-biplot');
-  const dpr = window.devicePixelRatio || 1;
-  const W = panel.clientWidth - 56;
-  const H = Math.max(380, Math.min(W * 0.7, 500));
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
-
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-
-  const PAD_L = 50, PAD_R = 50, PAD_T = 30, PAD_B = 50;
-  const pw = W - PAD_L - PAD_R;
-  const ph = H - PAD_T - PAD_B;
-
-  ctx.fillStyle = '#111318';
-  ctx.fillRect(0, 0, W, H);
-
-  // We need to project the centered matrix onto the first 2 principal components.
-  const pc1 = svd.components[0].loading;
-  const pc2 = svd.components[1].loading;
-  const proj = svd.matrix.map(row => {
-    const cRow = row.map((v, j) => v - svd.means[j]);
-    let p1 = 0, p2 = 0;
-    for(let j=0; j<cRow.length; j++) {
-      p1 += cRow[j] * pc1[j];
-      p2 += cRow[j] * pc2[j];
-    }
-    return {x: p1, y: p2};
-  });
-
-  const xs = proj.map(p=>p.x), ys = proj.map(p=>p.y);
-  const maxAbsX = Math.max(...xs.map(Math.abs)) || 1;
-  const maxAbsY = Math.max(...ys.map(Math.abs)) || 1;
-  const lim = Math.max(maxAbsX, maxAbsY) * 1.1; // force square-ish aspect based on max
-
-  const toX = v => PAD_L + pw/2 + (v / lim) * (pw/2);
-  const toY = v => PAD_T + ph/2 - (v / lim) * (ph/2); // inverted Y
-
-  // Grid
-  ctx.strokeStyle = '#1e2330'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(PAD_L, PAD_T+ph/2); ctx.lineTo(PAD_L+pw, PAD_T+ph/2); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(PAD_L+pw/2, PAD_T); ctx.lineTo(PAD_L+pw/2, PAD_T+ph); ctx.stroke();
-  ctx.strokeStyle = '#252c3a';
-  ctx.strokeRect(PAD_L, PAD_T, pw, ph);
-
-  // Draw points (scores)
-  ctx.fillStyle = 'rgba(96,165,250,0.5)';
-  proj.forEach(p => {
-    ctx.beginPath(); ctx.arc(toX(p.x), toY(p.y), 2.5, 0, 2*Math.PI); ctx.fill();
-  });
-
-  // Draw vectors (loadings) scaled
-  ctx.strokeStyle = '#f5a623'; ctx.lineWidth = 2;
-  ctx.fillStyle = '#e8eaf0'; ctx.font = '10px JetBrains Mono, monospace';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  
-  // Scale loadings for visibility relative to scores limit
-  const maxLoadingX = Math.max(...pc1.map(Math.abs));
-  const maxLoadingY = Math.max(...pc2.map(Math.abs));
-  const loadScale = lim / Math.max(maxLoadingX, maxLoadingY, 1) * 0.8;
-
-  svd.cols.forEach((col, j) => {
-    const lx = pc1[j] * loadScale;
-    const ly = pc2[j] * loadScale;
-    const cx = toX(lx), cy = toY(ly);
-    
-    ctx.beginPath();
-    ctx.moveTo(toX(0), toY(0));
-    ctx.lineTo(cx, cy);
-    ctx.stroke();
-    
-    // Draw arrow head
-    const angle = Math.atan2(cy - toY(0), cx - toX(0));
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx - 8 * Math.cos(angle - Math.PI/6), cy - 8 * Math.sin(angle - Math.PI/6));
-    ctx.lineTo(cx - 8 * Math.cos(angle + Math.PI/6), cy - 8 * Math.sin(angle + Math.PI/6));
-    ctx.closePath();
-    ctx.fillStyle = '#f5a623'; ctx.fill();
-
-    // Label
-    ctx.fillStyle = '#e8eaf0';
-    const offsetX = Math.cos(angle) * 12;
-    const offsetY = Math.sin(angle) * 12;
-    ctx.fillText(col.length>10 ? col.substring(0,8)+'…' : col, cx + offsetX, cy + offsetY);
-  });
-
-  // Labels
-  ctx.fillStyle = '#8892a4'; ctx.font = '11px JetBrains Mono, monospace';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-  ctx.fillText(`PC1 (${(svd.components[0].varianceExplained*100).toFixed(1)}%)`, PAD_L + pw/2, H-4);
-  
-  ctx.save();
-  ctx.translate(14, PAD_T + ph/2); ctx.rotate(-Math.PI/2);
-  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-  ctx.fillText(`PC2 (${(svd.components[1].varianceExplained*100).toFixed(1)}%)`, 0, 0);
-  ctx.restore();
+  panel.style.display = '';
+  panel.innerHTML = `
+    <details class="removed-data-details">
+      <summary>
+        ⚠ ${removedRows.length} linha${removedRows.length !== 1 ? 's' : ''} excluída${removedRows.length !== 1 ? 's' : ''} da análise
+        <span style="margin-left:auto;font-size:9px;opacity:.5">clique para expandir</span>
+      </summary>
+      <div class="removed-data-table-wrap">
+        <table class="removed-data-table">
+          <thead>
+            <tr>
+              <th>#orig</th>
+              ${colsToShow.map(c => `<th>${c}</th>`).join('')}
+              <th>motivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => {
+              const row = r.origRow || rawData[r.rowIndex] || {};
+              return `<tr>
+                <td class="idx-cell">${r.rowIndex + 1}</td>
+                ${colsToShow.map(c => {
+                  const v = row[c] ?? '—';
+                  const isOutCol = c === r.col;
+                  return `<td class="${isOutCol ? 'outlier-val' : ''}">${v === '' ? '—' : v}</td>`;
+                }).join('')}
+                <td>${reasonLabel[r.reason] || r.reason}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+        ${overflow ? `<div style="padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);border-top:1px solid var(--border);">... e mais ${removedRows.length - 200} linhas</div>` : ''}
+      </div>
+    </details>`;
 }
 </script>
 </body>
