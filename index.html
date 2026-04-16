@@ -1561,6 +1561,268 @@
 
   .filter-clear-btn:hover { border-color: var(--red); color: var(--red); }
 
+  /* ── MULTIPLE REGRESSION ── */
+  .reg-mode-toggle {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    align-items: center;
+  }
+  .reg-mode-btn {
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .reg-mode-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .reg-mode-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .multireg-predictors {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    animation: fadeIn 0.3s ease;
+  }
+  .multireg-predictors.show { display: flex; }
+  .multireg-pred-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+  .multireg-pred-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 6px;
+  }
+  .multireg-pred-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .multireg-pred-item:hover { border-color: var(--accent); }
+  .multireg-pred-item input[type="checkbox"] {
+    accent-color: var(--accent);
+    width: 13px; height: 13px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .multireg-pred-item label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .multireg-pred-item:has(input:checked) { border-color: var(--accent); background: var(--accent-dim); }
+  .multireg-pred-item:has(input:checked) label { color: var(--accent); }
+  .multireg-results {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    animation: fadeIn 0.4s ease;
+  }
+  .multireg-results.show { display: flex; }
+  .mreg-coef-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    overflow-x: auto;
+  }
+  .mreg-coef-table th {
+    padding: 7px 10px;
+    text-align: left;
+    color: var(--text3);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .mreg-coef-table td {
+    padding: 8px 10px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .mreg-coef-table tr:last-child td { border-bottom: none; }
+  .mreg-coef-table .coef-name { color: var(--accent); font-weight: 600; }
+  .mreg-coef-table .sig-star { color: var(--green); font-weight: 700; }
+  .mreg-coef-table .vif-warn { color: var(--red); }
+  .mreg-coef-table .vif-ok { color: var(--text2); }
+  .mreg-metrics-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .mreg-metric {
+    flex: 1;
+    min-width: 120px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .mreg-metric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+  .mreg-metric-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .mreg-resid-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+  }
+  .mreg-resid-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+
+  /* ── CHI-SQUARE ── */
+  .chisq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .chisq-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .chisq-metric {
+    background: var(--surface);
+    padding: 16px 14px;
+    text-align: center;
+  }
+  .chisq-metric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+  .chisq-metric-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .chisq-contingency-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .chisq-contingency {
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    min-width: 300px;
+    width: 100%;
+  }
+  .chisq-contingency th {
+    padding: 8px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .chisq-contingency th.row-header { text-align: left; color: var(--accent); }
+  .chisq-contingency th.col-header { color: var(--blue); }
+  .chisq-contingency td {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+    color: var(--text);
+    transition: background 0.2s;
+    position: relative;
+  }
+  .chisq-contingency td.row-total { background: var(--surface2); color: var(--text2); font-weight: 600; }
+  .chisq-contingency td.col-total { background: var(--surface2); color: var(--text2); font-weight: 600; }
+  .chisq-contingency td.grand-total { background: var(--surface2); color: var(--accent); font-weight: 700; }
+  .chisq-contingency td.row-label { text-align: left; color: var(--accent); background: var(--surface2); font-weight: 600; white-space: nowrap; }
+  .chisq-interp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .chisq-interp-none { background: rgba(74,85,104,0.2); color: var(--text3); border: 1px solid rgba(74,85,104,0.3); }
+  .chisq-interp-fraca { background: rgba(96,165,250,0.15); color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
+  .chisq-interp-moderada { background: rgba(245,166,35,0.15); color: var(--accent); border: 1px solid rgba(245,166,35,0.3); }
+  .chisq-interp-forte { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+
+  /* ── TAB DISABLED STATE ── */
+  .chart-tab.tab-disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .chart-tab.tab-disabled:hover { border-color: var(--border2); color: var(--text2); }
+  .panel-unavailable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    color: var(--text3);
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .panel-unavailable-icon { font-size: 36px; opacity: 0.4; }
+  .panel-unavailable-msg { color: var(--text3); line-height: 1.7; }
+
   /* ── REMOVED DATA DETAILS PANEL ── */
   .removed-data-details {
     border: 1px solid rgba(248,113,113,0.18);
@@ -1881,6 +2143,171 @@
   .svd-scree-wrap { margin-top: 16px; }
   .svd-loadings-wrap { margin-top: 16px; }
 
+  /* ── K-MEANS PANEL ── */
+  .kmeans-cols-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+  .kmeans-multiselect {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 6px 4px;
+    min-height: 90px;
+    max-height: 140px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .kmeans-multiselect:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+  .kmeans-multiselect option {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: var(--text);
+    background: var(--surface2);
+  }
+  .kmeans-multiselect option:checked {
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+  .kmeans-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .kmeans-slider-wrap {
+    flex: 1;
+    min-width: 180px;
+  }
+  .kmeans-slider-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .kmeans-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--border2) 0%);
+    outline: none;
+    cursor: pointer;
+  }
+  .kmeans-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .kmeans-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  .kmeans-slider::-moz-range-thumb {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    border: none;
+    cursor: pointer;
+  }
+  .kmeans-canvases {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  @media (max-width: 700px) {
+    .kmeans-canvases { grid-template-columns: 1fr; }
+  }
+  .kmeans-canvas-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .kmeans-canvas-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text2);
+    padding: 10px 14px 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .kmeans-canvas-block canvas {
+    display: block;
+    width: 100%;
+  }
+  /* Centroid table */
+  .kmeans-centroid-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    margin-top: 20px;
+  }
+  .kmeans-centroid-table th {
+    text-align: left;
+    padding: 7px 12px;
+    color: var(--text3);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    font-weight: 500;
+  }
+  .kmeans-centroid-table td {
+    padding: 8px 12px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .kmeans-centroid-table tr:last-child td { border-bottom: none; }
+  .kmeans-centroid-table .cluster-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  .kmeans-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .kmeans-elbow-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.35);
+    color: var(--purple);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .kmeans-section-pad { padding: 18px 20px; }
+
   /* ── STEP 5: COMPARISON BLOCK ── */
   .comparison-block {
     background: var(--surface);
@@ -1946,10 +2373,63 @@
   }
 
   /* ── STEP 5: REGRESSION/CORRELATION CANVAS PANELS ── */
-  #panel-regression canvas, #panel-correlation canvas, #panel-biplot canvas {
+  #panel-regression canvas, #panel-correlation canvas, #panel-biplot canvas,
+  #panel-matriz canvas {
     max-height: none !important;
     width: 100% !important;
     display: block;
+  }
+
+  /* ── MATRIZ TOOLBAR ── */
+  .matriz-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .btn-matriz-sort {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn-matriz-sort:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-matriz-sort.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .matriz-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── MATRIZ TOOLTIP ── */
+  .matriz-tooltip-div {
+    position: fixed;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.6;
+    padding: 8px 12px;
+    border-radius: 8px;
+    pointer-events: none;
+    display: none;
+    white-space: nowrap;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
 
   /* ── STEP 5: CORRELATION TOOLTIP ── */
@@ -1984,6 +2464,117 @@
     background: rgba(45,212,191,0.18);
     border-color: var(--teal);
     box-shadow: 0 0 16px rgba(45,212,191,0.2);
+  }
+
+  /* ── ANOVA / KW TABLES ── */
+  .anova-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .anova-table th {
+    text-align: left;
+    padding: 7px 12px;
+    color: var(--text3);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+    background: var(--surface2);
+  }
+  .anova-table td {
+    padding: 8px 12px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .anova-table tr:last-child td { border-bottom: none; }
+  .anova-table tr:hover td { background: var(--surface2); }
+
+  .anova-section {
+    padding: 20px 24px;
+  }
+  .anova-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text2);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .anova-verdict {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.65;
+    margin: 12px 0;
+  }
+  .anova-verdict.sig {
+    border-left: 3px solid var(--red);
+    background: rgba(248,113,113,0.06);
+  }
+  .anova-verdict.notsig {
+    border-left: 3px solid var(--green);
+    background: rgba(52,211,153,0.06);
+  }
+  .kw-block {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 4px;
+  }
+  .kw-metrics {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    width: fit-content;
+  }
+  .kw-metric {
+    background: var(--surface);
+    padding: 14px 22px;
+  }
+  .kw-metric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .kw-metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .tukey-sig-yes {
+    background: rgba(52,211,153,0.12);
+    color: var(--green);
+    border: 1px solid rgba(52,211,153,0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+  }
+  .tukey-sig-no {
+    background: var(--border);
+    color: var(--text3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
   }
 </style>
 </head>
@@ -2088,7 +2679,7 @@
         <span class="select-arrow">▾</span>
       </div>
       <div class="select-wrap" id="correlateColWrap" style="display:none;">
-        <div class="select-label"><span class="type-dot numeric"></span> Correlacionar com <span style="opacity:.5">(opcional)</span></div>
+        <div class="select-label"><span class="type-dot numeric"></span> Correlacionar com / Chi² <span style="opacity:.5">(opcional)</span></div>
         <select id="correlateCol" onchange="onCorrelateColChange()">
           <option value="">— sem correlação —</option>
         </select>
@@ -2160,7 +2751,11 @@
         <button class="chart-tab" onclick="switchChart('scatter', this)">Scatter / Outliers</button>
         <button class="chart-tab" onclick="switchChart('bargroup', this)" id="tabBarGroup" style="display:none">Médias por Grupo</button>
         <button class="chart-tab" onclick="switchChart('regression', this)" id="tabRegression" style="display:none">Scatter + Regressão</button>
-        <button class="chart-tab" onclick="switchChart('correlation', this)" id="tabCorrelation" style="display:none">Correlações</button>
+        <button class="chart-tab" onclick="switchChartConditional('anova', this)" id="tabAnova" title="Requer ≥3 grupos categóricos">ANOVA / KW</button>
+        <button class="chart-tab" onclick="switchChartConditional('chisquare', this)" id="tabChisquare" title="Requer 2 colunas categóricas">Chi²</button>
+        <button class="chart-tab" onclick="switchChartConditional('kmeans', this)" id="tabKmeans" title="Requer ≥2 colunas numéricas">K-Means</button>
+        <button class="chart-tab" onclick="switchChartConditional('correlation', this)" id="tabCorrelation" title="Requer ≥3 colunas numéricas">Correlações</button>
+        <button class="chart-tab" onclick="switchChartConditional('matriz', this)" id="tabMatriz" title="Requer ≥2 colunas numéricas">Matriz</button>
         <button class="chart-tab" onclick="switchChart('biplot', this)" id="tabBiplot" style="display:none">Biplot</button>
         <button class="chart-tab" onclick="switchChart('ecdf', this)">ECDF</button>
       </div>
@@ -2251,8 +2846,75 @@
       <!-- REGRESSION PANEL -->
       <div class="chart-panel chart-panel-wrap" id="panel-regression" style="position:relative; display:none;">
         <button class="btn-png-download visible" onclick="downloadPNG('regression')">⬇ PNG</button>
-        <canvas id="chartRegression" style="width:100%;"></canvas>
-        <div class="ecdf-tooltip-div" id="regressionTooltip"></div>
+
+        <!-- REGRESSION MODE TOGGLE -->
+        <div class="reg-mode-toggle">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-right:6px;">Modo:</span>
+          <button class="reg-mode-btn active" id="regModeSimple" onclick="setRegMode('simple')">Simples</button>
+          <button class="reg-mode-btn" id="regModeMultiple" onclick="setRegMode('multiple')">Múltipla</button>
+        </div>
+
+        <!-- SIMPLE REGRESSION (existing) -->
+        <div id="regSimpleSection">
+          <canvas id="chartRegression" style="width:100%;"></canvas>
+          <div class="ecdf-tooltip-div" id="regressionTooltip"></div>
+        </div>
+
+        <!-- MULTIPLE REGRESSION -->
+        <div id="regMultipleSection" style="display:none;">
+          <div class="multireg-predictors show" id="multiregPredictors">
+            <div class="multireg-pred-label">Variáveis preditoras (X) — selecione ≥ 1</div>
+            <div class="multireg-pred-grid" id="multiregPredGrid"></div>
+            <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
+              <button class="btn btn-primary" style="padding:8px 18px;font-size:12px" onclick="runMultipleRegression()">▶ Rodar OLS</button>
+              <button class="btn btn-ghost" style="padding:8px 14px;font-size:11px" onclick="toggleAllPredictors(true)">Todos</button>
+              <button class="btn btn-ghost" style="padding:8px 14px;font-size:11px" onclick="toggleAllPredictors(false)">Nenhum</button>
+            </div>
+          </div>
+          <div class="multireg-results" id="multiregResults">
+            <!-- Metrics -->
+            <div class="mreg-metrics-row" id="multiregMetrics"></div>
+            <!-- Coefficients table -->
+            <div style="overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius);">
+              <table class="mreg-coef-table" id="multiregCoefTable"></table>
+            </div>
+            <!-- Residuals canvas -->
+            <div class="mreg-resid-wrap">
+              <div class="mreg-resid-title">Resíduos × Valores Ajustados</div>
+              <canvas id="chartResiduals" style="width:100%;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHI-SQUARE PANEL -->
+      <div class="chart-panel chart-panel-wrap" id="panel-chisquare" style="display:none;">
+        <div id="chisqContent">
+          <div class="panel-unavailable">
+            <div class="panel-unavailable-icon">χ²</div>
+            <div class="panel-unavailable-msg">Selecione duas colunas <strong>categóricas</strong> nos seletores<br>de "Agrupar por" e "Correlacionar com" e calcule as estatísticas.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANOVA / KW PANEL -->
+      <div class="chart-panel chart-panel-wrap" id="panel-anova" style="display:none;">
+        <div id="anovaPanelContent">
+          <div class="panel-unavailable">
+            <div class="panel-unavailable-icon">📊</div>
+            <div class="panel-unavailable-msg">Requer uma coluna numérica e uma categórica<br>com <strong>≥ 3 grupos</strong>. Configure e calcule as estatísticas.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- K-MEANS PANEL -->
+      <div class="chart-panel chart-panel-wrap" id="panel-kmeans" style="display:none;">
+        <div id="kmeansPanelContent">
+          <div class="panel-unavailable">
+            <div class="panel-unavailable-icon">🎯</div>
+            <div class="panel-unavailable-msg">Requer <strong>≥ 2 colunas numéricas</strong>.<br>Carregue um dataset com múltiplas colunas numéricas.</div>
+          </div>
+        </div>
       </div>
 
       <!-- CORRELATION HEATMAP PANEL -->
@@ -2266,6 +2928,22 @@
       <div class="chart-panel chart-panel-wrap" id="panel-biplot" style="position:relative; display:none;">
         <button class="btn-png-download visible" onclick="downloadPNG('biplot')">⬇ PNG</button>
         <canvas id="chartBiplot" style="width:100%;"></canvas>
+      </div>
+
+      <!-- MATRIZ DE CORRELAÇÃO PANEL -->
+      <div class="chart-panel chart-panel-wrap" id="panel-matriz" style="position:relative; display:none;">
+        <div class="matriz-toolbar">
+          <button class="btn-matriz-sort" id="btnMatrizSort" onclick="toggleMatrizSort()">⊞ Ordenar por correlação</button>
+          <span class="matriz-hint">clique numa célula para explorar o par no scatter</span>
+        </div>
+        <canvas id="chartMatriz" style="width:100%;"></canvas>
+        <div class="matriz-tooltip-div" id="matrizTooltip"></div>
+        <details class="chart-explain" id="explain-matriz" style="margin-top:18px;">
+          <summary>como ler este gráfico</summary>
+          <div class="chart-explain-body">
+            <p>A <strong>matriz de correlação</strong> exibe o <strong>coeficiente de Pearson r</strong> entre todos os pares de colunas numéricas. Cada célula é colorida de <span style="color:#60a5fa">azul (r = −1)</span> a <span style="color:#8892a4">cinza (r = 0)</span> a <span style="color:#f5a623">âmbar (r = +1)</span>. O valor de r em cada célula é branco quando |r| &gt; 0,5 (correlação relevante). A <strong>diagonal</strong> mostra o nome da coluna (correlação consigo mesma = 1). Quando há ≥ 4 colunas, o <strong>p-valor</strong> é exibido no tooltip (verde se p &lt; 0,05 — estatisticamente significativo). <strong>Clique</strong> numa célula para carregar o par no módulo de regressão.</p>
+          </div>
+        </details>
       </div>
     </div>
 
@@ -2443,21 +3121,30 @@ function populateSelectors() {
   corrSel.innerHTML = '<option value="">— sem correlação —</option>';
 
   const numericCols = [];
+  const categoricalCols = [];
   headers.forEach(h => {
     if (detectNumeric(h)) {
       numericCols.push(h);
       numSel.innerHTML += `<option value="${h}">📊 ${h}</option>`;
     } else {
+      categoricalCols.push(h);
       catSel.innerHTML += `<option value="${h}">🏷 ${h}</option>`;
     }
   });
 
   // Show second numeric selector only if ≥2 numeric cols
   const wrap = document.getElementById('correlateColWrap');
-  wrap.style.display = numericCols.length >= 2 ? '' : 'none';
+  wrap.style.display = numericCols.length >= 2 || categoricalCols.length >= 2 ? '' : 'none';
   numericCols.forEach(h => {
     corrSel.innerHTML += `<option value="${h}">📊 ${h}</option>`;
   });
+  // Also add categorical columns (for chi-square)
+  if (categoricalCols.length > 0) {
+    corrSel.innerHTML += `<option disabled>── Categóricas (χ²) ──</option>`;
+    categoricalCols.forEach(h => {
+      corrSel.innerHTML += `<option value="${h}" data-cattype="categorical">🏷 ${h}</option>`;
+    });
+  }
 
   // Update correlate options when primary numeric col changes
   numSel.onchange = function() {
@@ -2471,11 +3158,18 @@ function updateCorrelateOptions() {
   const current = corrSel.value;
   corrSel.innerHTML = '<option value="">— sem correlação —</option>';
   const numericCols = headers.filter(h => detectNumeric(h));
+  const categoricalCols = headers.filter(h => !detectNumeric(h));
   numericCols.forEach(h => {
     if (h !== numCol) {
       corrSel.innerHTML += `<option value="${h}"${h===current?' selected':''}>📊 ${h}</option>`;
     }
   });
+  if (categoricalCols.length > 0) {
+    corrSel.innerHTML += `<option disabled>── Categóricas (χ²) ──</option>`;
+    categoricalCols.forEach(h => {
+      corrSel.innerHTML += `<option value="${h}"${h===current?' selected':''} data-cattype="categorical">🏷 ${h}</option>`;
+    });
+  }
 }
 
 function onCorrelateColChange() {
@@ -3235,6 +3929,8 @@ function renderStats(s, container, outlierInfo) {
 
     <!-- GROUP 9: SVD — rendered dynamically after container is inserted -->
     <div id="svdGroup"></div>
+    <!-- GROUP 10: K-MEANS — rendered dynamically -->
+    <div id="kmeansGroup"></div>
   `;
 
   container.innerHTML = html;
@@ -3391,6 +4087,9 @@ function renderStats(s, container, outlierInfo) {
 
   // Render SVD group if ≥2 numeric columns
   renderSVDGroup(s);
+
+  // Render K-Means group if ≥2 numeric columns
+  renderKMeansGroup();
 }
 
 // ══════════════════════════════════════════════
@@ -3496,6 +4195,20 @@ function renderGrouped(numCol, catCol) {
     `;
     container.appendChild(div);
   });
+
+  // ── ANOVA + KW block for 3+ groups ────────────────────────────────────────
+  const anovaPlaceholder = document.getElementById('anovaGroupBlock');
+  if (anovaPlaceholder) anovaPlaceholder.remove();
+
+  if (results.length >= 3) {
+    const anovaDiv = document.createElement('div');
+    anovaDiv.id = 'anovaGroupBlock';
+    anovaDiv.className = 'stat-group';
+    anovaDiv.style.marginTop = '16px';
+    anovaDiv.style.animation = 'fadeIn 0.4s ease';
+    anovaDiv.innerHTML = buildANOVABlock(results);
+    container.appendChild(anovaDiv);
+  }
 
   document.getElementById('groupedSection').style.display = 'block';
   document.getElementById('tabBarGroup').style.display = '';
@@ -4036,8 +4749,28 @@ function switchChart(name, btn) {
     const numericCols = headers.filter(h => detectNumeric(h));
     if (numericCols.length >= 2) setTimeout(() => renderCorrelationHeatmap(numericCols), 30);
   }
+  if (name === 'matriz') {
+    const numericCols = headers.filter(h => detectNumeric(h));
+    if (numericCols.length >= 2) setTimeout(() => renderCorrelationMatrix(numericCols, _matrizSorted), 30);
+  }
   if (name === 'biplot') {
     setTimeout(() => renderBiplotCanvas(), 30);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  CONDITIONAL CHART TAB SWITCH
+// ══════════════════════════════════════════════
+function switchChartConditional(name, btn) {
+  if (btn.classList.contains('tab-disabled')) return;
+  switchChart(name, btn);
+  if (name === 'correlation') {
+    const numericCols = headers.filter(h => detectNumeric(h));
+    if (numericCols.length >= 2) setTimeout(() => renderCorrelationHeatmap(numericCols), 30);
+  }
+  if (name === 'matriz') {
+    const numericCols = headers.filter(h => detectNumeric(h));
+    if (numericCols.length >= 2) setTimeout(() => renderCorrelationMatrix(numericCols, _matrizSorted), 30);
   }
 }
 
@@ -4321,12 +5054,19 @@ function runAnalysis() {
   renderCharts(s, grouped);
 
   const numericCols = headers.filter(h => detectNumeric(h));
+  const catCols = headers.filter(h => !detectNumeric(h));
 
+  // ── Chi-Square detection: corrCol is categorical ──
+  const corrIsCat = corrCol && !detectNumeric(corrCol);
+  const catCol2 = catCol; // categoryCol
+
+  // ── Regression tab ──
   const tabReg = document.getElementById('tabRegression');
   const panelReg = document.getElementById('panel-regression');
-  if (corrCol && corrCol !== numCol) {
+  if (corrCol && corrCol !== numCol && !corrIsCat) {
     tabReg.style.display = '';
     panelReg.style.display = '';
+    buildMultiregPredGrid(numCol);
     renderColumnComparison(numCol, corrCol, excludeOutliers ? values : rawValues);
     renderRegressionCanvas(numCol, corrCol, grouped, excludeOutliers, removedRows);
   } else {
@@ -4335,15 +5075,77 @@ function runAnalysis() {
     document.getElementById('comparisonSection').style.display = 'none';
   }
 
+  // ── Chi-Square panel ──
+  const tabChi = document.getElementById('tabChisquare');
+  const panelChi = document.getElementById('panel-chisquare');
+  if (corrIsCat && catCol2) {
+    tabChi.classList.remove('tab-disabled');
+    panelChi.style.display = '';
+    runChiSquare(catCol2, corrCol);
+  } else if (corrIsCat && !catCol2) {
+    // corrCol is cat but no categoryCol selected
+    tabChi.classList.remove('tab-disabled');
+    panelChi.style.display = '';
+    document.getElementById('chisqContent').innerHTML = `<div class="panel-unavailable"><div class="panel-unavailable-icon">χ²</div><div class="panel-unavailable-msg">Selecione também uma coluna em <strong>"Agrupar por Categoria"</strong> para formar a tabela de contingência.</div></div>`;
+  } else {
+    tabChi.classList.add('tab-disabled');
+    panelChi.style.display = 'none';
+  }
+
+  // ── Correlation heatmap tabs ──
   const tabCorr = document.getElementById('tabCorrelation');
   const panelCorr = document.getElementById('panel-correlation');
+  const tabMatriz = document.getElementById('tabMatriz');
+  const panelMatriz = document.getElementById('panel-matriz');
   if (numericCols.length >= 3) {
-    tabCorr.style.display = '';
+    tabCorr.classList.remove('tab-disabled');
     panelCorr.style.display = '';
     renderCorrelationHeatmap(numericCols);
   } else {
-    tabCorr.style.display = 'none';
+    tabCorr.classList.add('tab-disabled');
     panelCorr.style.display = 'none';
+    tabCorr.title = 'Requer ≥3 colunas numéricas (atual: ' + numericCols.length + ')';
+  }
+  if (numericCols.length >= 2) {
+    tabMatriz.classList.remove('tab-disabled');
+    panelMatriz.style.display = '';
+    _matrizSorted = false;
+    const sortBtn = document.getElementById('btnMatrizSort');
+    if (sortBtn) { sortBtn.textContent = '⊞ Ordenar por correlação'; sortBtn.classList.remove('active'); }
+  } else {
+    tabMatriz.classList.add('tab-disabled');
+    panelMatriz.style.display = 'none';
+    tabMatriz.title = 'Requer ≥2 colunas numéricas (atual: ' + numericCols.length + ')';
+  }
+
+  // ── ANOVA/KW panel ──
+  const tabAnova = document.getElementById('tabAnova');
+  const panelAnova = document.getElementById('panel-anova');
+  if (grouped && grouped.length >= 3) {
+    tabAnova.classList.remove('tab-disabled');
+    panelAnova.style.display = '';
+    const anovaHTML = buildANOVABlock(grouped);
+    document.getElementById('anovaPanelContent').innerHTML = anovaHTML ||
+      `<div class="panel-unavailable"><div class="panel-unavailable-icon">📊</div><div class="panel-unavailable-msg">Dados insuficientes para ANOVA (cada grupo precisa de ≥ 2 observações).</div></div>`;
+  } else {
+    tabAnova.classList.add('tab-disabled');
+    panelAnova.style.display = 'none';
+    tabAnova.title = 'Requer ≥3 grupos — atual: ' + (grouped ? grouped.length : 0);
+  }
+
+  // ── K-Means panel ──
+  const tabKmeans = document.getElementById('tabKmeans');
+  const panelKmeans = document.getElementById('panel-kmeans');
+  if (numericCols.length >= 2) {
+    tabKmeans.classList.remove('tab-disabled');
+    panelKmeans.style.display = '';
+    // Render K-Means inside panel (same as kmeansGroup)
+    const kmeansDiv = document.getElementById('kmeansPanelContent');
+    if (kmeansDiv) renderKMeansInPanel(kmeansDiv, numericCols);
+  } else {
+    tabKmeans.classList.add('tab-disabled');
+    panelKmeans.style.display = 'none';
+    tabKmeans.title = 'Requer ≥2 colunas numéricas (atual: ' + numericCols.length + ')';
   }
 
   document.getElementById('resultsSection').classList.add('show');
@@ -4352,7 +5154,8 @@ function runAnalysis() {
   document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.chart-panel').forEach(p => {
     p.classList.remove('active');
-    if (p.id !== 'panel-regression' && p.id !== 'panel-correlation' && p.id !== 'panel-biplot') {
+    if (!['panel-regression','panel-correlation','panel-biplot','panel-matriz',
+          'panel-chisquare','panel-anova','panel-kmeans'].includes(p.id)) {
       p.style.display = '';
     }
   });
@@ -4369,6 +5172,400 @@ function runAnalysis() {
 // ══════════════════════════════════════════════
 //  EXPORT / IMPORT
 // ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+//  ANOVA + KRUSKAL-WALLIS ENGINE
+// ══════════════════════════════════════════════
+
+// ── Lanczos lgamma ──────────────────────────────────────────────────────────
+function lgamma(z) {
+  const g = 7;
+  const c = [0.99999999999980993,676.5203681218851,-1259.1392167224028,
+             771.32342877765313,-176.61502916214059,12.507343278686905,
+             -0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lgamma(1 - z);
+  z -= 1;
+  let x = c[0];
+  for (let i = 1; i < g + 2; i++) x += c[i] / (z + i);
+  const t = z + g + 0.5;
+  return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+}
+
+// ── Regularized incomplete beta I_x(a,b) — modified Lentz CF ───────────────
+function regularizedIncompleteBeta(x, a, b) {
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  if (x > (a + 1) / (a + b + 2)) return 1 - regularizedIncompleteBeta(1 - x, b, a);
+  // lbeta = log(Γ(a+b)/(Γ(a)Γ(b))) = log(1/B(a,b)), so front = x^a*(1-x)^b/(a*B(a,b)) uses +lbeta
+  const lbeta = lgamma(a + b) - lgamma(a) - lgamma(b);
+  const front = Math.exp(Math.log(x) * a + Math.log(1 - x) * b + lbeta) / a;
+  const FPMIN = 1e-30, MAXI = 300;
+  const qab = a + b, qap = a + 1, qam = a - 1;
+  let c = 1, d = 1 - qab * x / qap;
+  if (Math.abs(d) < FPMIN) d = FPMIN;
+  d = 1 / d;
+  let h = d;
+  for (let m = 1; m <= MAXI; m++) {
+    const m2 = 2 * m;
+    let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN;
+    c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN;
+    d = 1 / d; h *= d * c;
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN;
+    c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN;
+    d = 1 / d;
+    const del = d * c;
+    h *= del;
+    if (Math.abs(del - 1) < 3e-7) break;
+  }
+  return front * h;
+}
+
+// ── Regularized upper incomplete gamma Q(a, x) ──────────────────────────────
+function regUpperGamma(a, x) {
+  if (x < 0) return 1;
+  if (x < a + 1) {
+    // Series for P(a,x) = lower; Q = 1 - P
+    if (x <= 0) return 1;
+    let term = 1 / a, sum = term;
+    for (let n = 1; n <= 300; n++) {
+      term *= x / (a + n); sum += term;
+      if (Math.abs(term) < Math.abs(sum) * 1e-11) break;
+    }
+    return 1 - Math.exp(-x + a * Math.log(x) - lgamma(a)) * sum;
+  } else {
+    // Continued fraction for Q(a,x)
+    const FPMIN = 1e-30;
+    let b = x + 1 - a, c = 1 / FPMIN;
+    let d = 1 / b, h = d;
+    for (let i = 1; i <= 300; i++) {
+      const an = -i * (i - a);
+      b += 2;
+      d = an * d + b; if (Math.abs(d) < FPMIN) d = FPMIN;
+      c = b + an / c;   if (Math.abs(c) < FPMIN) c = FPMIN;
+      d = 1 / d;
+      const del = d * c;
+      h *= del;
+      if (Math.abs(del - 1) < 1e-9) break;
+    }
+    return Math.exp(-x + a * Math.log(x) - lgamma(a)) * h;
+  }
+}
+
+// ── F-distribution p-value: P(F > f | df1, df2) ─────────────────────────────
+function fPValue(f, df1, df2) {
+  if (f <= 0) return 1;
+  const t = (df1 * f) / (df1 * f + df2);
+  return 1 - regularizedIncompleteBeta(t, df1 / 2, df2 / 2);
+}
+
+// ── Chi-squared p-value: P(χ² > h | df) ─────────────────────────────────────
+function chi2PValue(h, df) {
+  if (h <= 0) return 1;
+  return regUpperGamma(df / 2, h / 2);
+}
+
+// ── One-Way ANOVA ─────────────────────────────────────────────────────────────
+function oneWayANOVA(groups) {
+  const k = groups.length;
+  const N = groups.reduce((s, g) => s + g.n, 0);
+  if (k < 2 || N <= k) return null;
+  const grandMean = groups.reduce((s, g) => s + g.mean * g.n, 0) / N;
+  let ssBetween = 0, ssWithin = 0;
+  groups.forEach(g => {
+    ssBetween += g.n * (g.mean - grandMean) ** 2;
+    // SS within = (n-1)*variance  (sample variance)
+    ssWithin += (g.n - 1) * (g.std ** 2);
+  });
+  const dfB = k - 1, dfW = N - k;
+  if (dfW <= 0 || ssWithin === 0) return null;
+  const msB = ssBetween / dfB, msW = ssWithin / dfW;
+  const F = msB / msW;
+  const pValue = fPValue(F, dfB, dfW);
+  return { k, N, grandMean, ssBetween, ssWithin, dfBetween: dfB, dfWithin: dfW,
+           msBetween: msB, msWithin: msW, F, pValue };
+}
+
+// ── Tukey-Kramer HSD (unequal n, α = 0.05) ──────────────────────────────────
+// Studentized range q_crit table [k groups][df bucket] at α=0.05
+const Q_CRIT_TABLE = {
+  // k:  [df≤5, df≤10, df≤20, df≤40, df≤120, df>120]
+  3:  [4.60, 3.88, 3.58, 3.44, 3.36, 3.31],
+  4:  [5.22, 4.33, 3.96, 3.79, 3.69, 3.63],
+  5:  [5.67, 4.65, 4.23, 4.04, 3.92, 3.86],
+  6:  [6.03, 4.91, 4.45, 4.23, 4.10, 4.03],
+  7:  [6.33, 5.12, 4.62, 4.39, 4.26, 4.17],
+  8:  [6.58, 5.30, 4.77, 4.53, 4.39, 4.29],
+  9:  [6.80, 5.46, 4.90, 4.65, 4.50, 4.40],
+  10: [6.99, 5.60, 5.01, 4.75, 4.59, 4.48],
+};
+function qCritical(k, dfW) {
+  const kK = Math.min(Math.max(k, 3), 10);
+  const row = Q_CRIT_TABLE[kK];
+  if (!row) return 3.31;
+  const idx = dfW <= 5 ? 0 : dfW <= 10 ? 1 : dfW <= 20 ? 2 : dfW <= 40 ? 3 : dfW <= 120 ? 4 : 5;
+  return row[idx];
+}
+
+function tukeyHSD(groups, msWithin, dfWithin) {
+  const k = groups.length;
+  const qCrit = qCritical(k, dfWithin);
+  const pairs = [];
+  for (let i = 0; i < k; i++) {
+    for (let j = i + 1; j < k; j++) {
+      const gi = groups[i], gj = groups[j];
+      const diff = gi.mean - gj.mean;
+      const se = Math.sqrt(msWithin / 2 * (1 / gi.n + 1 / gj.n));
+      if (se <= 0) continue;
+      const q = Math.abs(diff) / se;
+      pairs.push({ a: gi.cat, b: gj.cat, diff, se, q, qCrit, significant: q > qCrit });
+    }
+  }
+  return { pairs, qCrit };
+}
+
+// ── Kruskal-Wallis ────────────────────────────────────────────────────────────
+function kruskalWallis(groups) {
+  const k = groups.length;
+  // groups[i] must have .values array
+  const allItems = [];
+  groups.forEach((g, gi) => {
+    (g.values || []).forEach(v => allItems.push({ v, g: gi }));
+  });
+  const N = allItems.length;
+  if (N < k + 1) return null;
+
+  // Sort and assign ranks with tie averaging
+  allItems.sort((a, b) => a.v - b.v);
+  const ranks = new Array(N);
+  let i = 0;
+  while (i < N) {
+    let j = i;
+    while (j < N - 1 && allItems[j + 1].v === allItems[j].v) j++;
+    const avg = (i + j) / 2 + 1;
+    for (let kk = i; kk <= j; kk++) ranks[kk] = avg;
+    i = j + 1;
+  }
+
+  // Tie correction C = 1 - Σ(t³-t) / (N³-N)
+  let tieSum = 0;
+  i = 0;
+  while (i < N) {
+    let j = i;
+    while (j < N - 1 && allItems[j + 1].v === allItems[j].v) j++;
+    const t = j - i + 1;
+    if (t > 1) tieSum += t ** 3 - t;
+    i = j + 1;
+  }
+  const C = N > 1 ? 1 - tieSum / (N ** 3 - N) : 1;
+
+  // Rank sums per group
+  const Rk = new Array(k).fill(0), nk = new Array(k).fill(0);
+  allItems.forEach((item, idx) => { Rk[item.g] += ranks[idx]; nk[item.g]++; });
+
+  // H statistic
+  let H = 0;
+  for (let gi = 0; gi < k; gi++) {
+    if (nk[gi] > 0) H += Rk[gi] ** 2 / nk[gi];
+  }
+  H = (12 / (N * (N + 1))) * H - 3 * (N + 1);
+  if (C > 0) H /= C;
+
+  const df = k - 1;
+  return { H, df, N, pValue: chi2PValue(H, df), rankSums: Rk, groupNs: nk };
+}
+
+// ── HTML builders ─────────────────────────────────────────────────────────────
+function _fmtNum(v, d=4) {
+  if (v === null || v === undefined || isNaN(v)) return '—';
+  return v.toLocaleString('pt-BR', {minimumFractionDigits: d, maximumFractionDigits: d});
+}
+function _fmtP(p) {
+  if (isNaN(p) || p === null) return '—';
+  if (p < 0.0001) return '< 0,0001';
+  return p.toFixed(4).replace('.', ',');
+}
+
+function buildANOVABlock(results) {
+  // Build groups with values array from the stats object
+  const groups = results
+    .map(r => ({ cat: r.cat, values: r.s.values || [], mean: r.s.mean, std: r.s.std, n: r.s.n }))
+    .filter(g => g.values.length >= 2);
+
+  if (groups.length < 3) return '';
+
+  // Normality per group
+  const normTests = groups.map(g => ({
+    cat: g.cat,
+    nt: g.values.length >= 3 ? shapiroWilk(g.values) : { name: 'N/A', stat: NaN, pValue: NaN, verdict: 'N/A' }
+  }));
+  const anyNonNormal = normTests.some(t => t.nt.verdict === 'Não normal');
+
+  // ANOVA
+  const anova = oneWayANOVA(groups);
+  if (!anova) return '';
+
+  const pSig = anova.pValue < 0.05;
+  const pStr = _fmtP(anova.pValue);
+  const fStr = _fmtNum(anova.F, 4);
+
+  // Tukey HSD (only when significant)
+  let tukeyHTML = '';
+  if (pSig) {
+    const tukey = tukeyHSD(groups, anova.msWithin, anova.dfWithin);
+    const rows = tukey.pairs.map(p => `
+      <tr>
+        <td style="color:var(--accent);font-weight:600">${p.a}</td>
+        <td style="color:var(--blue);font-weight:600">${p.b}</td>
+        <td style="color:${p.diff >= 0 ? 'var(--green)' : 'var(--red)'}">${p.diff >= 0 ? '+' : ''}${_fmtNum(p.diff, 3)}</td>
+        <td style="color:var(--text2)">${_fmtNum(p.se, 3)}</td>
+        <td style="color:var(--purple);font-weight:700">${_fmtNum(p.q, 3)}</td>
+        <td>${p.significant
+          ? '<span class="tukey-sig-yes">✓ sim</span>'
+          : '<span class="tukey-sig-no">✗ não</span>'}</td>
+      </tr>`).join('');
+    tukeyHTML = `
+      <div class="anova-section-title" style="margin-top:16px;">
+        ↳ Post-Hoc Tukey HSD — Comparações Par a Par (α = 0,05 · q crítico ≈ ${tukey.qCrit.toFixed(2)})
+      </div>
+      <div style="overflow-x:auto; margin-bottom:4px">
+        <table class="anova-table" style="min-width:560px">
+          <thead><tr><th>Grupo A</th><th>Grupo B</th><th>Diferença (μA−μB)</th><th>Erro Padrão</th><th>q stat</th><th>Significativo?</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  // Kruskal-Wallis (when any group fails normality)
+  let kwHTML = '';
+  if (anyNonNormal) {
+    const kw = kruskalWallis(groups);
+    if (kw) {
+      const kwSig = kw.pValue < 0.05;
+      const kwPStr = _fmtP(kw.pValue);
+      const normRows = normTests.map(t => {
+        const vc = t.nt.verdict === 'Normal' ? 'normal' : t.nt.verdict === 'Limítrofe' ? 'borderline' : t.nt.verdict === 'N/A' ? '' : 'not-normal';
+        return `<tr>
+          <td style="color:var(--accent)">${t.cat}</td>
+          <td>${vc ? `<span class="normality-verdict ${vc}" style="padding:2px 8px;font-size:10px;display:inline-flex;margin:0">${t.nt.verdict}</span>` : '<span style="color:var(--text3);font-size:11px;font-family:\'JetBrains Mono\',monospace">—</span>'}</td>
+          <td style="color:var(--text2)">${isNaN(t.nt.pValue) ? '—' : _fmtP(t.nt.pValue)}</td>
+        </tr>`;
+      }).join('');
+      kwHTML = `
+        <div class="kw-block">
+          <div class="anova-section-title">🔀 Alternativa Não-Paramétrica: Kruskal-Wallis (normalidade violada em ≥ 1 grupo)</div>
+          <div class="kw-metrics">
+            <div class="kw-metric">
+              <div class="kw-metric-label">H-statistic</div>
+              <div class="kw-metric-value" style="color:var(--purple)">${_fmtNum(kw.H, 4)}</div>
+            </div>
+            <div class="kw-metric">
+              <div class="kw-metric-label">df (χ²)</div>
+              <div class="kw-metric-value" style="color:var(--text)">${kw.df}</div>
+            </div>
+            <div class="kw-metric">
+              <div class="kw-metric-label">p-valor</div>
+              <div class="kw-metric-value" style="color:${kwSig ? 'var(--red)' : 'var(--green)'}">${kwPStr}</div>
+            </div>
+            <div class="kw-metric">
+              <div class="kw-metric-label">N total</div>
+              <div class="kw-metric-value" style="color:var(--text2);font-size:16px">${kw.N}</div>
+            </div>
+          </div>
+          <div style="overflow-x:auto;margin-bottom:12px">
+            <table class="anova-table" style="width:auto;min-width:320px">
+              <thead><tr><th>Grupo</th><th>Normalidade (SW/KS)</th><th>p-valor teste</th></tr></thead>
+              <tbody>${normRows}</tbody>
+            </table>
+          </div>
+          <div class="anova-verdict ${kwSig ? 'sig' : 'notsig'}">
+            KW: H(${kw.df}) = ${_fmtNum(kw.H, 4)}, p = ${kwPStr} →
+            ${kwSig
+              ? `<strong>diferença significativa entre as distribuições dos grupos</strong>. ${anova.pValue >= 0.05 ? '⚠ A ANOVA não foi significativa, mas o KW sim — possível violação das suposições paramétricas.' : 'Corrobora o resultado da ANOVA.'} Considere pós-hoc de Dunn ou Mann-Whitney com correção Bonferroni.`
+              : `<strong>sem diferença significativa entre as distribuições</strong>. ${anova.pValue < 0.05 ? '⚠ A ANOVA foi significativa, mas o KW não — verifique a heterocedasticidade e o tamanho amostral.' : 'Corrobora o resultado da ANOVA.'}`}
+          </div>
+        </div>`;
+    }
+  }
+
+  // Interpretation
+  const groupNames = groups.map(g => `<em>${g.cat}</em>`).join(', ');
+  const interpretStaticHTML = `<strong>ANOVA one-way</strong> testa a hipótese nula H₀: μ₁ = μ₂ = … = μk (todas as médias são iguais).
+    O <strong>F</strong> é a razão entre a variância entre grupos (MS_entre) e a variância dentro dos grupos (MS_dentro).
+    Um F elevado → as diferenças entre grupos são maiores do que a variabilidade interna.
+    <strong>Premissas</strong>: normalidade por grupo, homocedasticidade (variâncias iguais) e independência das observações.
+    Quando a normalidade é violada, o <strong>Kruskal-Wallis</strong> (não-paramétrico) é a alternativa adequada.`;
+  const interpretDynHTML = `F(${anova.dfBetween}, ${anova.dfWithin}) = ${fStr} com p = ${pStr}.
+    ${pSig
+      ? `A diferença entre os grupos ${groupNames} é <strong>estatisticamente significativa</strong>. Pelo menos uma média difere das demais (α = 0,05). O post-hoc de Tukey HSD identifica quais pares são distintos.`
+      : `Não há evidência de diferença significativa entre os grupos ${groupNames} (α = 0,05). As variações observadas são compatíveis com flutuação aleatória.`}`;
+  const interpretConclHTML = pSig
+    ? `Use Tukey HSD (acima) para identificar os pares significativos. Se houver heterocedasticidade, prefira Welch ANOVA ou Kruskal-Wallis.`
+    : `Considere aumentar o tamanho amostral ou verificar se subgrupos ocultam diferenças reais. CV entre grupos: ${(Math.sqrt(anova.msBetween / anova.msWithin) * 100).toFixed(1)}%.`;
+
+  return `
+    <div class="stat-group-header">
+      <span class="stat-group-icon">📊</span>
+      <span class="stat-group-title">Comparação entre Grupos — ANOVA One-Way</span>
+      <span class="stat-group-desc">k = ${anova.k} grupos · N = ${anova.N}</span>
+    </div>
+    <div class="anova-section">
+      <div class="anova-section-title">Tabela ANOVA</div>
+      <div style="overflow-x:auto">
+        <table class="anova-table" style="min-width:440px;margin-bottom:4px">
+          <thead>
+            <tr><th>Fonte</th><th>SS</th><th>df</th><th>MS</th><th>F</th><th>p-valor</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--accent);font-weight:700">Entre grupos</td>
+              <td>${_fmtNum(anova.ssBetween, 3)}</td>
+              <td style="color:var(--text2)">${anova.dfBetween}</td>
+              <td>${_fmtNum(anova.msBetween, 3)}</td>
+              <td style="color:var(--blue);font-weight:700">${fStr}</td>
+              <td style="color:${pSig ? 'var(--red)' : 'var(--green)'};font-weight:700">${pStr}</td>
+            </tr>
+            <tr>
+              <td style="color:var(--text2)">Dentro dos grupos</td>
+              <td>${_fmtNum(anova.ssWithin, 3)}</td>
+              <td style="color:var(--text2)">${anova.dfWithin}</td>
+              <td>${_fmtNum(anova.msWithin, 3)}</td>
+              <td style="color:var(--text3)">—</td>
+              <td style="color:var(--text3)">—</td>
+            </tr>
+            <tr>
+              <td style="color:var(--text3)">Total</td>
+              <td>${_fmtNum(anova.ssBetween + anova.ssWithin, 3)}</td>
+              <td style="color:var(--text3)">${anova.dfBetween + anova.dfWithin}</td>
+              <td style="color:var(--text3)">—</td>
+              <td style="color:var(--text3)">—</td>
+              <td style="color:var(--text3)">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="anova-verdict ${pSig ? 'sig' : 'notsig'}">
+        F(${anova.dfBetween}, ${anova.dfWithin}) = ${fStr}, p = ${pStr} →
+        ${pSig
+          ? `<strong>há diferença significativa entre pelo menos um par de grupos</strong> (α = 0,05). Veja Tukey HSD abaixo.`
+          : `<strong>não há diferença significativa entre os grupos</strong> (α = 0,05). H₀ não rejeitada.`}
+      </div>
+
+      ${tukeyHTML}
+      ${kwHTML}
+    </div>
+
+    <details class="group-explain">
+      <summary>💡 como interpretar estes resultados</summary>
+      <div class="group-explain-body" id="ge-anova">
+        <p>${interpretStaticHTML}</p>
+        <div class="group-explain-dyn">${interpretDynHTML}</div>
+        <div class="group-explain-conclusion">💡 ${interpretConclHTML}</div>
+      </div>
+    </details>`;
+}
+
 // ══════════════════════════════════════════════
 //  MATHEMATICAL HELPERS (Step 4)
 // ══════════════════════════════════════════════
@@ -5591,6 +6788,574 @@ function renderBiplotCanvas() {
 }
 
 // ══════════════════════════════════════════════
+//  K-MEANS — renderKMeansGroup + algorithm
+// ══════════════════════════════════════════════
+
+const KMEANS_COLORS = [
+  '#f5a623','#60a5fa','#34d399','#f87171',
+  '#a78bfa','#2dd4bf','#fb923c','#e879f9'
+];
+
+let kmeansTooltipState = null; // {canvas, points, clusterLabels, selectedCols, origData}
+
+function renderKMeansGroup() {
+  const grp = document.getElementById('kmeansGroup');
+  if (!grp) return;
+  const numCols = headers.filter(detectNumeric);
+  if (numCols.length < 2) { grp.innerHTML = ''; return; }
+
+  const optionsHTML = numCols.map(c =>
+    `<option value="${c}" selected>${c}</option>`
+  ).join('');
+
+  grp.innerHTML = `
+  <div class="stat-group" style="margin-top:24px">
+    <div class="stat-group-header">
+      <span class="stat-group-icon">🎯</span>
+      <span class="stat-group-title">Clusterização K-Means</span>
+      <span class="stat-group-desc">aprendizado não-supervisionado</span>
+    </div>
+    <div class="kmeans-section-pad">
+      <div class="kmeans-cols-label">Colunas numéricas (selecione ≥ 2, Ctrl/Cmd para múltiplas)</div>
+      <select id="kmeansColSelect" class="kmeans-multiselect" multiple size="4">
+        ${optionsHTML}
+      </select>
+      <div class="kmeans-controls">
+        <div class="kmeans-slider-wrap">
+          <div class="kmeans-slider-label" id="kmeansSliderLabel">K = 3 clusters</div>
+          <input type="range" id="kmeansSlider" class="kmeans-slider" min="2" max="8" value="3"
+            oninput="document.getElementById('kmeansSliderLabel').textContent='K = '+this.value+' clusters'; updateKMeansSliderTrack(this)">
+        </div>
+        <button class="btn btn-primary" id="kmeansBtn" onclick="runKMeansUI()">⬡ Clusterizar</button>
+      </div>
+      <div id="kmeansHint" class="kmeans-hint">Selecione as colunas e clique em Clusterizar.</div>
+    </div>
+    <div class="kmeans-canvases" id="kmeansCanvasRow" style="display:none;padding:0 20px 4px">
+      <div class="kmeans-canvas-block">
+        <div class="kmeans-canvas-title">Gráfico do Cotovelo — WCSS × K <span id="kmeansElbowBadge" style="float:right"></span></div>
+        <canvas id="kmeansElbowCanvas" height="240"></canvas>
+      </div>
+      <div class="kmeans-canvas-block" style="position:relative">
+        <div class="kmeans-canvas-title">Scatter PCA com Clusters</div>
+        <canvas id="kmeansScatterCanvas" height="240"></canvas>
+        <div id="kmeansScatterTooltip" style="
+          position:absolute;
+          display:none;
+          background:var(--surface2);
+          border:1px solid var(--border2);
+          border-radius:8px;
+          padding:8px 12px;
+          font-family:'JetBrains Mono',monospace;
+          font-size:10px;
+          color:var(--text);
+          pointer-events:none;
+          z-index:20;
+          max-width:200px;
+          line-height:1.6;
+        "></div>
+      </div>
+    </div>
+    <div id="kmeansCentroidWrap" style="display:none;padding:0 20px 20px"></div>
+    <details class="group-explain">
+      <summary>💡 como interpretar clusterização K-Means</summary>
+      <div class="group-explain-body">
+        <p><strong>K-Means</strong> divide os dados em K grupos tentando minimizar a soma dos quadrados dentro de cada cluster (WCSS). O algoritmo itera: (1) atribui cada ponto ao centróide mais próximo; (2) recalcula os centróides; até convergir.</p>
+        <p><strong>Gráfico do Cotovelo:</strong> plote WCSS × K e procure o ponto onde a redução começa a diminuir significativamente — o "cotovelo". O K ideal geralmente está nesse ponto.</p>
+        <p><strong>Scatter PCA:</strong> os dados são projetados nos 2 primeiros componentes principais (PC1+PC2) para visualização 2D. Os ✕ marcam os centróides de cada cluster na mesma projeção.</p>
+        <p><strong>Inicialização K-Means++:</strong> em vez de centroides aleatórios, cada novo centróide é escolhido com probabilidade proporcional ao quadrado da distância ao centróide mais próximo já escolhido — reduz a chance de má convergência.</p>
+      </div>
+    </details>
+  </div>`;
+
+  // Init slider track
+  const sl = document.getElementById('kmeansSlider');
+  if (sl) updateKMeansSliderTrack(sl);
+
+  // Validate selection on change
+  document.getElementById('kmeansColSelect').addEventListener('change', () => {
+    const sel = Array.from(document.getElementById('kmeansColSelect').selectedOptions).map(o => o.value);
+    document.getElementById('kmeansBtn').disabled = sel.length < 2;
+  });
+}
+
+function updateKMeansSliderTrack(sl) {
+  const pct = ((sl.value - sl.min) / (sl.max - sl.min)) * 100;
+  sl.style.background = `linear-gradient(90deg, var(--accent) ${pct}%, var(--border2) ${pct}%)`;
+}
+
+// ── K-Means++ core ──────────────────────────────────────────────────────────
+function kmeansNormalize(data, cols) {
+  const means = cols.map(c => {
+    const vs = data.map(r => parseFloat(String(r[c]).replace(',','.'))).filter(v => !isNaN(v));
+    return vs.reduce((a,b) => a+b, 0) / vs.length;
+  });
+  const stds = cols.map((c, i) => {
+    const vs = data.map(r => parseFloat(String(r[c]).replace(',','.'))).filter(v => !isNaN(v));
+    const mu = means[i];
+    const sd = Math.sqrt(vs.reduce((a,v) => a+(v-mu)**2, 0) / (vs.length-1||1));
+    return sd || 1;
+  });
+  // Build matrix: rows = data points that have all columns valid
+  const matrix = [];
+  const validIdxs = [];
+  data.forEach((row, ri) => {
+    const pt = cols.map((c, i) => (parseFloat(String(row[c]).replace(',','.')) - means[i]) / stds[i]);
+    if (pt.every(v => !isNaN(v))) { matrix.push(pt); validIdxs.push(ri); }
+  });
+  return { matrix, means, stds, validIdxs };
+}
+
+function euclidSq(a, b) {
+  let s = 0;
+  for (let i = 0; i < a.length; i++) s += (a[i]-b[i])**2;
+  return s;
+}
+
+function kmeanspp(matrix, K, rng) {
+  const n = matrix.length, d = matrix[0].length;
+  const centroids = [];
+  // First centroid: random
+  centroids.push([...matrix[Math.floor(rng() * n)]]);
+  for (let k = 1; k < K; k++) {
+    const dists = matrix.map(pt => {
+      let minD = Infinity;
+      centroids.forEach(c => { const d2 = euclidSq(pt, c); if (d2 < minD) minD = d2; });
+      return minD;
+    });
+    const total = dists.reduce((a,b) => a+b, 0);
+    let r = rng() * total, idx = 0;
+    for (let i = 0; i < n; i++) { r -= dists[i]; if (r <= 0) { idx = i; break; } }
+    centroids.push([...matrix[idx]]);
+  }
+  return centroids;
+}
+
+function kmeansRun(matrix, K, seed) {
+  const n = matrix.length;
+  if (n < K) return null;
+  // Simple seeded LCG rng
+  let s = seed || 42;
+  const rng = () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
+
+  let centroids = kmeanspp(matrix, K, rng);
+  let labels = new Array(n).fill(0);
+
+  for (let iter = 0; iter < 100; iter++) {
+    // Assign
+    const newLabels = matrix.map(pt => {
+      let best = 0, bestD = Infinity;
+      centroids.forEach((c, k) => { const d = euclidSq(pt, c); if (d < bestD) { bestD = d; best = k; } });
+      return best;
+    });
+
+    // Recompute centroids
+    const newCentroids = Array.from({length: K}, () => new Array(matrix[0].length).fill(0));
+    const counts = new Array(K).fill(0);
+    newLabels.forEach((k, i) => {
+      counts[k]++;
+      matrix[i].forEach((v, d) => newCentroids[k][d] += v);
+    });
+    newCentroids.forEach((c, k) => {
+      if (counts[k] > 0) c.forEach((v, d) => newCentroids[k][d] /= counts[k]);
+      else newCentroids[k] = [...centroids[k]]; // keep old if empty
+    });
+
+    // Convergence
+    const maxShift = centroids.reduce((mx, c, k) => Math.max(mx, Math.sqrt(euclidSq(c, newCentroids[k]))), 0);
+    labels = newLabels;
+    centroids = newCentroids;
+    if (maxShift < 1e-6) break;
+  }
+
+  // WCSS
+  const wcss = matrix.reduce((sum, pt, i) => sum + euclidSq(pt, centroids[labels[i]]), 0);
+  return { labels, centroids, wcss };
+}
+
+// ── UI handler ──────────────────────────────────────────────────────────────
+function runKMeansUI() {
+  const selEl = document.getElementById('kmeansColSelect');
+  const selectedCols = Array.from(selEl.selectedOptions).map(o => o.value);
+  if (selectedCols.length < 2) {
+    document.getElementById('kmeansHint').innerHTML = '<span style="color:var(--red)">⚠ Selecione pelo menos 2 colunas.</span>';
+    return;
+  }
+  const K = parseInt(document.getElementById('kmeansSlider').value, 10);
+  const hint = document.getElementById('kmeansHint');
+  hint.textContent = 'Calculando...';
+
+  setTimeout(() => {
+    try {
+      const { matrix, means, stds, validIdxs } = kmeansNormalize(filteredData, selectedCols);
+      if (matrix.length < K * 2) {
+        hint.innerHTML = `<span style="color:var(--red)">⚠ Dados insuficientes (${matrix.length} pontos) para ${K} clusters.</span>`;
+        return;
+      }
+
+      // ── Elbow: run K=2..min(8, floor(n/2)) ──
+      const maxK = Math.min(8, Math.floor(matrix.length / 2));
+      const elbowKs = [], elbowWCSS = [];
+      for (let k = 2; k <= maxK; k++) {
+        // Run 3 times, take best WCSS
+        let best = null;
+        for (let rep = 0; rep < 3; rep++) {
+          const res = kmeansRun(matrix, k, k * 17 + rep * 31);
+          if (res && (best === null || res.wcss < best.wcss)) best = res;
+        }
+        if (best) { elbowKs.push(k); elbowWCSS.push(best.wcss); }
+      }
+
+      // Detect elbow: largest second derivative
+      let elbowK = K;
+      if (elbowKs.length >= 3) {
+        let maxD2 = -Infinity, elbowIdx = 1;
+        for (let i = 1; i < elbowKs.length - 1; i++) {
+          const d2 = elbowWCSS[i-1] - 2*elbowWCSS[i] + elbowWCSS[i+1];
+          if (d2 > maxD2) { maxD2 = d2; elbowIdx = i; }
+        }
+        elbowK = elbowKs[elbowIdx];
+      }
+
+      // ── Final run for chosen K ──
+      let finalResult = null;
+      for (let rep = 0; rep < 5; rep++) {
+        const res = kmeansRun(matrix, K, K * 13 + rep * 7);
+        if (res && (finalResult === null || res.wcss < finalResult.wcss)) finalResult = res;
+      }
+      if (!finalResult) { hint.textContent = 'Erro no cálculo.'; return; }
+
+      const { labels, centroids, wcss } = finalResult;
+
+      // ── PCA scores ──
+      let pcaX, pcaY;
+      if (currentSVDResult && currentSVDResult.scores && currentSVDResult.scores.length === filteredData.length) {
+        // Use SVD scores but only for validIdxs
+        pcaX = validIdxs.map(i => currentSVDResult.scores[i]?.[0] ?? 0);
+        pcaY = validIdxs.map(i => currentSVDResult.scores[i]?.[1] ?? 0);
+      } else {
+        // Fallback: use first 2 normalized cols as proxy
+        pcaX = matrix.map(pt => pt[0]);
+        pcaY = matrix.map(pt => pt[1] ?? 0);
+      }
+
+      // ── Desnormalize centroids ──
+      const denormCentroids = centroids.map(c =>
+        c.map((v, i) => v * stds[i] + means[i])
+      );
+
+      // Show canvases
+      document.getElementById('kmeansCanvasRow').style.display = '';
+      document.getElementById('kmeansCentroidWrap').style.display = '';
+      hint.style.display = 'none';
+
+      // ── Elbow badge ──
+      document.getElementById('kmeansElbowBadge').innerHTML =
+        `<span class="kmeans-elbow-badge">cotovelo detectado: K=${elbowK}</span>`;
+
+      // Draw charts
+      setTimeout(() => {
+        drawKMeansElbow(elbowKs, elbowWCSS, K, elbowK);
+        drawKMeansScatter(pcaX, pcaY, labels, K, centroids,
+          currentSVDResult ? currentSVDResult.components : null,
+          matrix, validIdxs, selectedCols);
+        renderCentroidTable(denormCentroids, labels, selectedCols, K);
+      }, 20);
+
+    } catch(e) {
+      hint.innerHTML = `<span style="color:var(--red)">Erro: ${e.message}</span>`;
+      console.error(e);
+    }
+  }, 10);
+}
+
+// ── Elbow canvas ─────────────────────────────────────────────────────────────
+function drawKMeansElbow(ks, wcss, activeK, elbowK) {
+  const canvas = document.getElementById('kmeansElbowCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.parentElement.clientWidth || 300;
+  const H = 240;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { top: 28, right: 24, bottom: 38, left: 52 };
+  const cW = W - pad.left - pad.right;
+  const cH = H - pad.top - pad.bottom;
+
+  const minW = Math.min(...wcss), maxW = Math.max(...wcss);
+  const wRange = maxW - minW || 1;
+  const toX = k => pad.left + ((k - ks[0]) / (ks[ks.length-1] - ks[0] || 1)) * cW;
+  const toY = w => pad.top + cH - ((w - minW) / wRange) * cH;
+
+  // Grid
+  ctx.strokeStyle = '#1e2330'; ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (i/4) * cH;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cW, y); ctx.stroke();
+    ctx.fillStyle = '#4a5568';
+    ctx.font = '9px JetBrains Mono, monospace';
+    ctx.textAlign = 'right';
+    const val = maxW - (i/4)*wRange;
+    ctx.fillText(val >= 1e6 ? (val/1e6).toFixed(1)+'M' : val >= 1e3 ? (val/1e3).toFixed(1)+'k' : val.toFixed(1),
+      pad.left - 4, y + 3);
+  }
+
+  // Area under curve
+  ctx.beginPath();
+  ctx.moveTo(toX(ks[0]), pad.top + cH);
+  ks.forEach((k, i) => ctx.lineTo(toX(k), toY(wcss[i])));
+  ctx.lineTo(toX(ks[ks.length-1]), pad.top + cH);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(245,166,35,0.07)';
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ks.forEach((k, i) => i === 0 ? ctx.moveTo(toX(k), toY(wcss[i])) : ctx.lineTo(toX(k), toY(wcss[i])));
+  ctx.strokeStyle = 'rgba(245,166,35,0.6)';
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // Points
+  ks.forEach((k, i) => {
+    const cx = toX(k), cy = toY(wcss[i]);
+    const isActive = k === activeK;
+    const isElbow = k === elbowK;
+    ctx.beginPath();
+    ctx.arc(cx, cy, isActive ? 7 : 5, 0, Math.PI*2);
+    ctx.fillStyle = isActive ? '#f5a623' : isElbow ? '#a78bfa' : 'rgba(245,166,35,0.5)';
+    ctx.fill();
+    if (isElbow && !isActive) {
+      ctx.strokeStyle = 'rgba(167,139,250,0.7)'; ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // K label below
+    ctx.fillStyle = isActive ? '#f5a623' : '#8892a4';
+    ctx.font = isActive ? 'bold 9px JetBrains Mono, monospace' : '9px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('K='+k, cx, pad.top + cH + 14);
+  });
+
+  // Active vertical dashed line
+  const axX = toX(activeK);
+  ctx.setLineDash([3,3]);
+  ctx.strokeStyle = 'rgba(245,166,35,0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(axX, pad.top); ctx.lineTo(axX, pad.top + cH); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Y axis title (rotated)
+  ctx.save();
+  ctx.translate(11, pad.top + cH/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle = '#8892a4';
+  ctx.font = '9px JetBrains Mono, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('WCSS', 0, 0);
+  ctx.restore();
+
+  // Title
+  ctx.fillStyle = '#8892a4'; ctx.font = '10px JetBrains Mono, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('Inércia por K', pad.left, 16);
+}
+
+// ── Scatter canvas ────────────────────────────────────────────────────────────
+function drawKMeansScatter(pcaX, pcaY, labels, K, centroidsNorm, components, matrix, validIdxs, selectedCols) {
+  const canvas = document.getElementById('kmeansScatterCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.parentElement.clientWidth || 300;
+  const H = 240;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const legendW = 90;
+  const pad = { top: 28, right: legendW + 12, bottom: 36, left: 44 };
+  const cW = W - pad.left - pad.right;
+  const cH = H - pad.top - pad.bottom;
+
+  const xMin = Math.min(...pcaX), xMax = Math.max(...pcaX);
+  const yMin = Math.min(...pcaY), yMax = Math.max(...pcaY);
+  const xRng = xMax - xMin || 1, yRng = yMax - yMin || 1;
+  const toX = x => pad.left + ((x - xMin) / xRng) * cW;
+  const toY = y => pad.top + cH - ((y - yMin) / yRng) * cH;
+
+  // Grid
+  ctx.strokeStyle = '#1e2330'; ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const gx = pad.left + (i/4)*cW, gy = pad.top + (i/4)*cH;
+    ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, pad.top + cH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left + cW, gy); ctx.stroke();
+  }
+
+  // Count per cluster
+  const clusterCounts = new Array(K).fill(0);
+  labels.forEach(l => clusterCounts[l]++);
+
+  // Draw points
+  const pts = []; // store for tooltip
+  pcaX.forEach((x, i) => {
+    const k = labels[i];
+    const cx = toX(x), cy = toY(pcaY[i]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, 3.5, 0, Math.PI*2);
+    ctx.fillStyle = KMEANS_COLORS[k % KMEANS_COLORS.length] + 'bb';
+    ctx.strokeStyle = KMEANS_COLORS[k % KMEANS_COLORS.length];
+    ctx.lineWidth = 0.5;
+    ctx.fill();
+    ctx.stroke();
+    pts.push({ cx, cy, k, origIdx: validIdxs[i] });
+  });
+
+  // Centroid projections in PCA space
+  // Project each centroid through SVD loadings if available
+  const centPCA = centroidsNorm.map(c => {
+    if (currentSVDResult && currentSVDResult.loadings) {
+      const loadings = currentSVDResult.loadings;
+      // c is in normalized selectedCols space, but SVD uses all numericCols
+      // We need to map: get the loadings for selectedCols only
+      const pc1 = loadings.reduce((sum, l) => {
+        const colIdx = selectedCols.indexOf(l.column);
+        return sum + (colIdx >= 0 ? c[colIdx] * (l.pc1 ?? 0) : 0);
+      }, 0);
+      const pc2 = loadings.reduce((sum, l) => {
+        const colIdx = selectedCols.indexOf(l.column);
+        return sum + (colIdx >= 0 ? c[colIdx] * (l.pc2 ?? 0) : 0);
+      }, 0);
+      return [pc1, pc2];
+    } else {
+      return [c[0], c[1] ?? 0];
+    }
+  });
+
+  // Draw centroid ✕ markers
+  centPCA.forEach((cp, k) => {
+    const cx = toX(cp[0]), cy = toY(cp[1]);
+    const col = KMEANS_COLORS[k % KMEANS_COLORS.length];
+    const sz = 7;
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(cx-sz, cy-sz); ctx.lineTo(cx+sz, cy+sz); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx+sz, cy-sz); ctx.lineTo(cx-sz, cy+sz); ctx.stroke();
+    // White outline for contrast
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(cx-sz, cy-sz); ctx.lineTo(cx+sz, cy+sz); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx+sz, cy-sz); ctx.lineTo(cx-sz, cy+sz); ctx.stroke();
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(cx-sz, cy-sz); ctx.lineTo(cx+sz, cy+sz); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx+sz, cy-sz); ctx.lineTo(cx-sz, cy+sz); ctx.stroke();
+  });
+
+  // Legend
+  const lx = W - legendW + 4;
+  ctx.fillStyle = '#8892a4'; ctx.font = '9px JetBrains Mono, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('Cluster n', lx, pad.top - 4);
+  for (let k = 0; k < K; k++) {
+    const ly = pad.top + k * 18;
+    ctx.beginPath(); ctx.arc(lx+5, ly+5, 5, 0, Math.PI*2);
+    ctx.fillStyle = KMEANS_COLORS[k % KMEANS_COLORS.length];
+    ctx.fill();
+    ctx.fillStyle = '#e8eaf0'; ctx.font = '9px JetBrains Mono, monospace';
+    ctx.fillText(`C${k+1} (${clusterCounts[k]})`, lx+14, ly+9);
+  }
+
+  // PCA axis labels
+  const pc1pct = components ? (components[0]?.varianceExplained*100||0).toFixed(0) : '—';
+  const pc2pct = components ? (components[1]?.varianceExplained*100||0).toFixed(0) : '—';
+  ctx.fillStyle = '#4a5568'; ctx.font = '9px JetBrains Mono, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(`PC1 (${pc1pct}%)`, pad.left + cW/2, H - 4);
+  ctx.save(); ctx.translate(11, pad.top + cH/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText(`PC2 (${pc2pct}%)`, 0, 0);
+  ctx.restore();
+
+  // Title
+  ctx.fillStyle = '#8892a4'; ctx.font = '10px JetBrains Mono, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText(`K = ${K} clusters`, pad.left, 16);
+
+  // Store state for tooltip
+  kmeansTooltipState = { canvas, pts, toX, toY, selectedCols };
+
+  // Tooltip handler
+  canvas.onmousemove = function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const tt = document.getElementById('kmeansScatterTooltip');
+    if (!tt) return;
+    let found = null, bestD = 12;
+    kmeansTooltipState.pts.forEach(p => {
+      const d = Math.hypot(p.cx - mx, p.cy - my);
+      if (d < bestD) { bestD = d; found = p; }
+    });
+    if (found) {
+      const origRow = filteredData[found.origIdx] || {};
+      const lines = kmeansTooltipState.selectedCols.map(c =>
+        `<span style="color:var(--text3)">${c}:</span> ${fmtShort ? fmtShort(origRow[c]) : origRow[c]}`
+      ).join('<br>');
+      tt.innerHTML = `<div style="color:${KMEANS_COLORS[found.k % KMEANS_COLORS.length]};font-weight:700;margin-bottom:4px">Cluster ${found.k+1}</div>${lines}`;
+      tt.style.display = 'block';
+      tt.style.left = (found.cx + 10) + 'px';
+      tt.style.top = (found.cy - 10) + 'px';
+    } else {
+      tt.style.display = 'none';
+    }
+  };
+  canvas.onmouseleave = function() {
+    const tt = document.getElementById('kmeansScatterTooltip');
+    if (tt) tt.style.display = 'none';
+  };
+}
+
+// ── Centroid table ────────────────────────────────────────────────────────────
+function renderCentroidTable(denormCentroids, labels, selectedCols, K) {
+  const wrap = document.getElementById('kmeansCentroidWrap');
+  if (!wrap) return;
+  const clusterCounts = new Array(K).fill(0);
+  labels.forEach(l => clusterCounts[l]++);
+
+  const headerCols = ['Cluster', 'n', ...selectedCols];
+  const thead = headerCols.map(c => `<th>${c}</th>`).join('');
+  const tbody = denormCentroids.map((c, k) => {
+    const color = KMEANS_COLORS[k % KMEANS_COLORS.length];
+    const cells = c.map((v, i) => {
+      const fv = Math.abs(v) >= 1e6 ? (v/1e6).toFixed(2)+'M'
+               : Math.abs(v) >= 1e3 ? (v/1e3).toFixed(2)+'k'
+               : v.toFixed(3);
+      return `<td style="font-family:'JetBrains Mono',monospace">${fv}</td>`;
+    }).join('');
+    return `<tr>
+      <td><span class="cluster-dot" style="background:${color};display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle"></span>C${k+1}</td>
+      <td style="color:var(--text2)">${clusterCounts[k]}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin-bottom:8px;">
+      Centróides (escala original)
+    </div>
+    <div style="overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)">
+      <table class="kmeans-centroid-table">
+        <thead><tr>${thead}</tr></thead>
+        <tbody>${tbody}</tbody>
+      </table>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
 //  FUNÇÃO 4 — renderRegressionCanvas
 // ══════════════════════════════════════════════
 function renderRegressionCanvas(numCol, corrCol, grouped, excludeOutliers, removedRowsRef) {
@@ -5989,6 +7754,312 @@ function renderCorrelationHeatmap(numericCols) {
 }
 
 // ══════════════════════════════════════════════
+//  FUNÇÃO 5b — renderCorrelationMatrix (full heatmap com p-valor + interatividade)
+// ══════════════════════════════════════════════
+let _matrizSorted = false;
+
+function _pearsonWithP(colA, colB) {
+  const pairsX = [], pairsY = [];
+  filteredData.forEach(r => {
+    const x = parseFloat(String(r[colA]).replace(',', '.'));
+    const y = parseFloat(String(r[colB]).replace(',', '.'));
+    if (!isNaN(x) && !isNaN(y)) { pairsX.push(x); pairsY.push(y); }
+  });
+  const n = pairsX.length;
+  if (n < 3) return { r: NaN, p: NaN, n };
+  const mx = pairsX.reduce((s, v) => s + v, 0) / n;
+  const my = pairsY.reduce((s, v) => s + v, 0) / n;
+  const Sxx = pairsX.reduce((s, v) => s + (v - mx) ** 2, 0);
+  const Syy = pairsY.reduce((s, v) => s + (v - my) ** 2, 0);
+  const Sxy = pairsX.reduce((s, v, i) => s + (v - mx) * (pairsY[i] - my), 0);
+  if (Sxx <= 0 || Syy <= 0) return { r: NaN, p: NaN, n };
+  const r = Sxy / Math.sqrt(Sxx * Syy);
+  const rc = Math.max(-0.9999999, Math.min(0.9999999, r));
+  const t = rc * Math.sqrt(n - 2) / Math.sqrt(1 - rc * rc);
+  const df = n - 2;
+  // two-tailed p via regularizedIncompleteBeta (already defined above)
+  const xBeta = df / (df + t * t);
+  const p = df >= 1 ? regularizedIncompleteBeta(xBeta, df / 2, 0.5) : NaN;
+  return { r, p, n };
+}
+
+function _corrStrength(r) {
+  const ar = Math.abs(r);
+  if (ar < 0.3) return 'fraca';
+  if (ar < 0.7) return 'moderada';
+  return 'forte';
+}
+
+function _corrSign(r) { return r >= 0 ? 'positiva' : 'negativa'; }
+
+// Greedy nearest-neighbour hierarchical reorder (distance = 1 - |r|)
+function _matrizHierarchicalReorder(cols, rMatrix) {
+  const n = cols.length;
+  if (n <= 2) return cols.slice();
+  const used = new Set([0]);
+  const order = [0];
+  while (order.length < n) {
+    const last = order[order.length - 1];
+    let best = -1, bestD = Infinity;
+    for (let k = 0; k < n; k++) {
+      if (!used.has(k)) {
+        const d = 1 - Math.abs(rMatrix[last][k]);
+        if (d < bestD) { bestD = d; best = k; }
+      }
+    }
+    order.push(best); used.add(best);
+  }
+  return order.map(i => cols[i]);
+}
+
+function renderCorrelationMatrix(numericCols, sorted) {
+  const canvas = document.getElementById('chartMatriz');
+  if (!canvas || !numericCols || numericCols.length < 2) return;
+
+  const baseCols = numericCols;
+  const ncBase = baseCols.length;
+
+  // Build full pairwise matrix on base column order
+  const baseMatrix = baseCols.map((colA, i) =>
+    baseCols.map((colB, j) => {
+      if (i === j) return { r: 1, p: 0, n: filteredData.length };
+      return _pearsonWithP(colA, colB);
+    })
+  );
+
+  // Resolve display order (sorted or original)
+  let displayCols = baseCols;
+  if (sorted) {
+    const rOnly = baseMatrix.map(row => row.map(c => c.r));
+    displayCols = _matrizHierarchicalReorder(baseCols.slice(), rOnly);
+  }
+
+  // Remap to display order
+  const idxOf = col => baseCols.indexOf(col);
+  const ncols = displayCols.length;
+  const matrix = displayCols.map(colA =>
+    displayCols.map(colB => {
+      if (colA === colB) return { r: 1, p: 0, n: filteredData.length };
+      const i = idxOf(colA), j = idxOf(colB);
+      return baseMatrix[i][j];
+    })
+  );
+
+  // Dimensions — adaptive cell size
+  const cellSize = Math.min(80, Math.max(24, Math.floor(500 / ncols)));
+  const labelArea = Math.max(72, Math.min(130, Math.floor(cellSize * 1.7)));
+  const legendH = 28;
+  const pad = 16;
+  const W = labelArea + ncols * cellSize + pad;
+  const H = labelArea + ncols * cellSize + legendH + pad;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const offX = labelArea, offY = labelArea;
+
+  // Tricolor gradient: blue(96,165,250) –[r=–1]→ gray(37,44,58) –[r=0]→ amber(245,166,35) –[r=+1]
+  const lerpColor = (r) => {
+    if (isNaN(r)) return '#252c3a';
+    if (r >= 0) {
+      const t = r;
+      return `rgb(${Math.round(37+t*(245-37))},${Math.round(44+t*(166-44))},${Math.round(58+t*(35-58))})`;
+    } else {
+      const t = -r;
+      return `rgb(${Math.round(37+t*(96-37))},${Math.round(44+t*(165-44))},${Math.round(58+t*(250-58))})`;
+    }
+  };
+
+  const fontSize = Math.min(11, Math.max(8, Math.floor(cellSize / 5.5)));
+  const labelFontSize = Math.min(11, Math.max(9, Math.floor(cellSize / 6)));
+
+  // ── Row labels (Y axis) ──
+  ctx.font = `${labelFontSize}px JetBrains Mono, monospace`;
+  ctx.fillStyle = '#8892a4';
+  ctx.textAlign = 'right';
+  displayCols.forEach((col, i) => {
+    const maxC = Math.max(3, Math.floor(labelArea / (labelFontSize * 0.62)));
+    const label = col.length > maxC ? col.substring(0, maxC - 1) + '…' : col;
+    ctx.fillText(label, offX - 6, offY + i * cellSize + cellSize / 2 + labelFontSize * 0.4);
+  });
+
+  // ── Column labels (X axis, rotated –45°) ──
+  ctx.save();
+  displayCols.forEach((col, i) => {
+    ctx.save();
+    ctx.font = `${labelFontSize}px JetBrains Mono, monospace`;
+    ctx.fillStyle = '#8892a4';
+    ctx.translate(offX + i * cellSize + cellSize / 2, offY - 8);
+    ctx.rotate(-Math.PI / 4);
+    ctx.textAlign = 'left';
+    const maxC = Math.max(3, Math.floor(labelArea / (labelFontSize * 0.6)));
+    const label = col.length > maxC ? col.substring(0, maxC - 1) + '…' : col;
+    ctx.fillText(label, 0, 0);
+    ctx.restore();
+  });
+  ctx.restore();
+
+  // ── Cells ──
+  ctx.textAlign = 'center';
+  for (let i = 0; i < ncols; i++) {
+    for (let j = 0; j < ncols; j++) {
+      const cell = matrix[i][j];
+      const cx = offX + j * cellSize;
+      const cy = offY + i * cellSize;
+
+      if (i === j) {
+        // Diagonal: accent-dim + truncated column name
+        ctx.fillStyle = 'rgba(245,166,35,0.15)';
+        ctx.fillRect(cx, cy, cellSize, cellSize);
+        ctx.font = `bold ${fontSize}px JetBrains Mono, monospace`;
+        ctx.fillStyle = '#f5a623';
+        const maxC = Math.max(1, Math.floor(cellSize / (fontSize * 0.65)));
+        const name = displayCols[i];
+        const label = name.length > maxC ? name.substring(0, maxC - 1) + '…' : name;
+        ctx.fillText(label, cx + cellSize / 2, cy + cellSize / 2 + fontSize * 0.38);
+      } else {
+        const rv = cell.r;
+        ctx.fillStyle = lerpColor(rv);
+        ctx.fillRect(cx, cy, cellSize, cellSize);
+        ctx.font = `${fontSize}px JetBrains Mono, monospace`;
+        ctx.fillStyle = !isNaN(rv) && Math.abs(rv) > 0.5 ? '#ffffff' : '#6b7a8d';
+        ctx.fillText(isNaN(rv) ? 'N/A' : rv.toFixed(2), cx + cellSize / 2, cy + cellSize / 2 + fontSize * 0.38);
+      }
+
+      // Cell border
+      ctx.strokeStyle = 'rgba(10,12,16,0.55)';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(cx, cy, cellSize, cellSize);
+    }
+  }
+
+  // ── Legend ──
+  const legW = Math.max(120, Math.min(220, ncols * cellSize));
+  const legH2 = 9;
+  const legX = offX + (ncols * cellSize - legW) / 2;
+  const legY = offY + ncols * cellSize + 10;
+  const grad = ctx.createLinearGradient(legX, 0, legX + legW, 0);
+  grad.addColorStop(0,   'rgb(96,165,250)');
+  grad.addColorStop(0.5, 'rgb(37,44,58)');
+  grad.addColorStop(1,   'rgb(245,166,35)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(legX, legY, legW, legH2);
+  ctx.strokeStyle = '#252c3a'; ctx.lineWidth = 0.5;
+  ctx.strokeRect(legX, legY, legW, legH2);
+  ctx.font = '9px JetBrains Mono, monospace';
+  ctx.fillStyle = '#8892a4';
+  ctx.textAlign = 'left';   ctx.fillText('−1', legX, legY + legH2 + 10);
+  ctx.textAlign = 'center'; ctx.fillText('0',  legX + legW / 2, legY + legH2 + 10);
+  ctx.textAlign = 'right';  ctx.fillText('+1', legX + legW, legY + legH2 + 10);
+
+  // ── Hit-test metadata ──
+  canvas._mMatrix   = matrix;
+  canvas._mCols     = displayCols;
+  canvas._mOffX     = offX;
+  canvas._mOffY     = offY;
+  canvas._mCellSize = cellSize;
+  canvas._mShowP    = ncols >= 4;
+  canvas._mW = W; canvas._mH = H;
+
+  const tooltip = document.getElementById('matrizTooltip');
+
+  const getCell = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const scaleY = H / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top)  * scaleY;
+    const col = Math.floor((mx - offX) / cellSize);
+    const row = Math.floor((my - offY) / cellSize);
+    if (col >= 0 && col < ncols && row >= 0 && row < ncols) return { row, col };
+    return null;
+  };
+
+  canvas.style.cursor = 'crosshair';
+
+  canvas.onmousemove = function(e) {
+    if (!tooltip) return;
+    const hit = getCell(e);
+    if (!hit) { tooltip.style.display = 'none'; return; }
+    const { row, col } = hit;
+    const cell = matrix[row][col];
+    const rv = cell.r, pv = cell.p, nv = cell.n;
+    if (row === col) {
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top  = (e.clientY - 42) + 'px';
+      tooltip.innerHTML = `<span style="color:var(--accent);font-weight:700">${displayCols[row]}</span>&nbsp;—&nbsp;diagonal`;
+    } else {
+      const rStr  = isNaN(rv) ? 'N/A' : rv.toFixed(4);
+      const showP = ncols >= 4 && !isNaN(pv);
+      const pStr  = showP ? pv.toFixed(4) : null;
+      const sig   = pStr && parseFloat(pStr) < 0.05;
+      const pHtml = pStr
+        ? `&nbsp;·&nbsp;p&nbsp;=&nbsp;<strong style="color:${sig ? 'var(--green)' : 'var(--text2)'}">${pStr}</strong>`
+        : '';
+      const strLabel = isNaN(rv) ? '' : `correlação <strong>${_corrStrength(rv)} ${_corrSign(rv)}</strong>`;
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top  = (e.clientY - 52) + 'px';
+      tooltip.innerHTML =
+        `<span style="color:var(--accent)">${displayCols[col]}</span>&nbsp;×&nbsp;<span style="color:var(--blue)">${displayCols[row]}</span>:&nbsp;r&nbsp;=&nbsp;<strong>${rStr}</strong>${pHtml}<br>` +
+        `<span style="color:var(--text3);font-size:10px;">${strLabel}&nbsp;·&nbsp;n&nbsp;=&nbsp;${nv}${!showP && ncols < 4 ? '&nbsp;·&nbsp;<em>p-valor requer ≥4 colunas</em>' : ''}</span>`;
+    }
+  };
+
+  canvas.onmouseleave = function() { if (tooltip) tooltip.style.display = 'none'; };
+
+  canvas.onclick = function(e) {
+    const hit = getCell(e);
+    if (!hit) return;
+    const { row, col } = hit;
+    if (row === col) return;
+    const colA = displayCols[col];
+    const colB = displayCols[row];
+    const numSel  = document.getElementById('numericCol');
+    const corrSel = document.getElementById('correlateCol');
+    if (!numSel || !corrSel) return;
+    // Fill selectors
+    if ([...numSel.options].some(o => o.value === colA)) numSel.value = colA;
+    updateCorrelateOptions();
+    if ([...corrSel.options].some(o => o.value === colB)) corrSel.value = colB;
+    // Run and navigate to regression tab
+    runAnalysis();
+    setTimeout(() => {
+      const tabReg  = document.getElementById('tabRegression');
+      const panelReg = document.getElementById('panel-regression');
+      if (tabReg && panelReg && tabReg.style.display !== 'none') {
+        document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.chart-panel').forEach(p => p.classList.remove('active'));
+        tabReg.classList.add('active');
+        panelReg.classList.add('active');
+        panelReg.style.display = '';
+        if (numSel.value && corrSel.value) {
+          renderRegressionCanvas(numSel.value, corrSel.value, currentGrouped);
+        }
+      }
+    }, 200);
+  };
+}
+
+function toggleMatrizSort() {
+  const numericCols = headers.filter(h => detectNumeric(h));
+  if (!numericCols || numericCols.length < 2) return;
+  _matrizSorted = !_matrizSorted;
+  const btn = document.getElementById('btnMatrizSort');
+  if (btn) {
+    btn.textContent = _matrizSorted ? '⊞ Ordem original' : '⊞ Ordenar por correlação';
+    btn.classList.toggle('active', _matrizSorted);
+  }
+  renderCorrelationMatrix(numericCols, _matrizSorted);
+}
+
+// ══════════════════════════════════════════════
 //  FUNÇÃO 6 — renderColumnComparison
 // ══════════════════════════════════════════════
 function renderColumnComparison(numCol, corrCol, valuesCol1) {
@@ -6278,409 +8349,522 @@ function updatePreviewWithFilter() {
 //  LEARNING MODE
 // ══════════════════════════════════════════════
 function openLearningMode() {
-  // ── a) Dataset fictício embutido ──
-  const LEARN_DATA = [
-    { vendedor: 'Ana Lima',       regiao: 'Sul',    vendas_mes: 22400, ticket_medio: 310,  satisfacao: 4.5, dias_ativo: 22 },
-    { vendedor: 'Bruno Melo',     regiao: 'Norte',  vendas_mes: 11200, ticket_medio: 175,  satisfacao: 3.8, dias_ativo: 18 },
-    { vendedor: 'Carla Souza',    regiao: 'Centro', vendas_mes: 18700, ticket_medio: 260,  satisfacao: 4.2, dias_ativo: 21 },
-    { vendedor: 'Diego Ramos',    regiao: 'Sul',    vendas_mes: 89000, ticket_medio: 980,  satisfacao: 4.9, dias_ativo: 25 },
-    { vendedor: 'Elisa Nunes',    regiao: 'Norte',  vendas_mes:  9800, ticket_medio: 145,  satisfacao: 3.6, dias_ativo: 16 },
-    { vendedor: 'Fábio Costa',    regiao: 'Centro', vendas_mes: 24100, ticket_medio: 340,  satisfacao: 4.3, dias_ativo: 23 },
-    { vendedor: 'Gabi Torres',    regiao: 'Sul',    vendas_mes: 31500, ticket_medio: 430,  satisfacao: 4.6, dias_ativo: 24 },
-    { vendedor: 'Hugo Dias',      regiao: 'Norte',  vendas_mes: 13600, ticket_medio: 200,  satisfacao: 3.9, dias_ativo: 19 },
-    { vendedor: 'Íris Pinto',     regiao: 'Centro', vendas_mes: 20300, ticket_medio: 285,  satisfacao: 4.1, dias_ativo: 22 },
-    { vendedor: 'João Araújo',    regiao: 'Sul',    vendas_mes: 27800, ticket_medio: 385,  satisfacao: 4.4, dias_ativo: 23 },
-    { vendedor: 'Karen Vieira',   regiao: 'Norte',  vendas_mes: 10400, ticket_medio: 160,  satisfacao: 3.7, dias_ativo: 17 },
-    { vendedor: 'Lucas Faria',    regiao: 'Centro', vendas_mes: 92000, ticket_medio: 1020, satisfacao: 4.8, dias_ativo: 26 },
-    { vendedor: 'Mariana Lopes',  regiao: 'Sul',    vendas_mes: 19500, ticket_medio: 270,  satisfacao: 4.0, dias_ativo: 21 },
-    { vendedor: 'Natan Cunha',    regiao: 'Norte',  vendas_mes: 12100, ticket_medio: 185,  satisfacao: 3.8, dias_ativo: 18 },
-    { vendedor: 'Olívia Barros',  regiao: 'Centro', vendas_mes: 21600, ticket_medio: 300,  satisfacao: 4.3, dias_ativo: 22 },
-    { vendedor: 'Paulo Gomes',    regiao: 'Sul',    vendas_mes: 33200, ticket_medio: 455,  satisfacao: 4.5, dias_ativo: 24 },
-    { vendedor: 'Queila Rocha',   regiao: 'Norte',  vendas_mes:  8600, ticket_medio: 130,  satisfacao: 3.5, dias_ativo: 15 },
-    { vendedor: 'Rafael Teles',   regiao: 'Centro', vendas_mes: 25700, ticket_medio: 360,  satisfacao: 4.2, dias_ativo: 23 },
-    { vendedor: 'Sara Mendes',    regiao: 'Sul',    vendas_mes: 16800, ticket_medio: 235,  satisfacao: 3.9, dias_ativo: 20 },
-    { vendedor: 'Tiago Alves',    regiao: 'Norte',  vendas_mes: 14200, ticket_medio: 210,  satisfacao: 4.0, dias_ativo: 19 },
-    { vendedor: 'Úrsula Fidalgo', regiao: 'Centro', vendas_mes: 23000, ticket_medio: 320,  satisfacao: 4.4, dias_ativo: 22 },
-    { vendedor: 'Vitor Cardoso',  regiao: 'Sul',    vendas_mes: 28900, ticket_medio: 400,  satisfacao: 4.5, dias_ativo: 24 },
-    { vendedor: 'Wesley Mota',    regiao: 'Norte',  vendas_mes: 11700, ticket_medio: 178,  satisfacao: 3.7, dias_ativo: 17 },
-    { vendedor: 'Ximena Reis',    regiao: 'Centro', vendas_mes: 19100, ticket_medio: 265,  satisfacao: 4.1, dias_ativo: 21 },
-    { vendedor: 'Yasmin Duarte',  regiao: 'Sul',    vendas_mes: 36400, ticket_medio: 495,  satisfacao: 4.7, dias_ativo: 25 },
-    { vendedor: 'Zeca Borges',    regiao: 'Norte',  vendas_mes:  9300, ticket_medio: 140,  satisfacao: 3.6, dias_ativo: 16 },
-    { vendedor: 'Alice Ferreira', regiao: 'Centro', vendas_mes: 26500, ticket_medio: 370,  satisfacao: 4.3, dias_ativo: 23 },
-    { vendedor: 'Bernardo Lima',  regiao: 'Sul',    vendas_mes: 15700, ticket_medio: 220,  satisfacao: 3.8, dias_ativo: 20 },
-    { vendedor: 'Cecília Neto',   regiao: 'Norte',  vendas_mes: 13000, ticket_medio: 195,  satisfacao: 3.9, dias_ativo: 18 },
-    { vendedor: 'Davi Martins',   regiao: 'Centro', vendas_mes: 22800, ticket_medio: 315,  satisfacao: 4.2, dias_ativo: 22 },
-    { vendedor: 'Eduarda Paz',    regiao: 'Sul',    vendas_mes: 30100, ticket_medio: 415,  satisfacao: 4.4, dias_ativo: 24 },
-    { vendedor: 'Felipe Assis',   regiao: 'Norte',  vendas_mes: 10900, ticket_medio: 165,  satisfacao: 3.7, dias_ativo: 17 },
-    { vendedor: 'Giovana Luz',    regiao: 'Centro', vendas_mes: 24600, ticket_medio: 345,  satisfacao: 4.3, dias_ativo: 23 },
-    { vendedor: 'Henrique Sal',   regiao: 'Sul',    vendas_mes: 17300, ticket_medio: 240,  satisfacao: 4.0, dias_ativo: 20 },
-    { vendedor: 'Isadora Melo',   regiao: 'Norte',  vendas_mes: 12600, ticket_medio: 190,  satisfacao: 3.8, dias_ativo: 18 },
-    { vendedor: 'Júlio César',    regiao: 'Centro', vendas_mes: 20800, ticket_medio: 290,  satisfacao: 4.1, dias_ativo: 21 },
-    { vendedor: 'Karina Soto',    regiao: 'Sul',    vendas_mes: 25200, ticket_medio: 350,  satisfacao: 4.3, dias_ativo: 23 },
-    { vendedor: 'Leonardo Rua',   regiao: 'Norte',  vendas_mes:  9700, ticket_medio: 148,  satisfacao: 3.6, dias_ativo: 16 },
-    { vendedor: 'Mirela Vaz',     regiao: 'Centro', vendas_mes: 27300, ticket_medio: 380,  satisfacao: 4.4, dias_ativo: 23 },
-    { vendedor: 'Nelson Cruz',    regiao: 'Sul',    vendas_mes: 21000, ticket_medio: 295,  satisfacao: 4.1, dias_ativo: 21 },
-    { vendedor: 'Olivia Matos',   regiao: 'Norte',  vendas_mes: 11400, ticket_medio: 172,  satisfacao: 3.7, dias_ativo: 17 },
-    { vendedor: 'Pamela Dinis',   regiao: 'Centro', vendas_mes: 23500, ticket_medio: 328,  satisfacao: 4.2, dias_ativo: 22 },
-    { vendedor: 'Quintino Ló',    regiao: 'Sul',    vendas_mes: 29600, ticket_medio: 408,  satisfacao: 4.5, dias_ativo: 24 },
-    { vendedor: 'Roberta Ivo',    regiao: 'Norte',  vendas_mes: 10100, ticket_medio: 155,  satisfacao: 3.7, dias_ativo: 16 },
-    { vendedor: 'Samuel Ouro',    regiao: 'Centro', vendas_mes: 18300, ticket_medio: 255,  satisfacao: 4.0, dias_ativo: 21 },
-    { vendedor: 'Tatiane Rios',   regiao: 'Sul',    vendas_mes: 34700, ticket_medio: 475,  satisfacao: 4.6, dias_ativo: 25 },
-    { vendedor: 'Ulisses Braga',  regiao: 'Norte',  vendas_mes: 13400, ticket_medio: 202,  satisfacao: 3.9, dias_ativo: 19 },
-    { vendedor: 'Vanessa Porto',  regiao: 'Centro', vendas_mes: 26000, ticket_medio: 363,  satisfacao: 4.3, dias_ativo: 23 },
-    { vendedor: 'William Sá',     regiao: 'Sul',    vendas_mes: 14900, ticket_medio: 215,  satisfacao: 3.9, dias_ativo: 20 },
-    { vendedor: 'Xiomara Lins',   regiao: 'Norte',  vendas_mes: 12800, ticket_medio: 192,  satisfacao: 3.8, dias_ativo: 18 },
-  ];
+  window.open('datalab_learn.html', '_blank');
+}
 
-  // ── b) Cálculos estatísticos inline sobre vendas_mes ──
-  const vals = LEARN_DATA.map(d => d.vendas_mes).sort((a, b) => a - b);
-  const n = vals.length;
-  const sum = vals.reduce((a, b) => a + b, 0);
-  const mean = sum / n;
-  const median = n % 2 === 0 ? (vals[n/2 - 1] + vals[n/2]) / 2 : vals[Math.floor(n/2)];
-  const variance = vals.reduce((a, v) => a + Math.pow(v - mean, 2), 0) / (n - 1);
-  const std = Math.sqrt(variance);
-  const minVal = vals[0];
-  const maxVal = vals[n - 1];
-  const q1 = vals[Math.floor(n * 0.25)];
-  const q3 = vals[Math.floor(n * 0.75)];
-  const iqr = q3 - q1;
-  const cv = (std / mean) * 100;
-  const skew = vals.reduce((a, v) => a + Math.pow((v - mean) / std, 3), 0) / n;
+// ══════════════════════════════════════════════
+//  REGRESSÃO MÚLTIPLA — OLS via Álgebra Matricial
+// ══════════════════════════════════════════════
 
-  // ── Médias por região ──
-  const regioes = ['Sul', 'Norte', 'Centro'];
-  const regMedias = {};
-  regioes.forEach(function(r) {
-    const rv = LEARN_DATA.filter(d => d.regiao === r).map(d => d.vendas_mes);
-    regMedias[r] = rv.reduce((a, b) => a + b, 0) / rv.length;
-  });
+// ── Matrix operations (pure JS) ───────────────
+function matMul(A, B) {
+  const r = A.length, c = B[0].length, k = B.length;
+  const C = Array.from({length: r}, () => new Array(c).fill(0));
+  for (let i = 0; i < r; i++)
+    for (let j = 0; j < c; j++)
+      for (let l = 0; l < k; l++)
+        C[i][j] += A[i][l] * B[l][j];
+  return C;
+}
 
-  function fmtK(v) { return 'R$' + (v / 1000).toFixed(1).replace('.', ',') + 'k'; }
-  function fmt(v)  { return 'R$' + Math.round(v).toLocaleString('pt-BR'); }
+function matTranspose(A) {
+  const r = A.length, c = A[0].length;
+  const T = Array.from({length: c}, () => new Array(r).fill(0));
+  for (let i = 0; i < r; i++)
+    for (let j = 0; j < c; j++)
+      T[j][i] = A[i][j];
+  return T;
+}
 
-  // ── c) HTML completo da página educativa ──
-  const htmlString = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DataLab \u2014 Modo Aprendizado</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg:#0a0c10;--surface:#111318;--surface2:#181c24;--border:#1e2330;--border2:#252c3a;
-    --accent:#f5a623;--accent2:#e8891a;--accent-dim:rgba(245,166,35,0.12);--accent-glow:rgba(245,166,35,0.25);
-    --text:#e8eaf0;--text2:#8892a4;--text3:#4a5568;
-    --green:#34d399;--blue:#60a5fa;--red:#f87171;--purple:#a78bfa;--teal:#2dd4bf;
-    --radius:12px;--radius-lg:18px;
+// Gauss-Jordan inversion (in-place on augmented matrix)
+function matInverse(M) {
+  const n = M.length;
+  const A = M.map(r => [...r]);
+  const I = Array.from({length: n}, (_, i) => { const r = new Array(n).fill(0); r[i] = 1; return r; });
+  for (let col = 0; col < n; col++) {
+    // Find pivot
+    let maxRow = col;
+    for (let row = col+1; row < n; row++)
+      if (Math.abs(A[row][col]) > Math.abs(A[maxRow][col])) maxRow = row;
+    [A[col], A[maxRow]] = [A[maxRow], A[col]];
+    [I[col], I[maxRow]] = [I[maxRow], I[col]];
+    const piv = A[col][col];
+    if (Math.abs(piv) < 1e-14) return null; // singular
+    for (let j = 0; j < n; j++) { A[col][j] /= piv; I[col][j] /= piv; }
+    for (let row = 0; row < n; row++) {
+      if (row === col) continue;
+      const f = A[row][col];
+      for (let j = 0; j < n; j++) { A[row][j] -= f * A[col][j]; I[row][j] -= f * I[col][j]; }
+    }
   }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
-  body::after{content:'';position:fixed;inset:0;
-    background-image:linear-gradient(rgba(45,212,191,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(45,212,191,0.025) 1px,transparent 1px);
-    background-size:48px 48px;pointer-events:none;z-index:0}
-  header{position:relative;z-index:10;padding:24px 40px;border-bottom:1px solid var(--border);
-    display:flex;align-items:center;justify-content:space-between;
-    background:rgba(10,12,16,0.9);backdrop-filter:blur(12px)}
-  .logo{display:flex;align-items:center;gap:12px}
-  .logo-icon{width:38px;height:38px;background:var(--teal);border-radius:8px;
-    display:grid;place-items:center;font-family:'JetBrains Mono',monospace;
-    font-weight:700;font-size:18px;color:#000;box-shadow:0 0 20px rgba(45,212,191,0.3)}
-  .logo-text{font-size:18px;font-weight:800;letter-spacing:-0.5px}
-  .logo-text span{color:var(--teal)}
-  .header-badge{font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 14px;
-    border-radius:6px;border:1px solid rgba(45,212,191,0.35);background:rgba(45,212,191,0.07);
-    color:var(--teal);letter-spacing:0.5px}
-  main{position:relative;z-index:10;max-width:1060px;margin:0 auto;
-    padding:48px 24px 100px;display:flex;flex-direction:column;gap:48px}
-  .section-title{font-size:11px;font-family:'JetBrains Mono',monospace;font-weight:500;
-    letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:20px;
-    display:flex;align-items:center;gap:10px}
-  .section-title::after{content:'';flex:1;height:1px;
-    background:linear-gradient(90deg,rgba(45,212,191,0.3),transparent)}
-  .about-block{background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius-lg);padding:28px 32px}
-  .about-block h2{font-size:18px;font-weight:700;margin-bottom:12px}
-  .about-block p{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px}
-  .col-table{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:12px}
-  .col-table th{text-align:left;padding:8px 14px;background:var(--surface2);color:var(--text2);
-    letter-spacing:1px;font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--border2)}
-  .col-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);
-    vertical-align:top;line-height:1.5}
-  .col-table tr:last-child td{border-bottom:none}
-  .col-type{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
-  .col-type.num{background:rgba(245,166,35,0.12);color:var(--accent);border:1px solid rgba(245,166,35,0.3)}
-  .col-type.cat{background:rgba(96,165,250,0.12);color:var(--blue);border:1px solid rgba(96,165,250,0.3)}
-  .learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-  .learn-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    padding:18px 20px;transition:border-color 0.2s}
-  .learn-card:hover{border-color:rgba(45,212,191,0.4)}
-  .learn-card-icon{font-size:22px;margin-bottom:10px;display:block}
-  .learn-card-title{font-size:13px;font-weight:700;margin-bottom:6px}
-  .learn-card-desc{font-size:12px;color:var(--text2);line-height:1.5;font-family:'JetBrains Mono',monospace}
-  .stat-group{background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius-lg);overflow:hidden}
-  .stat-group-header{padding:16px 20px;border-bottom:1px solid var(--border);
-    display:flex;align-items:center;gap:12px;background:var(--surface2)}
-  .stat-group-icon{font-size:18px}
-  .stat-group-title{font-size:13px;font-weight:700}
-  .stat-group-desc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);
-    margin-left:auto;letter-spacing:0.5px}
-  .stat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-    gap:1px;background:var(--border)}
-  .stat-card{background:var(--surface);padding:20px 18px;cursor:default}
-  .stat-card:hover{background:var(--surface2)}
-  .stat-card-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);
-    text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
-  .stat-card-value{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;
-    color:var(--text);letter-spacing:-0.5px;line-height:1}
-  .stat-card-value.accent{color:var(--accent)}.stat-card-value.green{color:var(--green)}
-  .stat-card-value.blue{color:var(--blue)}.stat-card-value.red{color:var(--red)}
-  .stat-card-value.teal{color:var(--teal)}.stat-card-value.purple{color:var(--purple)}
-  .stat-card-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px}
-  .insight-box{background:rgba(45,212,191,0.05);border:1px solid rgba(45,212,191,0.2);
-    border-left:3px solid var(--teal);border-radius:var(--radius);padding:18px 22px}
-  .insight-box-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;
-    text-transform:uppercase;color:var(--teal);margin-bottom:10px}
-  .insight-box p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:8px}
-  .insight-box p:last-child{margin-bottom:0}
-  .insight-box strong{color:var(--text);font-weight:700}
-  .insight-box code{font-family:'JetBrains Mono',monospace;font-size:12px;
-    background:rgba(45,212,191,0.08);color:var(--teal);padding:1px 6px;border-radius:4px}
-  .region-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px}
-  .region-card{background:var(--surface2);border:1px solid var(--border);
-    border-radius:var(--radius);padding:18px 20px;text-align:center}
-  .region-name{font-size:13px;font-weight:700;margin-bottom:6px}
-  .region-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--accent)}
-  .region-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-top:4px}
-  .try-block{background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius-lg);padding:32px;display:flex;gap:32px;align-items:flex-start}
-  .try-steps{flex:1}
-  .try-steps h3{font-size:16px;font-weight:700;margin-bottom:14px}
-  .step-list{list-style:none;display:flex;flex-direction:column;gap:12px}
-  .step-list li{display:flex;gap:12px;font-size:13px;color:var(--text2);line-height:1.6;align-items:flex-start}
-  .step-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;
-    background:rgba(45,212,191,0.12);border:1px solid rgba(45,212,191,0.3);color:var(--teal);
-    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;display:grid;place-items:center}
-  .btn-download{font-family:'JetBrains Mono',monospace;font-size:12px;padding:12px 22px;
-    border-radius:8px;border:1px solid rgba(45,212,191,0.4);background:rgba(45,212,191,0.08);
-    color:var(--teal);cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;
-    display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
-  .btn-download:hover{background:rgba(45,212,191,0.18);border-color:var(--teal);
-    box-shadow:0 0 16px rgba(45,212,191,0.2)}
-  footer{position:relative;z-index:10;padding:24px 40px;border-top:1px solid var(--border);
-    display:flex;align-items:center;justify-content:space-between;background:rgba(10,12,16,0.9)}
-  .footer-back{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);
-    cursor:pointer;background:none;border:1px solid var(--border2);padding:8px 16px;
-    border-radius:8px;transition:all 0.2s;letter-spacing:0.5px}
-  .footer-back:hover{border-color:var(--teal);color:var(--teal)}
-  .footer-copy{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3)}
-</style>
-</head>
-<body>
+  return I;
+}
 
-<header>
-  <div class="logo">
-    <div class="logo-icon">\u{1F393}</div>
-    <div><div class="logo-text">Data<span>Lab</span> &mdash; Modo Aprendizado</div></div>
-  </div>
-  <div class="header-badge">\u{1F393} dataset de exemplo: loja_vendas_2024.csv</div>
-</header>
+// ── OLS: returns {betas, seArr, tStats, pValues, yHat, residuals, R2, adjR2, F, pF, AIC, n, k} ──
+function olsRegression(Xmat, y) {
+  const n = y.length;
+  const k = Xmat[0].length; // includes intercept column
+  const Xt = matTranspose(Xmat);
+  const XtX = matMul(Xt, Xmat);
+  const XtXinv = matInverse(XtX);
+  if (!XtXinv) return null;
+  const Xty = matMul(Xt, y.map(v => [v]));
+  const betas = matMul(XtXinv, Xty).map(r => r[0]);
 
-<main>
+  const yHat = Xmat.map(row => row.reduce((s, v, j) => s + v * betas[j], 0));
+  const residuals = y.map((v, i) => v - yHat[i]);
 
-  <section>
-    <div class="section-title">01 &middot; sobre este dataset</div>
-    <div class="about-block">
-      <h2>loja_vendas_2024.csv</h2>
-      <p>Dataset fict&iacute;cio com <strong>50 registros</strong> simulando o desempenho mensal de vendedores de uma rede varejista com opera&ccedil;&otilde;es nas regi&otilde;es Sul, Norte e Centro do Brasil. Os dados foram constru&iacute;dos para demonstrar os principais padr&otilde;es estat&iacute;sticos que voc&ecirc; encontrar&aacute; em datasets reais: assimetria, outliers, correla&ccedil;&atilde;o e varia&ccedil;&atilde;o entre grupos.</p>
-      <table class="col-table">
-        <thead><tr><th>coluna</th><th>tipo</th><th>descri&ccedil;&atilde;o</th><th>exemplo</th></tr></thead>
-        <tbody>
-          <tr><td>vendedor</td><td><span class="col-type cat">texto</span></td><td>Nome do vendedor</td><td>Ana Lima</td></tr>
-          <tr><td>regiao</td><td><span class="col-type cat">texto</span></td><td>Regi&atilde;o de atua&ccedil;&atilde;o (Sul, Norte, Centro)</td><td>Sul</td></tr>
-          <tr><td>vendas_mes</td><td><span class="col-type num">num&eacute;rico</span></td><td>Total de vendas no m&ecirc;s (R$) &mdash; apresenta outliers e assimetria positiva</td><td>22.400</td></tr>
-          <tr><td>ticket_medio</td><td><span class="col-type num">num&eacute;rico</span></td><td>Valor m&eacute;dio por venda (R$) &mdash; correlaciona com vendas_mes</td><td>310</td></tr>
-          <tr><td>satisfacao</td><td><span class="col-type num">num&eacute;rico</span></td><td>Nota m&eacute;dia de satisfa&ccedil;&atilde;o dos clientes (1&ndash;5)</td><td>4.5</td></tr>
-          <tr><td>dias_ativo</td><td><span class="col-type num">num&eacute;rico</span></td><td>Dias trabalhados no m&ecirc;s</td><td>22</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+  const SSres = residuals.reduce((s, e) => s + e*e, 0);
+  const yMean = y.reduce((s, v) => s + v, 0) / n;
+  const SStot = y.reduce((s, v) => s + (v - yMean)**2, 0);
+  const R2 = SStot > 0 ? 1 - SSres / SStot : 0;
+  const adjR2 = 1 - (1 - R2) * (n - 1) / (n - k);
 
-  <section>
-    <div class="section-title">02 &middot; o que voc&ecirc; vai aprender</div>
-    <div class="learn-grid">
-      <div class="learn-card"><span class="learn-card-icon">&#128202;</span><div class="learn-card-title">Medidas de Posi&ccedil;&atilde;o</div><div class="learn-card-desc">M&eacute;dia vs mediana: por que a m&eacute;dia mente na presen&ccedil;a de outliers e quando usar cada uma</div></div>
-      <div class="learn-card"><span class="learn-card-icon">&#128208;</span><div class="learn-card-title">Dispers&atilde;o e Variabilidade</div><div class="learn-card-desc">Desvio padr&atilde;o, coeficiente de varia&ccedil;&atilde;o e IQR &mdash; como medir o quanto os dados &ldquo;espalham&rdquo;</div></div>
-      <div class="learn-card"><span class="learn-card-icon">&#9888;</span><div class="learn-card-title">Detec&ccedil;&atilde;o de Outliers</div><div class="learn-card-desc">Regra de Tukey (1.5&times;IQR), z-score e como outliers distorcem an&aacute;lises</div></div>
-      <div class="learn-card"><span class="learn-card-icon">&#128200;</span><div class="learn-card-title">Assimetria (Skewness)</div><div class="learn-card-desc">Por que dados de vendas e renda sempre t&ecirc;m cauda direita longa &mdash; e o que isso implica</div></div>
-      <div class="learn-card"><span class="learn-card-icon">&#128279;</span><div class="learn-card-title">Correla&ccedil;&atilde;o</div><div class="learn-card-desc">Rela&ccedil;&atilde;o entre vendas_mes e ticket_medio: scatter plot, Pearson e interpreta&ccedil;&atilde;o</div></div>
-      <div class="learn-card"><span class="learn-card-icon">&#128506;</span><div class="learn-card-title">An&aacute;lise por Grupos</div><div class="learn-card-desc">Compara&ccedil;&atilde;o das regi&otilde;es Sul, Norte e Centro &mdash; boxplot, ANOVA e diferen&ccedil;as de m&eacute;dia</div></div>
-    </div>
-  </section>
+  const MSres = SSres / Math.max(1, n - k);
+  const seArr = XtXinv.map((row, j) => Math.sqrt(Math.max(0, row[j]) * MSres));
 
-  <section>
-    <div class="section-title">03 &middot; estat&iacute;sticas de vendas_mes</div>
-
-    <div class="stat-group" style="margin-bottom:16px">
-      <div class="stat-group-header">
-        <span class="stat-group-icon">&#128205;</span>
-        <span class="stat-group-title">Medidas de Posi&ccedil;&atilde;o</span>
-        <span class="stat-group-desc">tend&ecirc;ncia central</span>
-      </div>
-      <div class="stat-cards">
-        <div class="stat-card"><div class="stat-card-label">M&eacute;dia</div><div class="stat-card-value accent" id="sc-mean"></div><div class="stat-card-sub">puxada pelos outliers</div></div>
-        <div class="stat-card"><div class="stat-card-label">Mediana</div><div class="stat-card-value green" id="sc-median"></div><div class="stat-card-sub">valor central real</div></div>
-        <div class="stat-card"><div class="stat-card-label">M&iacute;nimo</div><div class="stat-card-value" id="sc-min"></div><div class="stat-card-sub">menor valor</div></div>
-        <div class="stat-card"><div class="stat-card-label">M&aacute;ximo</div><div class="stat-card-value red" id="sc-max"></div><div class="stat-card-sub">outlier confirmado</div></div>
-      </div>
-    </div>
-    <div class="insight-box" style="margin-bottom:28px" id="insight-pos"></div>
-
-    <div class="stat-group" style="margin-bottom:16px">
-      <div class="stat-group-header">
-        <span class="stat-group-icon">&#128208;</span>
-        <span class="stat-group-title">Dispers&atilde;o</span>
-        <span class="stat-group-desc">variabilidade</span>
-      </div>
-      <div class="stat-cards">
-        <div class="stat-card"><div class="stat-card-label">Desvio Padr&atilde;o</div><div class="stat-card-value teal" id="sc-std"></div><div class="stat-card-sub">sens&iacute;vel a outliers</div></div>
-        <div class="stat-card"><div class="stat-card-label">CV</div><div class="stat-card-value purple" id="sc-cv"></div><div class="stat-card-sub">coef. varia&ccedil;&atilde;o</div></div>
-        <div class="stat-card"><div class="stat-card-label">Q1 (25%)</div><div class="stat-card-value" id="sc-q1"></div><div class="stat-card-sub">1&ordm; quartil</div></div>
-        <div class="stat-card"><div class="stat-card-label">Q3 (75%)</div><div class="stat-card-value" id="sc-q3"></div><div class="stat-card-sub">3&ordm; quartil</div></div>
-        <div class="stat-card"><div class="stat-card-label">IQR</div><div class="stat-card-value blue" id="sc-iqr"></div><div class="stat-card-sub">amplitude interquartil</div></div>
-        <div class="stat-card"><div class="stat-card-label">Assimetria</div><div class="stat-card-value accent" id="sc-skew"></div><div class="stat-card-sub">cauda direita</div></div>
-      </div>
-    </div>
-    <div class="insight-box" style="margin-bottom:28px" id="insight-disp"></div>
-
-    <div class="stat-group" style="margin-bottom:16px">
-      <div class="stat-group-header">
-        <span class="stat-group-icon">&#128506;</span>
-        <span class="stat-group-title">M&eacute;dia de Vendas por Regi&atilde;o</span>
-        <span class="stat-group-desc">an&aacute;lise grupal</span>
-      </div>
-      <div class="region-grid" id="region-grid"></div>
-    </div>
-    <div class="insight-box" id="insight-reg"></div>
-  </section>
-
-  <section>
-    <div class="section-title">04 &middot; tente voc&ecirc; mesmo</div>
-    <div class="try-block">
-      <div class="try-steps">
-        <h3>Carregue este dataset no DataLab</h3>
-        <ol class="step-list">
-          <li><span class="step-num">1</span><span>Baixe o CSV usando o bot&atilde;o ao lado &mdash; o arquivo <code>loja_vendas_2024.csv</code> cont&eacute;m os 50 registros deste exemplo</span></li>
-          <li><span class="step-num">2</span><span>Volte ao DataLab (aba anterior) e arraste o CSV para a zona de upload</span></li>
-          <li><span class="step-num">3</span><span>Selecione a coluna <strong>vendas_mes</strong> e rode a an&aacute;lise univariada &mdash; confirme os outliers com o boxplot</span></li>
-          <li><span class="step-num">4</span><span>Use <strong>regiao</strong> como vari&aacute;vel categ&oacute;rica e <strong>vendas_mes</strong> como num&eacute;rica na an&aacute;lise bigrupo para comparar as regi&otilde;es</span></li>
-          <li><span class="step-num">5</span><span>Explore a correla&ccedil;&atilde;o entre <strong>vendas_mes</strong> e <strong>ticket_medio</strong> no m&oacute;dulo de regress&atilde;o</span></li>
-        </ol>
-      </div>
-      <div>
-        <button class="btn-download" onclick="downloadCSV()">&#11015; Baixar dataset de exemplo (CSV)</button>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  <button class="footer-back" onclick="window.close()">&larr; Voltar ao DataLab</button>
-  <div class="footer-copy">DataLab &middot; Modo Aprendizado &middot; dataset fict&iacute;cio para fins educativos</div>
-</footer>
-
-<script>
-  var DATA = ${JSON.stringify(LEARN_DATA)};
-
-  var vs = DATA.map(function(d){return d.vendas_mes}).sort(function(a,b){return a-b});
-  var n  = vs.length;
-  var sm = vs.reduce(function(a,b){return a+b},0);
-  var mn = sm/n;
-  var md = n%2===0?(vs[n/2-1]+vs[n/2])/2:vs[Math.floor(n/2)];
-  var vr = vs.reduce(function(a,v){return a+Math.pow(v-mn,2)},0)/(n-1);
-  var sd = Math.sqrt(vr);
-  var mi = vs[0], mx = vs[n-1];
-  var q1 = vs[Math.floor(n*0.25)], q3 = vs[Math.floor(n*0.75)], iq = q3-q1;
-  var cv = (sd/mn)*100;
-  var sk = vs.reduce(function(a,v){return a+Math.pow((v-mn)/sd,3)},0)/n;
-
-  var rm = {};
-  ['Sul','Norte','Centro'].forEach(function(r){
-    var rv=DATA.filter(function(d){return d.regiao===r}).map(function(d){return d.vendas_mes});
-    rm[r]=rv.reduce(function(a,b){return a+b},0)/rv.length;
+  const tStats = betas.map((b, j) => seArr[j] > 0 ? b / seArr[j] : 0);
+  // Two-sided p-value via Student-t (use existing tPValue logic)
+  const tPValArr = tStats.map(t => {
+    const df = n - k;
+    if (df <= 0) return NaN;
+    const x = df / (df + t * t);
+    return regularizedIncompleteBeta(x, df / 2, 0.5);
   });
 
-  function fK(v){return 'R$'+(v/1000).toFixed(1).replace('.',',')+'k'}
-  function fR(v){return 'R$'+Math.round(v).toLocaleString('pt-BR')}
+  // F-statistic (model significance)
+  const SSreg = SStot - SSres;
+  const dfReg = k - 1; // predictors (excl. intercept)
+  const dfRes = n - k;
+  const F = dfReg > 0 && dfRes > 0 && MSres > 0 ? (SSreg / dfReg) / MSres : NaN;
+  const pF = isNaN(F) ? NaN : fPValue(F, dfReg, dfRes);
 
-  document.getElementById('sc-mean').textContent   = fK(mn);
-  document.getElementById('sc-median').textContent = fK(md);
-  document.getElementById('sc-min').textContent    = fK(mi);
-  document.getElementById('sc-max').textContent    = fK(mx);
-  document.getElementById('sc-std').textContent    = fK(sd);
-  document.getElementById('sc-cv').textContent     = cv.toFixed(1)+'%';
-  document.getElementById('sc-q1').textContent     = fK(q1);
-  document.getElementById('sc-q3').textContent     = fK(q3);
-  document.getElementById('sc-iqr').textContent    = fK(iq);
-  document.getElementById('sc-skew').textContent   = sk.toFixed(2);
+  // AIC = n*ln(SSres/n) + 2k
+  const AIC = n > 0 ? n * Math.log(SSres / n) + 2 * k : NaN;
 
-  document.getElementById('insight-pos').innerHTML =
-    '<div class="insight-box-title">\uD83D\uDCA1 interpreta\u00E7\u00E3o \u2014 posi\u00E7\u00E3o</div>'+
-    '<p>A <strong>m\u00E9dia de '+fR(mn)+'</strong> est\u00E1 bem acima da <strong>mediana de '+fR(md)+'</strong> \u2014 uma diferen\u00E7a de <strong>'+fR(mn-md)+'</strong>. Esse gap \u00E9 o sinal cl\u00E1ssico de <strong>assimetria positiva</strong>: os 2 vendedores com vendas acima de R$89.000 (<code>Diego Ramos</code> e <code>Lucas Faria</code>) est\u00E3o puxando a m\u00E9dia para cima sem representar o comportamento t\u00EDpico.</p>'+
-    '<p>Em dados de vendas, sal\u00E1rios ou renda, <strong>sempre prefira a mediana</strong> como medida de \u201Cvalor t\u00EDpico\u201D. A m\u00E9dia s\u00F3 \u00E9 confi\u00E1vel quando a distribui\u00E7\u00E3o \u00E9 aproximadamente sim\u00E9trica.</p>';
+  return { betas, seArr, tStats, pValues: tPValArr, yHat, residuals, R2, adjR2, F, pF, AIC, n, k, MSres, SSres, SStot };
+}
 
-  document.getElementById('insight-disp').innerHTML =
-    '<div class="insight-box-title">\uD83D\uDCA1 interpreta\u00E7\u00E3o \u2014 dispers\u00E3o</div>'+
-    '<p>O <strong>desvio padr\u00E3o de '+fK(sd)+'</strong> parece grande, mas \u00E9 distorcido pelos outliers. O <strong>IQR de '+fK(iq)+'</strong> \u00E9 mais honesto: os 50% centrais dos vendedores t\u00EAm vendas entre <code>'+fK(q1)+'</code> e <code>'+fK(q3)+'</code>.</p>'+
-    '<p>O <strong>CV de '+cv.toFixed(1)+'%</strong> indica alta heterogeneidade. A <strong>assimetria de '+sk.toFixed(2)+'</strong> confirma a cauda direita longa.</p>'+
-    '<p>Outlier detection (Tukey): limite superior = Q3 + 1.5 \u00D7 IQR = <code>'+fR(q3)+' + 1.5 \u00D7 '+fR(iq)+' = '+fR(q3+1.5*iq)+'</code>. Os valores R$89.000 e R$92.000 ultrapassam esse limite.</p>';
-
-  var rg = document.getElementById('region-grid');
-  ['Sul','Centro','Norte'].forEach(function(r){
-    var c = document.createElement('div');
-    c.className='region-card';
-    c.innerHTML='<div class="region-name">'+r+'</div><div class="region-val">'+fK(rm[r])+'</div><div class="region-sub">m\u00E9dia mensal</div>';
-    rg.appendChild(c);
-  });
-
-  document.getElementById('insight-reg').innerHTML =
-    '<div class="insight-box-title">\uD83D\uDCA1 interpreta\u00E7\u00E3o \u2014 grupos</div>'+
-    '<p>A regi\u00E3o <strong>Sul</strong> lidera com m\u00E9dia de <code>'+fK(rm['Sul'])+'</code>, seguida do <strong>Centro</strong> com <code>'+fK(rm['Centro'])+'</code>. O <strong>Norte</strong> tem desempenho menor (<code>'+fK(rm['Norte'])+'</code>).</p>'+
-    '<p>As m\u00E9dias regionais incluem os 2 outliers (Sul e Centro). Use o DataLab para comparar <strong>medianas por grupo</strong> ap\u00F3s remover os outliers \u2014 essa \u00E9 a an\u00E1lise correta.</p>';
-
-  function downloadCSV() {
-    var cols=['vendedor','regiao','vendas_mes','ticket_medio','satisfacao','dias_ativo'];
-    var rows=DATA.map(function(r){
-      return cols.map(function(c){
-        var v=r[c];
-        return (typeof v==='string'&&v.indexOf(',')>=0)?'"'+v+'"':v;
-      }).join(',');
+// ── VIF: for each predictor, regress it on all others, VIF = 1/(1-R²) ──
+function calcVIF(Xmat, kPreds) {
+  // Xmat columns: [intercept, X1, X2, ...], kPreds = Xmat[0].length - 1
+  const n = Xmat.length;
+  if (kPreds < 2) return new Array(kPreds).fill(1);
+  const vifs = [];
+  for (let j = 1; j <= kPreds; j++) {
+    const yj = Xmat.map(r => r[j]);
+    // Design matrix: intercept + all other predictors
+    const Xj = Xmat.map(r => {
+      const row = [1];
+      for (let l = 1; l <= kPreds; l++) if (l !== j) row.push(r[l]);
+      return row;
     });
-    var csv=[cols.join(',')].concat(rows).join('\\n');
-    var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-    var url=URL.createObjectURL(blob);
-    var a=document.createElement('a');
-    a.href=url;a.download='loja_vendas_2024.csv';a.click();
-    URL.revokeObjectURL(url);
+    const res = olsRegression(Xj, yj);
+    if (!res) { vifs.push(NaN); continue; }
+    const R2j = Math.min(Math.max(res.R2, 0), 1 - 1e-10);
+    vifs.push(1 / (1 - R2j));
   }
-<\/script>
-</body>
-</html>`;
+  return vifs;
+}
 
-  // ── d) Abrir em nova janela ──
-  var win = window.open('', '_blank', 'width=1100,height=900');
-  if (!win) {
-    alert('Pop-up bloqueado pelo navegador. Por favor, permita pop-ups para este site e tente novamente.');
+// ── Build the predictor checkbox grid ──
+let _multiRegYCol = '';
+
+function buildMultiregPredGrid(yCol) {
+  _multiRegYCol = yCol;
+  const numericCols = headers.filter(h => detectNumeric(h));
+  const grid = document.getElementById('multiregPredGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  numericCols.forEach(col => {
+    if (col === yCol) return; // exclude Y
+    const item = document.createElement('div');
+    item.className = 'multireg-pred-item';
+    item.innerHTML = `<input type="checkbox" id="mrpred_${col.replace(/\W/g,'_')}" value="${col}" checked>
+      <label for="mrpred_${col.replace(/\W/g,'_')}" title="${col}">${col.length > 20 ? col.slice(0,18)+'…' : col}</label>`;
+    grid.appendChild(item);
+  });
+}
+
+function toggleAllPredictors(state) {
+  document.querySelectorAll('#multiregPredGrid input[type="checkbox"]').forEach(cb => cb.checked = state);
+}
+
+function setRegMode(mode) {
+  document.getElementById('regModeSimple').classList.toggle('active', mode === 'simple');
+  document.getElementById('regModeMultiple').classList.toggle('active', mode === 'multiple');
+  document.getElementById('regSimpleSection').style.display = mode === 'simple' ? '' : 'none';
+  document.getElementById('regMultipleSection').style.display = mode === 'multiple' ? '' : 'none';
+  if (mode === 'multiple') {
+    const numCol = document.getElementById('numericCol').value;
+    if (numCol) buildMultiregPredGrid(numCol);
+  }
+}
+
+function runMultipleRegression() {
+  const yCol = document.getElementById('numericCol').value;
+  if (!yCol) { alert('Selecione a coluna Y (Coluna Numérica) primeiro.'); return; }
+
+  const checked = [...document.querySelectorAll('#multiregPredGrid input:checked')].map(cb => cb.value);
+  if (checked.length === 0) { alert('Selecione pelo menos 1 variável preditora.'); return; }
+
+  // Build pairs: rows where Y and all Xi are valid
+  const rows = filteredData.filter(row => {
+    const yv = parseFloat(String(row[yCol]).replace(',','.'));
+    if (isNaN(yv)) return false;
+    return checked.every(col => !isNaN(parseFloat(String(row[col]).replace(',','.'))));
+  });
+  const n = rows.length;
+  const k = checked.length + 1; // +1 for intercept
+  if (n < k + 1) { alert(`Amostras insuficientes (n=${n}, k=${k}). Precisa de n > k+1.`); return; }
+
+  const y = rows.map(r => parseFloat(String(r[yCol]).replace(',','.')));
+
+  // Design matrix X: [1, x1, x2, ...]
+  const Xmat = rows.map(r => {
+    const row = [1]; // intercept
+    checked.forEach(col => row.push(parseFloat(String(r[col]).replace(',','.'))));
+    return row;
+  });
+
+  const res = olsRegression(Xmat, y);
+  if (!res) { alert('Erro: matriz X\'X é singular. Verifique multicolinearidade perfeita ou dados insuficientes.'); return; }
+
+  const vifs = calcVIF(Xmat, checked.length);
+
+  renderMultipleRegressionResults(res, checked, yCol, vifs);
+  renderResidualsCanvas(res.yHat, res.residuals);
+  document.getElementById('multiregResults').classList.add('show');
+}
+
+function renderMultipleRegressionResults(res, xCols, yCol, vifs) {
+  const { betas, seArr, tStats, pValues, R2, adjR2, F, pF, AIC, n, k } = res;
+
+  // Metrics row
+  const r2Color = R2 >= 0.7 ? 'var(--green)' : R2 >= 0.4 ? 'var(--accent)' : 'var(--text2)';
+  const pFStr = isNaN(pF) ? '—' : pF < 0.0001 ? '< 0,0001' : pF.toFixed(4).replace('.', ',');
+  document.getElementById('multiregMetrics').innerHTML = `
+    <div class="mreg-metric"><div class="mreg-metric-label">R²</div>
+      <div class="mreg-metric-val" style="color:${r2Color}">${R2.toFixed(4)}</div></div>
+    <div class="mreg-metric"><div class="mreg-metric-label">R² Ajustado</div>
+      <div class="mreg-metric-val" style="color:${r2Color}">${adjR2.toFixed(4)}</div></div>
+    <div class="mreg-metric"><div class="mreg-metric-label">F-statistic</div>
+      <div class="mreg-metric-val" style="color:var(--blue)">${isNaN(F)?'—':F.toFixed(3)}</div></div>
+    <div class="mreg-metric"><div class="mreg-metric-label">p-valor (F)</div>
+      <div class="mreg-metric-val" style="font-size:14px;color:${!isNaN(pF)&&pF<0.05?'var(--green)':'var(--text2)'}">${pFStr}</div></div>
+    <div class="mreg-metric"><div class="mreg-metric-label">AIC</div>
+      <div class="mreg-metric-val" style="font-size:14px;color:var(--purple)">${isNaN(AIC)?'—':AIC.toFixed(1)}</div></div>
+    <div class="mreg-metric"><div class="mreg-metric-label">n / k</div>
+      <div class="mreg-metric-val" style="font-size:14px;color:var(--text2)">${n} / ${k-1}</div></div>`;
+
+  // Coefficient table
+  const names = ['(Intercepto)', ...xCols];
+  const sigCode = p => p < 0.001 ? '***' : p < 0.01 ? '**' : p < 0.05 ? '*' : p < 0.1 ? '.' : '';
+  const pStr = p => isNaN(p) ? '—' : p < 0.0001 ? '< 0,0001' : p.toFixed(4).replace('.', ',');
+
+  let rows_html = names.map((name, j) => {
+    const vif = j === 0 ? null : vifs[j-1];
+    const vifStr = j === 0 ? '—' : isNaN(vif) ? '—' : vif.toFixed(2);
+    const vifClass = j > 0 && vif > 5 ? 'vif-warn' : 'vif-ok';
+    const vifWarn = j > 0 && vif > 5 ? ' ⚠' : '';
+    const p = pValues[j];
+    const sig = sigCode(p);
+    const pColor = p < 0.05 ? 'var(--green)' : 'var(--text2)';
+    return `<tr>
+      <td class="coef-name">${name}</td>
+      <td>${betas[j].toFixed(5)}</td>
+      <td>${seArr[j].toFixed(5)}</td>
+      <td>${tStats[j].toFixed(4)}</td>
+      <td style="color:${pColor}">${pStr(p)}</td>
+      <td class="sig-star">${sig}</td>
+      <td class="${vifClass}">${vifStr}${vifWarn}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('multiregCoefTable').innerHTML = `
+    <thead><tr>
+      <th>Variável</th><th>β (coef.)</th><th>Erro Padrão</th>
+      <th>t-stat</th><th>p-valor</th><th>Sig.</th>
+      <th title="Variance Inflation Factor. VIF > 5 indica multicolinearidade.">VIF</th>
+    </tr></thead>
+    <tbody>${rows_html}</tbody>
+    <tfoot><tr><td colspan="7" style="padding:6px 10px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;">
+      Signicância: *** p&lt;0,001 · ** p&lt;0,01 · * p&lt;0,05 · . p&lt;0,1 &nbsp;|&nbsp; VIF &gt; 5 = multicolinearidade · VIF &gt; 10 = severa
+    </td></tr></tfoot>`;
+}
+
+function renderResidualsCanvas(yHat, residuals) {
+  const canvas = document.getElementById('chartResiduals');
+  if (!canvas || !yHat || !residuals) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = Math.max(300, (canvas.parentElement?.clientWidth || 500) - 32);
+  const H = 280;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { top: 28, right: 20, bottom: 44, left: 56 };
+  const cW = W - pad.left - pad.right;
+  const cH = H - pad.top - pad.bottom;
+
+  ctx.fillStyle = '#111318';
+  ctx.fillRect(0, 0, W, H);
+
+  const n = yHat.length;
+  const xMin = Math.min(...yHat), xMax = Math.max(...yHat);
+  const rMin = Math.min(...residuals), rMax = Math.max(...residuals);
+  const xRng = xMax - xMin || 1;
+  const rRng = rMax - rMin || 1;
+  const xPad = xRng * 0.05, rPad = rRng * 0.1;
+
+  const toX = v => pad.left + ((v - xMin + xPad) / (xRng + 2*xPad)) * cW;
+  const toY = v => pad.top + cH - ((v - rMin + rPad) / (rRng + 2*rPad)) * cH;
+
+  // Grid
+  ctx.strokeStyle = '#1e2330'; ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const gx = pad.left + (i/4)*cW, gy = pad.top + (i/4)*cH;
+    ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, pad.top+cH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left+cW, gy); ctx.stroke();
+  }
+
+  // Zero line
+  const zeroY = toY(0);
+  ctx.beginPath(); ctx.strokeStyle='rgba(245,166,35,0.4)'; ctx.lineWidth=1; ctx.setLineDash([5,3]);
+  ctx.moveTo(pad.left, zeroY); ctx.lineTo(pad.left+cW, zeroY);
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // Points
+  for (let i = 0; i < n; i++) {
+    const px = toX(yHat[i]), py = toY(residuals[i]);
+    const isOutlier = Math.abs(residuals[i]) > 2 * Math.sqrt(residuals.reduce((s,e)=>s+e*e,0)/n);
+    ctx.beginPath();
+    ctx.arc(px, py, 3, 0, Math.PI*2);
+    ctx.fillStyle = isOutlier ? 'rgba(248,113,113,0.8)' : 'rgba(96,165,250,0.55)';
+    ctx.fill();
+  }
+
+  // Axes labels
+  ctx.font = '10px JetBrains Mono, monospace';
+  ctx.fillStyle = '#4a5568'; ctx.textAlign = 'center';
+  // X ticks
+  for (let i = 0; i <= 4; i++) {
+    const v = xMin - xPad + (i/4)*(xRng+2*xPad);
+    ctx.fillText(fmtShort(v), toX(v), pad.top+cH+14);
+  }
+  // Y ticks
+  for (let i = 0; i <= 4; i++) {
+    const v = rMin - rPad + (i/4)*(rRng+2*rPad);
+    ctx.textAlign = 'right';
+    ctx.fillText(fmtShort(v), pad.left-5, toY(v)+3);
+  }
+  ctx.fillStyle = '#8892a4'; ctx.font = '11px JetBrains Mono, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('Valores Ajustados (ŷ)', pad.left+cW/2, H-6);
+  ctx.save(); ctx.translate(13, pad.top+cH/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('Resíduos', 0, 0); ctx.restore();
+}
+
+// ══════════════════════════════════════════════
+//  CHI-QUADRADO
+// ══════════════════════════════════════════════
+
+function runChiSquare(colA, colB) {
+  const container = document.getElementById('chisqContent');
+  if (!container) return;
+
+  // Build contingency table
+  const rowVals = [...new Set(filteredData.map(r => String(r[colA] ?? '')).filter(v => v !== ''))].sort();
+  const colVals = [...new Set(filteredData.map(r => String(r[colB] ?? '')).filter(v => v !== ''))].sort();
+
+  if (rowVals.length < 2 || colVals.length < 2) {
+    container.innerHTML = `<div class="panel-unavailable"><div class="panel-unavailable-icon">χ²</div>
+      <div class="panel-unavailable-msg">Cada variável precisa de <strong>≥ 2 categorias</strong> para o teste qui-quadrado.</div></div>`;
     return;
   }
-  win.document.write(htmlString);
-  win.document.close();
+  if (rowVals.length > 20 || colVals.length > 20) {
+    container.innerHTML = `<div class="panel-unavailable"><div class="panel-unavailable-icon">⚠</div>
+      <div class="panel-unavailable-msg">Tabela muito grande (${rowVals.length} × ${colVals.length}). Considere agrupar categorias raras.</div></div>`;
+    return;
+  }
+
+  // Count observed frequencies O[i][j]
+  const r = rowVals.length, c = colVals.length;
+  const O = Array.from({length: r}, () => new Array(c).fill(0));
+  let N = 0;
+  filteredData.forEach(row => {
+    const rv = String(row[colA] ?? '');
+    const cv = String(row[colB] ?? '');
+    const ri = rowVals.indexOf(rv), ci = colVals.indexOf(cv);
+    if (ri >= 0 && ci >= 0) { O[ri][ci]++; N++; }
+  });
+
+  if (N === 0) { container.innerHTML = `<div class="panel-unavailable"><div class="panel-unavailable-icon">⚠</div><div class="panel-unavailable-msg">Nenhuma linha com dados válidos.</div></div>`; return; }
+
+  // Marginals
+  const rowSums = O.map(row => row.reduce((s,v) => s+v, 0));
+  const colSums = colVals.map((_, ci) => O.reduce((s, row) => s+row[ci], 0));
+
+  // Expected frequencies E[i][j] = rowSum[i]*colSum[j]/N
+  const E = O.map((row, ri) => row.map((_, ci) => rowSums[ri] * colSums[ci] / N));
+
+  // χ² = Σ (O-E)²/E
+  let chi2 = 0;
+  const stdResid = Array.from({length: r}, () => new Array(c).fill(0));
+  O.forEach((row, ri) => row.forEach((oij, ci) => {
+    const eij = E[ri][ci];
+    if (eij > 0) {
+      const diff = oij - eij;
+      chi2 += diff * diff / eij;
+      stdResid[ri][ci] = diff / Math.sqrt(eij);
+    }
+  }));
+
+  const df = (r - 1) * (c - 1);
+  const pValue = chi2PValue(chi2, df);
+
+  // Cramér's V = sqrt(χ²/(N*(min(r,c)-1)))
+  const minDim = Math.min(r, c);
+  const cramersV = Math.sqrt(chi2 / (N * (minDim - 1)));
+
+  // Interpretation
+  const V = cramersV;
+  let interpClass, interpLabel, interpIcon;
+  if (V < 0.1)        { interpClass='chisq-interp-none';     interpLabel='Associação muito fraca / sem associação'; interpIcon='○'; }
+  else if (V < 0.3)   { interpClass='chisq-interp-fraca';    interpLabel='Associação fraca';      interpIcon='◔'; }
+  else if (V < 0.5)   { interpClass='chisq-interp-moderada'; interpLabel='Associação moderada';   interpIcon='◑'; }
+  else                { interpClass='chisq-interp-forte';    interpLabel='Associação forte';      interpIcon='●'; }
+
+  // Warn if expected < 5 in >20% of cells
+  const smallExpected = E.flat().filter(v => v < 5).length;
+  const smallWarn = (smallExpected / (r * c)) > 0.2
+    ? `<div style="padding:8px 12px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.25);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);">
+        ⚠ ${smallExpected} células (${((smallExpected/(r*c))*100).toFixed(0)}%) têm frequência esperada &lt; 5 — resultado do χ² pode ser impreciso. Considere o Teste Exato de Fisher para tabelas pequenas.
+      </div>` : '';
+
+  const chi2Str = chi2.toFixed(4);
+  const pStr = pValue < 0.0001 ? '< 0,0001' : pValue.toFixed(4).replace('.', ',');
+  const pColor = pValue < 0.05 ? 'var(--green)' : 'var(--text2)';
+
+  // Max |std residual| for color scaling
+  const maxAbsResid = Math.max(...stdResid.flat().map(Math.abs), 0.01);
+
+  // Build contingency table HTML
+  let tableHtml = `<table class="chisq-contingency">
+    <thead>
+      <tr>
+        <th class="row-header">${colA} \\ ${colB}</th>
+        ${colVals.map(cv => `<th class="col-header">${cv.length>18?cv.slice(0,16)+'…':cv}</th>`).join('')}
+        <th class="row-header" style="color:var(--text2)">Total</th>
+      </tr>
+    </thead><tbody>`;
+
+  O.forEach((row, ri) => {
+    tableHtml += `<tr><td class="row-label">${rowVals[ri].length>18?rowVals[ri].slice(0,16)+'…':rowVals[ri]}</td>`;
+    row.forEach((oij, ci) => {
+      const eij = E[ri][ci].toFixed(1);
+      const sr = stdResid[ri][ci];
+      const t = Math.min(Math.abs(sr) / maxAbsResid, 1);
+      // Color: red for over-represented (sr>0), blue for under (sr<0)
+      const alpha = Math.round(t * 55);
+      const bg = sr > 0.5
+        ? `rgba(248,113,113,${(t*0.45).toFixed(2)})`
+        : sr < -0.5
+        ? `rgba(96,165,250,${(t*0.45).toFixed(2)})`
+        : 'transparent';
+      tableHtml += `<td style="background:${bg}" title="O=${oij} · E=${eij} · res.pad.=${sr.toFixed(2)}">`
+        + `<strong>${oij}</strong><span style="display:block;font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace">${eij}</span></td>`;
+    });
+    tableHtml += `<td class="row-total">${rowSums[ri]}</td></tr>`;
+  });
+
+  tableHtml += `<tr>
+    ${colSums.map((cs, ci) => `<td class="col-total">${cs}</td>`).join('')}`;
+  tableHtml = tableHtml.replace('<tr>\n    ', `<tr><td class="col-total" style="text-align:left;color:var(--text2)">Total</td>`);
+  tableHtml += `<td class="grand-total">${N}</td></tr></tbody></table>`;
+
+  container.innerHTML = `
+    <div class="chisq-container">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--text2)">
+          ${colA} × ${colB}
+        </span>
+        <div class="chisq-interp-badge ${interpClass}">${interpIcon} ${interpLabel}</div>
+        ${pValue < 0.05
+          ? `<span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green)">✓ associação estatisticamente significativa (p&lt;0,05)</span>`
+          : `<span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">✗ sem evidência estatística de associação (p≥0,05)</span>`}
+      </div>
+
+      <div class="chisq-metrics">
+        <div class="chisq-metric">
+          <div class="chisq-metric-label">χ²</div>
+          <div class="chisq-metric-val" style="color:var(--accent)">${chi2Str}</div>
+        </div>
+        <div class="chisq-metric">
+          <div class="chisq-metric-label">Graus de Liberdade</div>
+          <div class="chisq-metric-val" style="color:var(--blue)">${df}</div>
+        </div>
+        <div class="chisq-metric">
+          <div class="chisq-metric-label">p-valor</div>
+          <div class="chisq-metric-val" style="font-size:16px;color:${pColor}">${pStr}</div>
+        </div>
+        <div class="chisq-metric">
+          <div class="chisq-metric-label">V de Cramér</div>
+          <div class="chisq-metric-val" style="color:var(--purple)">${cramersV.toFixed(4)}</div>
+        </div>
+        <div class="chisq-metric">
+          <div class="chisq-metric-label">n</div>
+          <div class="chisq-metric-val" style="color:var(--text2);font-size:16px">${N}</div>
+        </div>
+        <div class="chisq-metric">
+          <div class="chisq-metric-label">Tabela</div>
+          <div class="chisq-metric-val" style="color:var(--text2);font-size:14px">${r} × ${c}</div>
+        </div>
+      </div>
+
+      ${smallWarn}
+
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">
+          Tabela de Contingência &nbsp;·&nbsp; <span style="color:var(--text3);font-size:9px">célula: O (observado) / E (esperado) · fundo proporcional ao resíduo padronizado</span>
+        </div>
+        <div class="chisq-contingency-wrap">${tableHtml}</div>
+      </div>
+
+      <details class="group-explain" style="border-top:1px solid var(--border);margin-top:4px;">
+        <summary>💡 como interpretar este resultado</summary>
+        <div class="group-explain-body" style="padding:12px 4px 12px 22px;">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);line-height:1.75;">
+            O <strong>Teste Qui-Quadrado (χ²)</strong> de independência verifica se existe associação estatística entre duas variáveis categóricas.
+            H₀: as variáveis são independentes. Se p &lt; 0,05, rejeitamos H₀ e concluímos que há evidência de associação.
+          </p>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);line-height:1.75;">
+            O <strong>V de Cramér</strong> mede a <em>magnitude</em> da associação (0 = nenhuma, 1 = perfeita): 
+            &lt;0,1 = muito fraca · 0,1–0,3 = fraca · 0,3–0,5 = moderada · &gt;0,5 = forte.
+            As células com <strong>fundo vermelho</strong> têm mais observações do que o esperado; as azuis têm menos.
+            O número menor em cada célula é a <strong>frequência esperada</strong> sob independência.
+          </p>
+        </div>
+      </details>
+    </div>`;
+}
+
+// ── K-Means in panel (delegates to existing renderKMeansGroup logic) ──
+function renderKMeansInPanel(div, numCols) {
+  // Reuse existing kmeansGroup rendering but target the panel div
+  const kmeansGroupOrig = document.getElementById('kmeansGroup');
+  if (!kmeansGroupOrig || !kmeansGroupOrig.innerHTML.trim()) {
+    // Not rendered yet — render it now in the original location then mirror
+    renderKMeansGroup();
+  }
+  if (kmeansGroupOrig && kmeansGroupOrig.innerHTML.trim()) {
+    div.innerHTML = kmeansGroupOrig.innerHTML;
+  } else {
+    div.innerHTML = `<div class="panel-unavailable"><div class="panel-unavailable-icon">🎯</div>
+      <div class="panel-unavailable-msg">K-Means disponível. Calcule as estatísticas primeiro.</div></div>`;
+  }
 }
 
 // ══════════════════════════════════════════════
